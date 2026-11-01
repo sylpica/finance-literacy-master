@@ -48,7 +48,7 @@ body {
 }
 [data-density="dense"] { font-size: 14px; }
 .app { max-width: 1120px; margin: 0 auto; padding: 0 16px 56px; }
-main { padding: 20px 0 8px; }
+main { padding: 12px 0 8px; }
 h2 { font-size: 1.45rem; line-height: 1.35; margin: 0 0 10px; }
 h3 { font-size: 1.08rem; margin: 22px 0 8px; }
 p { margin: 8px 0; }
@@ -62,13 +62,13 @@ header {
   position: sticky; top: 0; z-index: 10;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
-  padding: 12px 0 10px;
+  padding: 6px 0;
+  display: flex; align-items: center; gap: 10px;
 }
-.brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
-h1 { font-size: 20px; margin: 0; }
-h1 .title { font-size: 20px; font-weight: 700; color: var(--text); }
-.brand-tag { color: var(--muted); font-size: 0.85em; }
-nav { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.brand { display: flex; align-items: center; flex-shrink: 0; }
+h1 { font-size: 15px; margin: 0; line-height: 1.2; }
+h1 .title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; }
+nav { display: flex; gap: 5px; flex-wrap: nowrap; overflow-x: auto; flex: 1; scrollbar-width: thin; }
 button {
   font: inherit; color: var(--text); background: var(--panel);
   border: 1px solid var(--line); border-radius: var(--radius-s);
@@ -77,7 +77,7 @@ button {
 }
 button:hover { border-color: var(--line-strong); }
 button:disabled { opacity: 0.45; cursor: not-allowed; }
-button.nav { white-space: nowrap; border-radius: 999px; background: transparent; padding: 7px 11px; font-size: 0.95em; }
+button.nav { white-space: nowrap; border-radius: 999px; background: transparent; padding: 4px 10px; font-size: 0.88em; min-height: 32px; }
 button.nav.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 button.danger { background: var(--bad); color: #fff; border-color: var(--bad); font-weight: 700; }

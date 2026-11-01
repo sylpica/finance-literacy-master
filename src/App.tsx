@@ -240,7 +240,6 @@ function Shell() {
       <header>
         <div className="brand">
           <h1><button className="linklike title" onClick={() => go('')}>資産形成・金融教養マスター</button></h1>
-          <span className="brand-tag">株式・暗号資産を中心に学ぶ、無料の金融教養PWA</span>
         </div>
         <nav aria-label="主要画面">
           {NAV.map(n => <button key={n.path + n.label} className={route === n.path ? 'nav active' : 'nav'} aria-current={route === n.path ? 'page' : undefined} onClick={() => go(n.path)}>{n.label}</button>)}
