@@ -3,6 +3,7 @@ import { DOMAINS } from './content/domains';
 import { LESSONS, QUESTIONS, lessonById, searchAll } from './content';
 import { REGULATIONS } from './content/regulations';
 import { AppProvider, useApp } from './state';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LessonPage } from './pages/LessonPage';
 import { QuizPage, type QuizMode } from './pages/QuizPage';
 import { SimulatorsPage } from './pages/SimulatorsPage';
@@ -38,10 +39,13 @@ const NAV: { path: string; label: string }[] = [
 
 function Home({ go }: { go: (p: string) => void }) {
   const { state } = useApp();
-  const doneLessons = useMemo(() => {
-    const s = new Set<string>();
-    for (const a of state?.attempts ?? []) { const q = QUESTIONS.find(x => x.id === a.questionId); if (q) s.add(q.lessonId); }
-    return s;
+  const lessonProgress = useMemo(() => {
+    const attempted = new Map<string, Set<string>>();
+    for (const a of state?.attempts ?? []) {
+      const q = QUESTIONS.find(x => x.id === a.questionId); if (!q) continue;
+      const s = attempted.get(q.lessonId) ?? new Set<string>(); s.add(q.id); attempted.set(q.lessonId, s);
+    }
+    return attempted;
   }, [state]);
   return (
     <main>
@@ -56,7 +60,7 @@ function Home({ go }: { go: (p: string) => void }) {
           <div className="lesson-grid">
             {LESSONS.filter(l => l.domainId === d.id).map(l => (
               <button key={l.id} className="lesson-card" onClick={() => go(`lesson/${l.id}`)}>
-                <span className="lesson-id">{l.id}{doneLessons.has(l.id) ? ' ✓学習中' : ''}</span>
+                <span className="lesson-id">{l.id}{(lessonProgress.get(l.id)?.size ?? 0) >= l.questionIds.length && l.questionIds.length > 0 ? ' ✓学習済み' : lessonProgress.has(l.id) ? ' ✓学習中' : ''}</span>
                 <span className="lesson-title">{l.title}</span>
                 <span className="meta">難易度{l.level}／問題{l.questionIds.length}問{l.reviewStatus === 'draft' ? '／要確認' : ''}</span>
               </button>
@@ -107,6 +111,7 @@ function SearchPage({ go }: { go: (p: string) => void }) {
           <ul>{res.questions.map(x => <li key={x.id}><button className="linklike" onClick={() => go(`quiz/lesson/${x.lessonId}`)}>{x.id}: {x.prompt.slice(0, 60)}…</button></li>)}</ul>
           <h3>メモ {noteHits.length}件</h3>
           <ul>{noteHits.map(n => <li key={n.id}><button className="linklike" onClick={() => go(`lesson/${n.lessonId}`)}>{n.lessonId} のメモ</button>: {n.text.slice(0, 80)}</li>)}</ul>
+          {res.lessons.length + res.questions.length + noteHits.length === 0 && <p>「{q}」に一致する教材・問題・メモは見つかりませんでした。別の語句で試してください。</p>}
         </div>
       )}
     </main>
@@ -122,7 +127,7 @@ function RegulationsPage() {
       {REGULATIONS.map(r => (
         <section key={r.id} className="domain-block">
           <h3>{r.name}（{r.jurisdiction}）</h3>
-          <p>状態: <strong>{statusLabel[r.status]}</strong>{r.effectiveFrom ? ` ／ 適用開始: ${r.effectiveFrom}` : ''}{r.effectiveTo ? ` ／ 終了: ${r.effectiveTo}` : ''} ／ 対象: {r.appliesTo}</p>
+          <p>状態: <strong>{statusLabel[r.status]}</strong>{r.effectiveFrom ? ` ／ 適用開始: ${r.effectiveFrom}` : ''}{r.announcedAt ? ` ／ 公表日・節目: ${r.announcedAt}` : ''}{r.effectiveTo ? ` ／ 終了: ${r.effectiveTo}` : ''} ／ 対象: {r.appliesTo}</p>
           <div className="table-scroll"><table><tbody>
             {r.keyNumbers.map((k, i) => <tr key={i}><th>{k.label}</th><td>{k.value}</td></tr>)}
           </tbody></table></div>
@@ -155,7 +160,7 @@ function Shell() {
   const parts = route.split('/');
   let page: React.ReactNode;
   if (route === '') page = <Home go={go} />;
-  else if (parts[0] === 'lesson') page = <LessonPage lessonId={parts[1] ?? ''} go={go} />;
+  else if (parts[0] === 'lesson') page = <LessonPage key={parts[1] ?? ''} lessonId={parts[1] ?? ''} go={go} />;
   else if (parts[0] === 'quiz') {
     const sub = parts[1] ?? 'random';
     const mode: QuizMode = sub === 'lesson' ? { kind: 'lesson', lessonId: parts[2] ?? '' }
@@ -163,7 +168,7 @@ function Shell() {
       : sub === 'review' ? { kind: 'review' } : sub === 'weak' ? { kind: 'weak' } : { kind: 'random' };
     page = <QuizPage key={route} mode={mode} go={go} />;
   }
-  else if (parts[0] === 'sim') page = <SimulatorsPage initial={parts[1]} />;
+  else if (parts[0] === 'sim') page = <SimulatorsPage key={route} initial={parts[1]} />;
   else if (parts[0] === 'labs') page = <LabsPage go={go} />;
   else if (parts[0] === 'virtual') page = <VirtualPage />;
   else if (parts[0] === 'analytics') page = <AnalyticsPage go={go} />;
@@ -181,7 +186,7 @@ function Shell() {
           {NAV.map(n => <button key={n.path + n.label} className={route === n.path ? 'nav active' : 'nav'} onClick={() => go(n.path)}>{n.label}</button>)}
         </nav>
       </header>
-      {page}
+      <ErrorBoundary key={route}>{page}</ErrorBoundary>
       <footer><p className="meta">学習専用アプリです。投資助言ではなく、将来の価格・リターンを保証しません。制度情報は出典と確認日を確認してください。</p></footer>
     </div>
   );

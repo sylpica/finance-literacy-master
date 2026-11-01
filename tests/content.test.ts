@@ -95,11 +95,12 @@ describe('ケースと制度データ', () => {
       }
     }
   });
-  it('制度データは出典つきで、施行中データに適用開始日がある', () => {
+  it('制度データは出典つきで、施行中データに検証可能な日付（適用開始日または公表日）がある', () => {
     expect(REGULATIONS.length).toBeGreaterThanOrEqual(4);
     for (const r of REGULATIONS) {
       expect(allowedUrls.has(r.source.url), r.id).toBe(true);
-      if (r.status === 'in-force') expect(r.effectiveFrom, r.id).toBeTruthy();
+      // effectiveFrom は「適用開始」と言える日付に限る。公表日・節目の日は announcedAt に分ける（監査 C-F07）
+      if (r.status === 'in-force') expect(r.effectiveFrom ?? r.announcedAt, r.id).toBeTruthy();
     }
     const nisa = REGULATIONS.find(r => r.id.toLowerCase().includes('nisa'));
     expect(nisa).toBeTruthy();

@@ -85,7 +85,8 @@ export function accumulationSeries(inp: AccumInput): { year: number; nominal: nu
 }
 /** 目標到達期間（月数）。到達不能なら Infinity */
 export function monthsToGoal(initial: number, monthly: number, annualReturn: number, goal: number, maxMonths = 1200): number {
-  req(goal > 0, 'goal は正');
+  req(goal > 0, 'goal は正'); finite(initial, 'initial'); finite(monthly, 'monthly');
+  req(annualReturn > -1, 'annualReturn は -1 より大きい必要があります');
   let bal = initial; const mr = Math.pow(1 + annualReturn, 1 / 12) - 1;
   if (bal >= goal) return 0;
   for (let m = 1; m <= maxMonths; m++) { bal = bal * (1 + mr) + monthly; if (bal >= goal) return m; }
@@ -161,6 +162,8 @@ export function sharpeRatio(returns: number[], riskFree = 0): number {
   const s = std(returns); req(s > 0, '標準偏差0'); return (mean(returns) - riskFree) / s;
 }
 export function sortinoRatio(returns: number[], riskFree = 0): number {
+  // 本実装の下方偏差は「下方リターンだけを集めて二乗平均」する変法であり、
+  // 全期間を分母にする標準的な定義とは値が異なる。教材内では定義を明示して使うこと。
   const downside = returns.filter(r => r < riskFree);
   req(downside.length > 0, '下方偏差の対象がありません');
   const dd = Math.sqrt(mean(downside.map(r => (r - riskFree) ** 2)));
@@ -234,7 +237,7 @@ export function optionPayoff(type: 'call'|'put', strike: number, premium: number
 }
 /** ロングの簡易清算価格（維持証拠金率近似。取引所ごとの厳密式ではない） */
 export function liquidationPriceLong(entry: number, leverage: number, maintenanceMarginRate: number): number {
-  req(entry > 0 && leverage >= 1, '入力が不正です'); req(maintenanceMarginRate >= 0 && maintenanceMarginRate < 1 / leverage + 1, '維持証拠金率が不正です');
+  req(entry > 0 && leverage >= 1, '入力が不正です'); req(maintenanceMarginRate >= 0 && maintenanceMarginRate < 1 / leverage, '維持証拠金率は 1/レバレッジ 未満である必要があります（清算価格が参入価格以上になる条件は不成立）');
   return entry * (1 - 1 / leverage + maintenanceMarginRate);
 }
 export function fundingCost(notional: number, ratePerPeriod: number, periods: number): number { return notional * ratePerPeriod * periods; }

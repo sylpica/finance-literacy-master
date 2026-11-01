@@ -6,7 +6,8 @@ export function LessonPage({ lessonId, go }: { lessonId: string; go: (path: stri
   const lesson = lessonById.get(lessonId);
   const { state, toggleBookmark, saveNote } = useApp();
   const [layer, setLayer] = useState<'overview' | 'detail' | 'theory' | 'practice'>('overview');
-  const [noteText, setNoteText] = useState('');
+  // null = 未編集（保存済みメモを表示）。編集を始めたら下書きが正となり、空文字への削除も可能にする。
+  const [noteText, setNoteText] = useState<string | null>(null);
   if (!lesson) return <main><p>教材が見つかりません。</p></main>;
   const bookmarked = state?.bookmarks.some(b => b.lessonId === lesson.id) ?? false;
   const myNote = state?.notes.find(n => n.lessonId === lesson.id);
@@ -26,7 +27,7 @@ export function LessonPage({ lessonId, go }: { lessonId: string; go: (path: stri
           <button key={k} role="tab" aria-selected={layer === k} className={layer === k ? 'tab active' : 'tab'} onClick={() => setLayer(k)}>{layerLabels[k]}</button>
         ))}
       </div>
-      <article className="lesson-body"><p>{lesson.layers[layer]}</p></article>
+      <article className="lesson-body" role="tabpanel" aria-label={layerLabels[layer]}><p>{lesson.layers[layer]}</p></article>
       <section>
         <h3>よくある誤解・注意点</h3>
         <ul>{lesson.misconceptions.map((m, i) => <li key={i}>{m}</li>)}</ul>
@@ -43,8 +44,8 @@ export function LessonPage({ lessonId, go }: { lessonId: string; go: (path: stri
       </section>
       <section>
         <h3>学習メモ</h3>
-        <textarea value={noteText || myNote?.text || ''} onChange={e => setNoteText(e.target.value)} rows={3} aria-label="学習メモ" placeholder="個人的なメモ（採点対象ではありません）" />
-        <button onClick={() => void saveNote({ id: `note-${lesson.id}`, lessonId: lesson.id, text: noteText || myNote?.text || '', updatedAt: Date.now() })}>メモを保存</button>
+        <textarea value={noteText ?? myNote?.text ?? ''} onChange={e => setNoteText(e.target.value)} rows={3} aria-label="学習メモ" placeholder="個人的なメモ（採点対象ではありません）" />
+        <button onClick={() => void saveNote({ id: `note-${lesson.id}`, lessonId: lesson.id, text: noteText ?? myNote?.text ?? '', updatedAt: Date.now() })}>メモを保存</button>
       </section>
     </main>
   );

@@ -11,7 +11,7 @@ export function LineChart({ label, points, color = '#38bdf8', height = 180 }: { 
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${sx(i).toFixed(1)},${sy(p.y).toFixed(1)}`).join(' ');
   return (
     <figure className="chart">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
         <line x1={P} y1={H - P} x2={W - P} y2={H - P} stroke="#64748b" />
         <path d={path} fill="none" stroke={color} strokeWidth="2.5" />
         <text x={P} y={14} fill="currentColor" fontSize="12">最大 {formatNum(max)}</text>
@@ -37,4 +37,4 @@ export function formatNum(v: number): string {
   return String(Math.round(v * 1000) / 1000);
 }
 export function formatYen(v: number): string { return `${formatNum(v)}円`; }
-export function formatPct(v: number, digits = 1): string { return `${(v * 100).toFixed(digits)}%`; }
+export function formatPct(v: number, digits = 1): string { if (!Number.isFinite(v)) return '—'; return `${(v * 100).toFixed(digits)}%`; }

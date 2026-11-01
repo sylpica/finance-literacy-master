@@ -5,7 +5,7 @@ import { SRC } from './sources';
 export const QUESTIONS_4: Question[] = [
   {
     id: 'Q-M01-1', lessonId: 'M-01', type: 'single', difficulty: 1, skill: 'understand',
-    prompt: '現行NISA（2024年施行）について正しいものはどれですか。',
+    prompt: '現行NISA（2024年施行）について正しいものはどれか。',
     options: [
       { id: 'a', text: '年間の投資枠は合計360万円で、つみたて投資枠120万円と成長投資枠240万円を併用できる' },
       { id: 'b', text: '生涯非課税保有限度額は3,000万円で、成長投資枠にも上限はない' },
@@ -23,7 +23,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-M01-2', lessonId: 'M-01', type: 'single', difficulty: 1, skill: 'calculate',
-    prompt: 'つみたて投資枠のみを毎年上限まで使って投資する場合、生涯非課税保有限度額1,800万円に到達するまでの年数は何年ですか。',
+    prompt: 'つみたて投資枠のみを毎年上限まで使って投資する場合、生涯非課税保有限度額1,800万円に到達するまでの年数は何年か。',
     options: [
       { id: 'a', text: '10年' },
       { id: 'b', text: '15年' },
@@ -41,7 +41,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-M02-1', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'understand',
-    prompt: 'iDeCoの税制優遇について正しいものはどれですか。',
+    prompt: 'iDeCoの税制優遇について正しいものはどれか。',
     options: [
       { id: 'a', text: '掛金は所得控除の対象、運用益は非課税、受取時は退職所得または公的年金等として課税される' },
       { id: 'b', text: '掛金・運用益・受取金のすべてが完全に非課税である' },
@@ -55,11 +55,11 @@ export const QUESTIONS_4: Question[] = [
       c: '掛金限度額は国民年金・厚生年金等の加入区分や企業年金の有無により異なります。',
       d: 'iDeCoの資産は原則として60歳まで引き出すことができません。',
     },
-    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
   },
   {
     id: 'Q-M02-2', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'apply',
-    prompt: 'iDeCoの利用を検討する際の判断として最も適切なものはどれですか。',
+    prompt: 'iDeCoの利用を検討する際の判断として最も適切なものはどれか。',
     options: [
       { id: 'a', text: '生活防衛資金まで含めて全額をiDeCoに入れると最も節税になる' },
       { id: 'b', text: '原則60歳まで引き出せないため、近い将来に必要な資金は対象外とし、自分の加入区分の限度額を確認してから拠出額を決める' },
@@ -73,11 +73,11 @@ export const QUESTIONS_4: Question[] = [
       c: '受取時は退職所得または公的年金等として課税され、受取方法で税負担が変わるため検討が必要です。',
       d: '所得控除の節税効果は限界税率によって異なり、課税所得がない場合は効果が生じません。',
     },
-    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
   },
   {
     id: 'Q-M03-1', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'calculate',
-    prompt: '課税口座で上場株式を売却し、譲渡益が100万円でした。申告分離課税（税率20.315%）による税額はいくらですか。',
+    prompt: '課税口座で上場株式を売却し、譲渡益が100万円だった。申告分離課税（税率20.315%）による税額はいくらか。',
     options: [
       { id: 'a', text: '150,000円' },
       { id: 'b', text: '200,000円' },
@@ -91,11 +91,11 @@ export const QUESTIONS_4: Question[] = [
       b: '税率を20%ちょうどとした概算で、実際の税率20.315%とは異なります。',
       d: '税率の取り違えです。20.315%を正しく掛けると203,150円になります。',
     },
-    sources: [SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
   },
   {
     id: 'Q-M03-2', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'understand',
-    prompt: '上場株式等の譲渡損失の繰越控除について正しいものはどれですか。',
+    prompt: '上場株式等の譲渡損失の繰越控除について正しいものはどれか。',
     options: [
       { id: 'a', text: '特定口座（源泉徴収あり）を使えば、確定申告なしに自動で繰り越される' },
       { id: 'b', text: '確定申告により翌年以降3年間繰り越すことができ、継続して確定申告する必要がある' },
@@ -109,11 +109,11 @@ export const QUESTIONS_4: Question[] = [
       c: 'NISA口座内の損失は損益通算・繰越控除の対象になりません。',
       d: '繰越期間は翌年以降3年間が上限です。',
     },
-    sources: [SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
   },
   {
     id: 'Q-M04-1', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'calculate',
-    prompt: '元本100万円を年率5%で20年運用しました（税引前で約265.33万円）。売却時に利益全体へ20.315%が一括課税される単純化モデルでは、税引後の金額はおよそいくらですか。',
+    prompt: '元本100万円を年率5%で20年運用した（税引前で約265.33万円）。売却時に利益全体へ20.315%が一括課税される単純化モデルでは、税引後の金額はおよそいくらか。',
     options: [
       { id: 'a', text: '約211.5万円' },
       { id: 'b', text: '約231.7万円' },
@@ -128,11 +128,11 @@ export const QUESTIONS_4: Question[] = [
       d: 'これは税引前の金額です。非課税口座の場合に相当します。',
     },
     assumptions: '運用期間中の配当課税・売買を無視し、売却時に利益へ一括課税する単純化モデル',
-    sources: [SRC.ntaTop, SRC.fsaNisa], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax, SRC.fsaNisa], reviewStatus: 'draft',
   },
   {
     id: 'Q-M04-2', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'find-error',
-    prompt: '制度情報の扱いとして誤っているものはどれですか。',
+    prompt: '制度情報の扱いとして誤っているものはどれか。',
     options: [
       { id: 'a', text: '施行中の制度と、成立済みだが未施行の制度を区別して記録する' },
       { id: 'b', text: '報道された税制改正の議論を、現行制度としてシミュレーションに組み込む' },
@@ -150,7 +150,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N01-1', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'understand',
-    prompt: '「含み損の銘柄は損切りできず長く持ち続け、含み益の銘柄は早く売ってしまう」行動に最も関係が深いバイアスはどれですか。',
+    prompt: '「含み損の銘柄は損切りできず長く持ち続け、含み益の銘柄は早く売ってしまう」行動に最も関係が深いバイアスはどれか。',
     options: [
       { id: 'a', text: '損失回避' },
       { id: 'b', text: 'アンカリング' },
@@ -168,7 +168,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N01-2', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'calculate',
-    prompt: '価格が100から50へ下落した後、元の100に戻るために必要な上昇率はどれですか。',
+    prompt: '価格が100から50へ下落した後、元の100に戻るために必要な上昇率はどれか。',
     options: [
       { id: 'a', text: '50%' },
       { id: 'b', text: '75%' },
@@ -186,7 +186,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N02-1', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'understand',
-    prompt: '流動性危機で価格下落が増幅する仕組みとして正しいものはどれですか。',
+    prompt: '流動性危機で価格下落が増幅する仕組みとして正しいものはどれか。',
     options: [
       { id: 'a', text: '買い手が増えて価格が安定するため、下落は緩やかになる' },
       { id: 'b', text: '売りたいときに買い手が現れず、レバレッジ投資家の強制売却が「下落→担保価値低下→さらなる売却」の連鎖を起こす' },
@@ -204,7 +204,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N02-2', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'find-error',
-    prompt: 'バブルと危機に関する理解として誤っているものはどれですか。',
+    prompt: 'バブルと危機に関する理解として誤っているものはどれか。',
     options: [
       { id: 'a', text: '危機の一般的な経過を学ぶことは、危機の時期と規模を予測できることとは別である' },
       { id: 'b', text: '価格上昇そのものが買いの根拠になる段階は、バブルの後期に観察されることがある' },
@@ -222,7 +222,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N03-1', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'understand',
-    prompt: 'ポンジスキームが構造的に破綻する理由として正しいものはどれですか。',
+    prompt: 'ポンジスキームが構造的に破綻する理由として正しいものはどれか。',
     options: [
       { id: 'a', text: '運用者の手腕次第では、長期間継続できる仕組みだから' },
       { id: 'b', text: '配当の原資が新規出資者の資金であり、約束利回りを賄う新規流入が指数的に必要になって必ず行き詰まるから' },
@@ -240,7 +240,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N03-2', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'apply',
-    prompt: '「元本保証で月3%の配当」をうたう未登録の事業者から勧誘を受けました。最も適切な対応はどれですか。',
+    prompt: '「元本保証で月3%の配当」をうたう未登録の事業者から勧誘を受けた。最も適切な対応はどれか。',
     options: [
       { id: 'a', text: '少額なら試してよい。配当が出ている間は安全である' },
       { id: 'b', text: '知人の紹介なので、契約書だけ確認して契約する' },
@@ -258,7 +258,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N04-1', lessonId: 'N-04', type: 'single', difficulty: 1, skill: 'understand',
-    prompt: '投資判断の根拠として、最も信頼性が高い情報の組み合わせはどれですか。',
+    prompt: '投資判断の根拠として、最も信頼性が高い情報の組み合わせはどれか。',
     options: [
       { id: 'a', text: 'SNSで広く拡散されている投稿と、フォロワー数の多い発信者の予測' },
       { id: 'b', text: '発行体の有価証券報告書・決算短信と、金融庁・国税庁等の一次資料' },
@@ -276,7 +276,7 @@ export const QUESTIONS_4: Question[] = [
   },
   {
     id: 'Q-N04-2', lessonId: 'N-04', type: 'multi', difficulty: 2, skill: 'apply',
-    prompt: '投資情報を評価する際の確認手順として適切なものをすべて選んでください。',
+    prompt: '投資情報を評価する際の確認手順として適切なものをすべて選べ。',
     options: [
       { id: 'a', text: '主張の出典をたどり、一次情報で裏を取る' },
       { id: 'b', text: '数値の時点・単位・定義を確認する' },

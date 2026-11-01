@@ -40,7 +40,10 @@ export function validateMarketRows(table: CsvTable, mapping: { date: number; sym
     const date = (r[mapping.date] ?? '').trim();
     const symbol = (r[mapping.symbol] ?? '').trim();
     const closeRaw = (r[mapping.close] ?? '').trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date))) { errors.push(`${line}行目: 日付が不正です (${date})`); return; }
+    // 実在する日付か（Date.parse は 2月31日を3月へ繰り越して解釈するため、成分の往復で確認する）
+    const dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    const realDate = dm ? (() => { const d = new Date(Date.UTC(Number(dm[1]), Number(dm[2]) - 1, Number(dm[3]))); return d.getUTCFullYear() === Number(dm[1]) && d.getUTCMonth() === Number(dm[2]) - 1 && d.getUTCDate() === Number(dm[3]); })() : false;
+    if (!realDate) { errors.push(`${line}行目: 日付が不正です (${date})`); return; }
     if (!symbol) { errors.push(`${line}行目: 銘柄が空です`); return; }
     const close = Number(closeRaw.replace(/,/g, ''));
     if (!Number.isFinite(close)) { errors.push(`${line}行目: 価格が数値ではありません (${closeRaw})`); return; }

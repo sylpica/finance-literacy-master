@@ -18,13 +18,19 @@ interface Ctx {
 }
 const AppCtx = createContext<Ctx | null>(null);
 
+function readSetting<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
+  try { const v = localStorage.getItem(key); return (allowed as readonly string[]).includes(v ?? '') ? (v as T) : fallback; }
+  catch { return fallback; }
+}
+function writeSetting(key: string, value: string) { try { localStorage.setItem(key, value); } catch { /* 保存できない環境では設定は保持されない */ } }
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState | null>(null);
-  const [density, setDensityState] = useState<'normal' | 'dense'>(() => (localStorage.getItem('flm-density') as 'normal' | 'dense') || 'normal');
-  const [theme, setThemeState] = useState<'dark' | 'light'>(() => (localStorage.getItem('flm-theme') as 'dark' | 'light') || 'dark');
+  const [density, setDensityState] = useState<'normal' | 'dense'>(() => readSetting('flm-density', ['normal', 'dense'], 'normal'));
+  const [theme, setThemeState] = useState<'dark' | 'light'>(() => readSetting('flm-theme', ['dark', 'light'], 'dark'));
   useEffect(() => { void loadState().then(setState); }, []);
-  useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('flm-theme', theme); }, [theme]);
-  useEffect(() => { document.documentElement.dataset.density = density; localStorage.setItem('flm-density', density); }, [density]);
+  useEffect(() => { document.documentElement.dataset.theme = theme; writeSetting('flm-theme', theme); }, [theme]);
+  useEffect(() => { document.documentElement.dataset.density = density; writeSetting('flm-density', density); }, [density]);
 
   const recordAttempt = useCallback(async (a: StudyAttempt) => {
     if (!state) return;
@@ -34,7 +40,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     next = await saveScheduleItem(next, updated);
     setState(next);
   }, [state]);
-  const toggleBookmarkFn = useCallback(async (lessonId: string) => { setState(prev => prev); if (state) setState(await toggleBookmark(state, lessonId)); }, [state]);
+  const toggleBookmarkFn = useCallback(async (lessonId: string) => { if (state) setState(await toggleBookmark(state, lessonId)); }, [state]);
   const saveNoteFn = useCallback(async (n: Note) => { if (state) setState(await saveNote(state, n)); }, [state]);
   const addVirtualFn = useCallback(async (r: VirtualRecord) => { if (state) setState(await addVirtual(state, r)); }, [state]);
   const importState = useCallback(async (s: AppState) => { await replaceState(s); setState(s); }, []);

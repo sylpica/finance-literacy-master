@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { formatNum, formatPct } from '../components/Chart';
+import { NumField } from '../components/NumField';
 import * as F from '../finance/core';
 
 // 株式分析ラボ / 暗号資産ラボ（指示書 §9.2-5,6）
@@ -9,9 +10,9 @@ export function LabsPage({ go }: { go: (path: string) => void }) {
   return (
     <main>
       <h2>{tab === 'stock' ? '株式分析ラボ' : '暗号資産ラボ'}</h2>
-      <div className="tabs">
-        <button className={tab === 'stock' ? 'tab active' : 'tab'} onClick={() => setTab('stock')}>株式分析ラボ</button>
-        <button className={tab === 'crypto' ? 'tab active' : 'tab'} onClick={() => setTab('crypto')}>暗号資産ラボ</button>
+      <div className="tabs" role="tablist" aria-label="ラボの切り替え">
+        <button role="tab" aria-selected={tab === 'stock'} className={tab === 'stock' ? 'tab active' : 'tab'} onClick={() => setTab('stock')}>株式分析ラボ</button>
+        <button role="tab" aria-selected={tab === 'crypto'} className={tab === 'crypto' ? 'tab active' : 'tab'} onClick={() => setTab('crypto')}>暗号資産ラボ</button>
       </div>
       {tab === 'stock' ? <StockLab go={go} /> : <CryptoLab go={go} />}
     </main>
@@ -31,9 +32,15 @@ function StockLab({ go }: { go: (p: string) => void }) {
     const roicApprox = (op * 0.7) / (v.equity + v.debt);
     return { gross, op, ni, ocf, fcf, roe, roicApprox };
   }, [v]);
+  const RANGES: Record<keyof typeof DEF, { min: number; max: number }> = {
+    revenue: { min: 0, max: 100000 }, grossMargin: { min: -100, max: 100 },
+    opex: { min: 0, max: 100000 }, depreciation: { min: 0, max: 100000 },
+    capex: { min: 0, max: 100000 }, wcChange: { min: -10000, max: 10000 },
+    equity: { min: -10000, max: 100000 }, debt: { min: 0, max: 100000 },
+  };
   const num = (label: string, key: keyof typeof DEF, unit: string) => (
-    <label className="num-field"><span>{label}</span>
-      <input type="number" value={v[key]} onChange={e => setV({ ...v, [key]: Number(e.target.value) })} aria-label={label} /><span>{unit}</span></label>
+    <NumField label={label} value={v[key]} set={x => setV({ ...v, [key]: x })}
+      min={RANGES[key].min} max={RANGES[key].max} unit={unit} slider={false} />
   );
   return (
     <div>

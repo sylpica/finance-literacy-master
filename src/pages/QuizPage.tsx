@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { QUESTIONS, lessonById, questionById, shuffledOptions } from '../content';
 import { isDue } from '../learning/srs';
 import { useApp } from '../state';
@@ -21,19 +21,26 @@ export function selectQuestions(mode: QuizMode, state: { schedule: { questionId:
       for (const a of state?.attempts ?? []) if (!a.correct) wrong.set(a.questionId, (wrong.get(a.questionId) ?? 0) + 1);
       return [...wrong.entries()].sort((a, b) => b[1] - a[1]).map(([id]) => questionById.get(id)).filter((q): q is Question => !!q);
     }
-    case 'random': return [...QUESTIONS].sort(() => 0.5 - Math.sin(now % 3600)).slice(0, 10);
+    case 'random': return shuffledOptions(QUESTIONS, `random-${now}`).slice(0, 10);
   }
 }
 
 export function QuizPage({ mode, go }: { mode: QuizMode; go: (path: string) => void }) {
   const { state, recordAttempt } = useApp();
-  const questions = useMemo(() => selectQuestions(mode, state ? { schedule: state.schedule, attempts: state.attempts } : null), [mode.kind, mode.kind === 'lesson' ? mode.lessonId : mode.kind === 'domain' ? mode.domainId : '']); // eslint-disable-line
+  // 出題セットは学習データの読込完了後に一度だけ確定させる。
+  // 回答のたびに state が更新されても、進行中のセッションの出題は変えない。
+  const [questions, setQuestions] = useState<Question[] | null>(null);
+  useEffect(() => {
+    if (state && questions === null) setQuestions(selectQuestions(mode, state));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, questions]);
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [answered, setAnswered] = useState<null | boolean>(null);
   const [score, setScore] = useState(0);
-  const q = questions[idx];
+  const q = questions?.[idx];
   const options = useMemo(() => (q ? shuffledOptions(q.options, q.id) : []), [q?.id]); // eslint-disable-line
+  if (!state || questions === null) return <main><h2>問題演習</h2><p>読み込み中…</p></main>;
   if (questions.length === 0) return <main><h2>問題演習</h2><p>対象の問題がありません。教材の問題を解くと、間違えた問題と復習期限の問題がここに出ます。</p><button onClick={() => go('')}>教材一覧へ</button></main>;
   if (!q) return (
     <main><h2>演習完了</h2><p>{questions.length}問中 {score}問正解でした。</p>

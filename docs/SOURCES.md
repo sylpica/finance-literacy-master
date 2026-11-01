@@ -10,6 +10,8 @@
 | 資産形成の基本 | 金融庁 | https://www.fsa.go.jp/policy/nisa2/invest/ | 長期・積立・分散、株式等の税率20.315%の説明 |
 | 暗号資産の利用者のみなさまへ | 金融庁 | https://www.fsa.go.jp/policy/virtual_currency/ | 暗号資産交換業の登録制・利用者注意 |
 | No.1524 暗号資産の課税関係 | 国税庁 | https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1524.htm | 暗号資産の所得区分 |
+| 株式・配当・利子と税（暮らしの税情報） | 国税庁 | https://www.nta.go.jp/publication/pamph/koho/kurashi/pdf/13.pdf | 上場株式等の申告分離課税20.315%・損益通算・繰越控除（監査対応で追加、2026-11-02確認） |
+| iDeCo公式サイト | 国民年金基金連合会 | https://www.ideco-koushiki.jp/ | iDeCoの制度構造・3つの税制優遇（監査対応で追加、2026-11-02確認） |
 | 暗号資産等に関する税務上の取扱い及び計算書 | 国税庁 | https://www.nta.go.jp/publication/pamph/shotoku/kakuteishinkokukankei/kasoutuka/index.htm | 暗号資産の所得計算（総平均法/移動平均法） |
 | 金融政策の概要 | 日本銀行 | https://www.boj.or.jp/mopo/outline/index.htm | 金融政策・公開市場操作 |
 | EDINET | 金融庁 | https://disclosure2.edinet-fsa.go.jp/ | 有価証券報告書等の開示 |

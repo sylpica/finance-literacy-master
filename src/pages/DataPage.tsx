@@ -10,14 +10,15 @@ export function DataPage() {
   const [table, setTable] = useState<CsvTable | null>(null);
   const [mapping, setMapping] = useState({ date: 0, symbol: 1, close: 2 });
   const [message, setMessage] = useState('');
+  const [csvMessage, setCsvMessage] = useState('');
   const [confirmWipe, setConfirmWipe] = useState(false);
   if (!state) return <main><p>読み込み中…</p></main>;
 
   const onCsv = async (file: File) => {
-    if (file.size > 5 * 1024 * 1024) { setMessage('ファイルが大きすぎます（上限5MB）'); return; }
+    if (file.size > 5 * 1024 * 1024) { setCsvMessage('ファイルが大きすぎます（上限5MB）'); return; }
     const text = decodeCsvBuffer(await file.arrayBuffer());
-    try { const t = parseCsv(text); setTable(t); setMessage(`読み込みました: ${t.rows.length}行`); }
-    catch (e) { setMessage(e instanceof Error ? e.message : 'CSV解析に失敗しました'); }
+    try { const t = parseCsv(text); setTable(t); setCsvMessage(`読み込みました: ${t.rows.length}行`); }
+    catch (e) { setCsvMessage(e instanceof Error ? e.message : 'CSV解析に失敗しました'); }
   };
   const result = table ? validateMarketRows(table, mapping) : null;
   const series = result && result.errors.length === 0 && result.ok.length > 0
@@ -42,6 +43,7 @@ export function DataPage() {
         <h3>市場データCSVの取込</h3>
         <p className="meta">対応形式: 日付列（YYYY-MM-DD）・銘柄列・価格（終値）列を含むCSV。UTF-8 / Shift_JIS に対応します。取り込んだデータは検証プレビュー用で、端末外に送信されません。調整前/調整後の株価の区別は元のデータ提供元の定義に従ってください。</p>
         <input type="file" accept=".csv,text/csv" onChange={e => { const f = e.target.files?.[0]; if (f) void onCsv(f); }} aria-label="CSVファイルを選択" />
+        {csvMessage && <p aria-live="polite">{csvMessage}</p>}
         {table && (
           <div>
             <p>列の対応付け:</p>
@@ -79,7 +81,7 @@ export function DataPage() {
         <h3>学習データの消去</h3>
         {!confirmWipe
           ? <button onClick={() => setConfirmWipe(true)}>すべての学習データを消去…</button>
-          : <span><button className="danger" onClick={() => { void wipe(); setConfirmWipe(false); setMessage('学習データを消去しました'); }}>本当に消去する</button>{' '}
+          : <span><button className="danger" onClick={() => { void (async () => { try { await wipe(); setMessage('学習データを消去しました'); } catch { setMessage('消去に失敗しました。もう一度お試しください'); } setConfirmWipe(false); })(); }}>本当に消去する</button>{' '}
             <button onClick={() => setConfirmWipe(false)}>キャンセル</button></span>}
       </section>
     </main>

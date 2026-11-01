@@ -10,6 +10,8 @@ export const SRC = {
   ntaTop: { title: '国税庁ウェブサイト', publisher: '国税庁', url: 'https://www.nta.go.jp/', checkedAt: d },
   ntaCrypto: { title: 'No.1524 暗号資産を使用することにより利益が生じた場合の課税関係', publisher: '国税庁', url: 'https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1524.htm', checkedAt: d },
   ntaCryptoCalc: { title: '暗号資産等に関する税務上の取扱い及び計算書について', publisher: '国税庁', url: 'https://www.nta.go.jp/publication/pamph/shotoku/kakuteishinkokukankei/kasoutuka/index.htm', checkedAt: d },
+  ntaStockTax: { title: '株式・配当・利子と税（暮らしの税情報）', publisher: '国税庁', url: 'https://www.nta.go.jp/publication/pamph/koho/kurashi/pdf/13.pdf', checkedAt: d },
+  idecoOfficial: { title: 'iDeCo公式サイト', publisher: '国民年金基金連合会', url: 'https://www.ideco-koushiki.jp/', checkedAt: d },
   bojTop: { title: '日本銀行ウェブサイト', publisher: '日本銀行', url: 'https://www.boj.or.jp/', checkedAt: d },
   bojPolicy: { title: '金融政策の概要', publisher: '日本銀行', url: 'https://www.boj.or.jp/mopo/outline/index.htm', checkedAt: d },
   edinet: { title: 'EDINET（金融商品取引法に基づく有価証券報告書等の開示書類に関する電子開示システム）', publisher: '金融庁', url: 'https://disclosure2.edinet-fsa.go.jp/', checkedAt: d },

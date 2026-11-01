@@ -77,7 +77,7 @@ export interface RegulationVersion {
 export interface CaseStudy {
   id: string;
   title: string;
-  kind: 'fictional-company'|'fictional-crypto'|'historical';
+  kind: 'fictional-company'|'fictional-crypto'|'fictional-market'|'historical';
   decisionDate: string; // この日付より後の情報は判断材料に表示しない
   briefing: string; // decisionDate 時点で公開済みの情報のみ
   seriesLabel: string;

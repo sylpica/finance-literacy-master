@@ -63,7 +63,7 @@ export const QUESTIONS_2: Question[] = [
     options: [{ id: 'a', text: '20円/ドル' }, { id: 'b', text: '100円/ドル' }, { id: 'c', text: '200円/ドル' }, { id: 'd', text: '2,000円/ドル' }],
     correctIds: ['c'],
     explanation: '購買力平価レート ＝ 日本の価格 ÷ 米国の価格 ＝ 2,000 ÷ 10 ＝ 200円/ドル。これは長期的な目安であり、短期の為替予測に使えるものではありません。',
-    wrongExplanations: { a: '桁を取り違えた計算です。', b: '割り算の組み立てが誤っています（2,000 ÷ 20 の結果）。', d: '米国の価格で割る前の日本の価格そのものです。' },
+    wrongExplanations: { a: '桁を取り違えた計算です。', b: '日本の価格2,000円の桁を1つ落として1,000 ÷ 10とした誤りです。正しくは2,000 ÷ 10 ＝ 200円/ドルです。', d: '米国の価格で割る前の日本の価格そのものです。' },
     assumptions: '同一の財・品質で、輸送費・税・関税がないという購買力平価の仮定に基づく。', sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
@@ -241,7 +241,7 @@ QUESTIONS_2.push(
     sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
-    id: 'Q-H02-1', lessonId: 'H-02', type: 'single', difficulty: 3, skill: 'calculate',
+    id: 'Q-H02-1', lessonId: 'H-02', type: 'single', difficulty: 2, skill: 'calculate',
     prompt: '永久先物の建玉の想定元本が200万円、資金調達率が1回あたり+0.03%で、この建玉が支払う側だとする。1回あたりの資金調達の支払額はいくらか。',
     options: [{ id: 'a', text: '60円' }, { id: 'b', text: '600円' }, { id: 'c', text: '6,000円' }, { id: 'd', text: '60,000円' }],
     correctIds: ['b'],

@@ -11,11 +11,6 @@ export function AnalyticsPage({ go }: { go: (path: string) => void }) {
   const now = Date.now();
   const dueIds = new Set(state.schedule.filter(s => s.dueAt <= now).map(s => s.questionId));
   const recs = recommendLessons(state.attempts, QUESTIONS, dueIds);
-  const staleLessons = LESSONS.filter(l => {
-    const attempted = state.attempts.some(a => a.questionId.startsWith(`Q-${l.id.slice(2)}`) || QUESTIONS.find(q => q.id === a.questionId)?.lessonId === l.id);
-    return attempted;
-  });
-  void staleLessons;
   return (
     <main>
       <h2>学習分析</h2>

@@ -40,7 +40,7 @@ export const REGULATIONS: RegulationVersion[] = [
       { label: '住民税', value: '5%' },
       { label: '譲渡損失の繰越控除期間', value: '翌年以降3年間（確定申告が必要）' },
     ],
-    source: SRC.ntaTop,
+    source: SRC.ntaStockTax,
     version: 1,
     history: '上場株式等の譲渡益・配当に対する申告分離課税の現行の取扱い。軽減税率（10%）が2013年末で終了し、2014年1月1日から本則の20%に復興特別所得税0.315%を加えた20.315%が適用されている（復興特別所得税は2037年まで）。損益通算および繰越控除は確定申告を要件とする。国税庁の公開情報に基づき記録（確認日 2026-11-02）。',
   },
@@ -50,7 +50,6 @@ export const REGULATIONS: RegulationVersion[] = [
     jurisdiction: '日本',
     status: 'in-force',
     announcedAt: '2017-12-01',
-    effectiveFrom: '2017-12-01',
     appliesTo: '暗号資産の売却、他の暗号資産との交換、暗号資産による支払い、報酬としての取得等により生じる利益',
     keyNumbers: [
       { label: '所得区分（原則）', value: '雑所得（総合課税）' },
@@ -66,7 +65,7 @@ export const REGULATIONS: RegulationVersion[] = [
     name: 'iDeCo（個人型確定拠出年金）',
     jurisdiction: '日本',
     status: 'in-force',
-    effectiveFrom: '2017-01-01',
+    announcedAt: '2017-01-01',
     appliesTo: '加入資格を有する個人が拠出する個人型確定拠出年金の掛金・運用・給付',
     keyNumbers: [
       { label: '掛金の税制上の取扱い', value: '全額が所得控除の対象' },
@@ -75,8 +74,8 @@ export const REGULATIONS: RegulationVersion[] = [
       { label: '引出しの可否', value: '原則として60歳まで不可' },
       { label: '掛金限度額', value: '限度額は加入区分（国民年金・厚生年金等の区分や企業年金の有無）により異なるため、本データでは金額を断定しない' },
     ],
-    source: SRC.fsaTop,
+    source: SRC.idecoOfficial,
     version: 1,
-    history: '個人型確定拠出年金（iDeCo）の制度構造（拠出・運用・受取の3段階の課税上の取扱いと、原則60歳まで引出不可）を記録。effectiveFrom の2017年1月1日は、加入対象が大幅に拡大され（自営業者・会社員・公務員・専業主婦（夫）等）現行の加入枠組みとなった日。掛金限度額は加入区分により異なるため、具体的金額は登録せず記述的項目とした（確認日 2026-11-02）。',
+    history: '個人型確定拠出年金（iDeCo）の制度構造（拠出・運用・受取の3段階の課税上の取扱いと、原則60歳まで引出不可）を記録。2017年1月1日に加入対象が大幅に拡大され（自営業者・会社員・公務員・専業主婦（夫）等）、現行の加入枠組みとなった（この日は制度自体の開始日ではないため、適用開始日としては記録しない）。掛金限度額は加入区分により異なるため、具体的金額は登録せず記述的項目とした（確認日 2026-11-02）。',
   },
 ];

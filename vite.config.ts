@@ -9,7 +9,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      // 更新は自動適用する（prompt 方式の更新受付UIは持たないため、方式と実装を一致させる）
+      registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
       manifest: {
         name: '資産形成・金融教養マスター',

@@ -7,16 +7,17 @@ export function initSchedule(questionId: string, now: number): ReviewScheduleIte
   return { questionId, ease: 2.5, intervalDays: 0, repetitions: 0, dueAt: now, lastReviewedAt: 0 };
 }
 
-/** quality: 正答=5, 正答だが迷った等の中間は呼び出し側で 3、不正解=1 として渡す */
+/** 正答なら quality=5、不正解なら quality=1 として SM-2 の易しさ係数を更新する（中間評価は持たない）。
+ *  本アプリの上限: ease は 2.8、間隔は 365 日まで（際限のない伸びを防ぐための明示的な仕様）。 */
 export function applyReview(item: ReviewScheduleItem, correct: boolean, now: number): ReviewScheduleItem {
   const quality = correct ? 5 : 1;
   let { ease, intervalDays, repetitions } = item;
   if (quality < 3) { repetitions = 0; intervalDays = 1; }
   else {
     repetitions += 1;
-    intervalDays = repetitions === 1 ? 1 : repetitions === 2 ? 6 : Math.round(intervalDays * ease);
+    intervalDays = repetitions === 1 ? 1 : repetitions === 2 ? 6 : Math.min(365, Math.round(intervalDays * ease));
   }
-  ease = Math.max(1.3, ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+  ease = Math.min(2.8, Math.max(1.3, ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))));
   return { questionId: item.questionId, ease, intervalDays, repetitions, dueAt: now + intervalDays * 86400000, lastReviewedAt: now };
 }
 
