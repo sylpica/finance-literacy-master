@@ -1,0 +1,61 @@
+:root { --bg:#0b1220; --panel:#111c30; --text:#e6edf7; --muted:#94a7bd; --accent:#38bdf8; --accent2:#fbbf24; --line:#24344d; --bad:#f87171; --good:#34d399; }
+[data-theme="light"] { --bg:#f6f8fb; --panel:#ffffff; --text:#14202f; --muted:#5b6b7d; --accent:#0369a1; --accent2:#b45309; --line:#d5dee8; --bad:#b91c1c; --good:#047857; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif; line-height:1.65; }
+[data-density="dense"] body, [data-density="dense"] { font-size:14px; }
+.app { max-width:1080px; margin:0 auto; padding:0 16px 48px; }
+header { padding:14px 0 8px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:5; }
+h1 { font-size:20px; margin:0 0 8px; }
+h1 .title { font-size:20px; font-weight:700; color:var(--text); }
+nav { display:flex; flex-wrap:wrap; gap:4px; }
+button { font:inherit; color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px 12px; cursor:pointer; min-height:40px; }
+button:disabled { opacity:.45; cursor:not-allowed; }
+button.primary { background:var(--accent); color:#04121f; border-color:var(--accent); font-weight:700; }
+[data-theme="light"] button.primary { color:#fff; }
+button.danger { background:var(--bad); color:#fff; border-color:var(--bad); }
+button.nav.active, button.chip.active, button.tab.active { border-color:var(--accent); color:var(--accent); }
+button.linklike { background:none; border:none; padding:2px 4px; min-height:0; color:var(--accent); text-align:left; }
+.chip { margin:2px; }
+main { padding:16px 0; }
+.meta { color:var(--muted); font-size:.9em; }
+.domain-block { border:1px solid var(--line); border-radius:12px; padding:12px 16px; margin:14px 0; background:var(--panel); }
+.lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; margin:8px 0; }
+.lesson-card { display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left; height:100%; }
+.lesson-id { color:var(--accent); font-weight:700; }
+.lesson-title { font-weight:600; }
+.tabs { display:flex; gap:4px; flex-wrap:wrap; margin:10px 0; }
+.lesson-body { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; white-space:pre-wrap; }
+textarea, input[type="search"], input[type="number"], select { font:inherit; color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px; }
+textarea { width:100%; }
+.search-input { width:100%; }
+.options { display:flex; flex-direction:column; gap:8px; margin:12px 0; }
+.option { text-align:left; padding:12px; }
+.option.selected { border-color:var(--accent); }
+.option.correct { border-color:var(--good); }
+.option.wrong { border-color:var(--bad); }
+.explanation { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 16px; }
+.num-field { display:flex; align-items:center; gap:8px; margin:6px 0; flex-wrap:wrap; }
+.num-field span:first-child { min-width:180px; }
+.num-field input[type="range"] { flex:1; min-width:120px; }
+.num-field input[type="number"] { width:110px; }
+.sim-list { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.sim-panel { border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--panel); }
+.sim-note { color:var(--muted); font-size:.92em; border-left:3px solid var(--accent2); padding-left:10px; }
+.chart svg { width:100%; height:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+.table-scroll { overflow-x:auto; max-width:100%; }
+table { border-collapse:collapse; min-width:420px; }
+th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; }
+.check-row { display:block; margin:6px 0; }
+.criteria { border:1px solid var(--line); border-radius:12px; margin:12px 0; }
+.error-text { color:var(--bad); } .warn-text { color:var(--accent2); }
+.inline-label { margin-right:12px; }
+.question-prompt { font-size:1.15em; }
+footer { border-top:1px solid var(--line); padding-top:10px; }
+a { color:var(--accent); }
+@media (max-width:640px) {
+  .app { padding:0 10px 40px; }
+  h1, h1 .title { font-size:17px; }
+  .num-field span:first-child { min-width:130px; }
+  table { min-width:340px; }
+  button { padding:8px 10px; }
+}
