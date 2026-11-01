@@ -43,10 +43,23 @@ export function QuizPage({ mode, go }: { mode: QuizMode; go: (path: string) => v
   if (!state || questions === null) return <main><h2>問題演習</h2><p>読み込み中…</p></main>;
   if (questions.length === 0) return <main><h2>問題演習</h2><p>対象の問題がありません。教材の問題を解くと、間違えた問題と復習期限の問題がここに出ます。</p><button onClick={() => go('')}>教材一覧へ</button></main>;
   if (!q) return (
-    <main><h2>演習完了</h2><p>{questions.length}問中 {score}問正解でした。</p>
-      <button className="primary" onClick={() => go('analytics')}>学習分析を見る</button>{' '}
-      <button onClick={() => go('')}>教材一覧へ</button></main>
+    <main>
+      <section className="hero score-hero" aria-label="演習結果">
+        <h2>演習完了</h2>
+        <p><span className="score-big">{score}</span> <span className="meta">/ {questions.length}問正解（正答率 {questions.length ? Math.round((score / questions.length) * 100) : 0}%）</span></p>
+        <p className="meta">{score === questions.length ? '全問正解です。次の教材に進みましょう。' : '間違えた問題は復習リストに入りました。教材で確認してから復習すると定着します。'}</p>
+        <div className="cta-row">
+          <button className="primary" onClick={() => go('analytics')}>学習分析を見る</button>
+          {score < questions.length && <button onClick={() => go('quiz/review')}>間違えた問題を復習する</button>}
+          <button onClick={() => go('')}>教材一覧へ</button>
+        </div>
+      </section>
+    </main>
   );
+  const modeTitle = mode.kind === 'lesson' ? `教材 ${mode.lessonId} ${lessonById.get(mode.lessonId)?.title ?? ''} の演習`
+    : mode.kind === 'domain' ? `分野 ${mode.domainId} の演習`
+    : mode.kind === 'review' ? '復習（期限・間違い問題）'
+    : mode.kind === 'weak' ? '弱点復習' : 'ランダム演習';
   const toggle = (id: string) => {
     if (answered !== null) return;
     setSelected(prev => q.type === 'single' ? [id] : prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
@@ -59,7 +72,13 @@ export function QuizPage({ mode, go }: { mode: QuizMode; go: (path: string) => v
   const next = () => { setIdx(i => i + 1); setSelected([]); setAnswered(null); };
   return (
     <main>
-      <p className="meta">{idx + 1} / {questions.length}問 ／ {q.id} ／ 教材 {q.lessonId} {lessonById.get(q.lessonId)?.title ?? ''} ／ 難易度 {q.difficulty} ／ {q.skill}</p>
+      <div className="quiz-head">
+        <p className="meta">{modeTitle}</p>
+        <div className="progress quiz-progress" role="progressbar" aria-label="演習の進み具合" aria-valuemin={1} aria-valuemax={questions.length} aria-valuenow={idx + 1}>
+          <div className="progress-fill" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
+        </div>
+        <p className="meta">{idx + 1} / {questions.length}問 ／ これまで {score}問正解 ／ {q.id} ／ 教材 {q.lessonId} {lessonById.get(q.lessonId)?.title ?? ''} ／ 難易度 {q.difficulty} ／ {q.skill}</p>
+      </div>
       <h2 className="question-prompt">{q.prompt}</h2>
       {q.type === 'multi' && <p className="meta">複数選択：当てはまるものをすべて選んでください</p>}
       <div className="options">
@@ -77,7 +96,7 @@ export function QuizPage({ mode, go }: { mode: QuizMode; go: (path: string) => v
         ? <button className="primary" disabled={selected.length === 0} onClick={() => void submit()}>回答する</button>
         : (
           <section className="explanation" aria-live="polite">
-            <p><strong>{answered ? '正解です。' : '不正解です。'}</strong> {q.explanation}</p>
+            <p><strong className={answered ? 'result-ok' : 'result-ng'}>{answered ? '正解です。' : '不正解です。'}</strong> {q.explanation}</p>
             <ul>
               {q.options.filter(o => !q.correctIds.includes(o.id)).map(o => (
                 <li key={o.id}>「{o.text}」が誤りの理由: {q.wrongExplanations[o.id] ?? '解説を参照してください'}</li>

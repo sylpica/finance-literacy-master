@@ -39,7 +39,7 @@ export function DataPage() {
   return (
     <main>
       <h2>データ管理</h2>
-      <section>
+      <section className="panel">
         <h3>市場データCSVの取込</h3>
         <p className="meta">対応形式: 日付列（YYYY-MM-DD）・銘柄列・価格（終値）列を含むCSV。UTF-8 / Shift_JIS に対応します。取り込んだデータは検証プレビュー用で、端末外に送信されません。調整前/調整後の株価の区別は元のデータ提供元の定義に従ってください。</p>
         <input type="file" accept=".csv,text/csv" onChange={e => { const f = e.target.files?.[0]; if (f) void onCsv(f); }} aria-label="CSVファイルを選択" />
@@ -68,7 +68,7 @@ export function DataPage() {
           </div>
         )}
       </section>
-      <section>
+      <section className="panel">
         <h3>学習データのバックアップと復元</h3>
         <p className="meta">ブラウザの保存領域は、ブラウザの判断で削除されることがあり永久保持は保証されません。大切な学習記録は定期的にバックアップしてください。</p>
         <button className="primary" onClick={downloadBackup}>バックアップをダウンロード（JSON）</button>{' '}
@@ -77,7 +77,7 @@ export function DataPage() {
         </label>
         {message && <p aria-live="polite">{message}</p>}
       </section>
-      <section>
+      <section className="panel">
         <h3>学習データの消去</h3>
         {!confirmWipe
           ? <button onClick={() => setConfirmWipe(true)}>すべての学習データを消去…</button>

@@ -1,7 +1,7 @@
 import type { Question } from '../types';
 import { SRC } from './sources';
 
-// 分野M・Nの問題。各教材2問、全項目必須、誤答には個別の理由を付す。
+// 分野M・Nの問題。各教材4問、全項目必須、誤答には個別の理由を付す。
 export const QUESTIONS_4: Question[] = [
   {
     id: 'Q-M01-1', lessonId: 'M-01', type: 'single', difficulty: 1, skill: 'understand',
@@ -40,6 +40,42 @@ export const QUESTIONS_4: Question[] = [
     sources: [SRC.fsaNisa], reviewStatus: 'verified',
   },
   {
+    id: 'Q-M01-3', lessonId: 'M-01', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: 'NISA口座で、簿価（取得価額）200万円で購入した株式を260万円で売却した。売却により翌年以降に再利用できる非課税枠はいくらか。',
+    options: [
+      { id: 'a', text: '200万円' },
+      { id: 'b', text: '260万円' },
+      { id: 'c', text: '60万円' },
+      { id: 'd', text: '0円（再利用はできない）' },
+    ],
+    correctIds: ['a'],
+    explanation: '非課税枠は買付金額（簿価）で管理されます。売却すると、その簿価分（200万円）の枠が翌年以降に再利用できます。売却額そのものや、利益の額が再利用されるわけではありません。',
+    wrongExplanations: {
+      b: '売却額260万円ではなく、簿価（取得価額）200万円分が再利用の対象です。',
+      c: '利益60万円は再利用額とは関係ありません。枠は簿価ベースで管理されます。',
+      d: '売却した分の枠は消滅するのではなく、簿価分が翌年以降に再利用できます。',
+    },
+    sources: [SRC.fsaNisa], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M01-4', lessonId: 'M-01', type: 'single', difficulty: 2, skill: 'find-error',
+    prompt: '現行NISAについて誤っているものはどれか。',
+    options: [
+      { id: 'a', text: 'つみたて投資枠の対象は、積立・分散・長期投資に適した一定の投資信託である' },
+      { id: 'b', text: '成長投資枠では、整理・監理銘柄やレバレッジ型など一部の商品は対象外とされている' },
+      { id: 'c', text: '生涯非課税保有限度額1,800万円は、その全額を成長投資枠で使うことができる' },
+      { id: 'd', text: '保有商品を売却すると、その簿価分の非課税枠が翌年以降に再利用できる' },
+    ],
+    correctIds: ['c'],
+    explanation: '成長投資枠で使えるのは、生涯非課税保有限度額1,800万円のうち1,200万円までです。全額を成長投資枠で使うことはできません。',
+    wrongExplanations: {
+      a: '正しい記述です。つみたて投資枠の対象は、一定の投資信託に限られます。',
+      b: '正しい記述です。成長投資枠でも、一部の商品は対象外とされています。',
+      d: '正しい記述です。再利用できるのは簿価分で、時期は翌年以降です。',
+    },
+    sources: [SRC.fsaNisa], reviewStatus: 'draft',
+  },
+  {
     id: 'Q-M02-1', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'understand',
     prompt: 'iDeCoの税制優遇について正しいものはどれか。',
     options: [
@@ -72,6 +108,42 @@ export const QUESTIONS_4: Question[] = [
       a: '生活防衛資金は緊急時に使える流動性が必要です。原則60歳まで引き出せないiDeCoに入れるべきではありません。',
       c: '受取時は退職所得または公的年金等として課税され、受取方法で税負担が変わるため検討が必要です。',
       d: '所得控除の節税効果は限界税率によって異なり、課税所得がない場合は効果が生じません。',
+    },
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M02-3', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'calculate',
+    prompt: 'iDeCoに年間36万円（月3万円）を拠出した。限界税率を所得税20%・住民税10%の合計30%と仮定すると、拠出時の節税額の概算はいくらか。',
+    options: [
+      { id: 'a', text: '3.6万円' },
+      { id: 'b', text: '10.8万円' },
+      { id: 'c', text: '7.2万円' },
+      { id: 'd', text: '36万円' },
+    ],
+    correctIds: ['b'],
+    explanation: '節税額の概算＝年間掛金額×限界税率です。36万円×30%＝10.8万円です。あくまで仮定に基づく概算であり、受取時の課税を含めた最終的な有利さは別に評価する必要があります。',
+    wrongExplanations: {
+      a: '住民税10%だけで計算した値です。所得税と住民税を合わせた限界税率30%で計算します。',
+      c: '所得税20%だけで計算した値です。合計30%で計算すると10.8万円になります。',
+      d: '掛金の全額が戻ってくるわけではありません。節税額は掛金に限界税率を掛けた概算です。',
+    },
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M02-4', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'find-error',
+    prompt: 'iDeCoの受取時の取扱いについて誤っているものはどれか。',
+    options: [
+      { id: 'a', text: '一時金で受け取る場合は、退職所得として課税される' },
+      { id: 'b', text: '年金で受け取る場合は、公的年金等の雑所得として課税される' },
+      { id: 'c', text: '受取時の税負担は受取方法によって変わりうるため、生涯の税負担で評価する必要がある' },
+      { id: 'd', text: '運用益が非課税であるため、受け取り方にかかわらず税金は一切かからない' },
+    ],
+    correctIds: ['d'],
+    explanation: 'iDeCoは拠出時と運用時が優遇され、受取時に課税される構造です。一時金は退職所得、年金は公的年金等の雑所得として課税されるため、「税金は一切かからない」は誤りです。',
+    wrongExplanations: {
+      a: '正しい記述です。一時金は退職所得として課税されます。',
+      b: '正しい記述です。年金は公的年金等の雑所得として課税されます。',
+      c: '正しい記述です。入口の節税だけでなく出口の課税を含めて評価します。',
     },
     sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
   },
@@ -112,6 +184,42 @@ export const QUESTIONS_4: Question[] = [
     sources: [SRC.ntaStockTax], reviewStatus: 'draft',
   },
   {
+    id: 'Q-M03-3', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'calculate',
+    prompt: '同じ年に、A口座で上場株式の譲渡益80万円、B口座で譲渡損失50万円があった。確定申告で損益通算した場合の税額はいくらか（税率20.315%）。',
+    options: [
+      { id: 'a', text: '101,575円' },
+      { id: 'b', text: '162,520円' },
+      { id: 'c', text: '60,945円' },
+      { id: 'd', text: '264,095円' },
+    ],
+    correctIds: ['c'],
+    explanation: '損益通算後の課税対象は80万円−50万円＝30万円です。税額は30万円×20.315%＝60,945円です。口座をまたぐ損益通算には確定申告が必要です。',
+    wrongExplanations: {
+      a: '損失50万円に税率を掛けた値です。損失そのものに課税されるわけではありません。',
+      b: '損益通算をしない場合の税額です（80万円×20.315%）。通算すると課税対象は30万円になります。',
+      d: '利益と損失を合計した130万円に税率を掛けた値です。損失は利益から差し引いて通算します。',
+    },
+    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M03-4', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: '取得価額100万円の投資信託で、普通分配金2万円と元本払戻金（特別分配金）3万円が支払われた。課税対象の金額と、支払い後の取得価額の組み合わせとして正しいものはどれか。',
+    options: [
+      { id: 'a', text: '課税対象5万円、取得価額100万円' },
+      { id: 'b', text: '課税対象2万円、取得価額97万円' },
+      { id: 'c', text: '課税対象3万円、取得価額97万円' },
+      { id: 'd', text: '課税対象0円、取得価額95万円' },
+    ],
+    correctIds: ['b'],
+    explanation: '元本払戻金（特別分配金）は課税対象ではなく、取得価額を引き下げる取扱いです。課税対象は普通分配金2万円で、取得価額は100万円−3万円＝97万円になります。',
+    wrongExplanations: {
+      a: '分配金全額を課税対象とし、取得価額の調整もしていません。元本払戻金は非課税で、受け取ると取得価額が下がります。',
+      c: '元本払戻金3万円を課税対象と取り違えています。課税対象は普通分配金2万円です。',
+      d: '普通分配金は課税対象です。また取得価額の下げ幅は、元本払戻金の3万円分だけです。',
+    },
+    sources: [SRC.ntaStockTax, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
     id: 'Q-M04-1', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'calculate',
     prompt: '元本100万円を年率5%で20年運用した（税引前で約265.33万円）。売却時に利益全体へ20.315%が一括課税される単純化モデルでは、税引後の金額はおよそいくらか。',
     options: [
@@ -145,6 +253,42 @@ export const QUESTIONS_4: Question[] = [
       a: '正しい扱いです。適用開始日が将来の制度は、現行制度とは区別しなければなりません。',
       c: '正しい扱いです。過去の期間の計算には当時の制度を使います。',
       d: '正しい扱いです。未確認の情報は未確認と明示し、確定値として表示しません。',
+    },
+    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M04-3', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'calculate',
+    prompt: '元本100万円を税引前年率5%で10年間運用する。費用のない場合と、年1%の費用がかかり実質年率4%になる場合とで、10年後の金額の差はおよそいくらか。前提：1.05^10≒1.629、1.04^10≒1.480とする。',
+    options: [
+      { id: 'a', text: '約14.9万円' },
+      { id: 'b', text: '約10万円' },
+      { id: 'c', text: '約48.0万円' },
+      { id: 'd', text: '約62.9万円' },
+    ],
+    correctIds: ['a'],
+    explanation: '費用なしでは100万円×1.629＝162.9万円、費用ありでは100万円×1.480＝148.0万円です。その差は約14.9万円で、年1%の費用の差が10年の複利で元本の約15%相当に広がります。',
+    wrongExplanations: {
+      b: '1%×10年＝10%と単純に掛けた計算です。複利では、差は約14.9万円に広がります。',
+      c: '費用ありの場合の利益額（148.0万円−100万円）そのものです。2つの場合の金額の差ではありません。',
+      d: '費用なしの場合の利益額（162.9万円−100万円）そのものです。2つの場合の金額の差ではありません。',
+    },
+    sources: [SRC.fsaNisa, SRC.ntaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-M04-4', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: 'ある制度改正が法律として成立したが、適用開始日は2年後である。この制度を資産形成の計算に使う際の扱いとして正しいものはどれか。',
+    options: [
+      { id: 'a', text: '成立したので、今年の計算から現行制度として組み込む' },
+      { id: 'b', text: '適用開始が将来であることを明示し、適用時点以降の計算にのみ使う' },
+      { id: 'c', text: '成立していても、報道された改正案と同様に無視する' },
+      { id: 'd', text: '成立した制度は、過去の期間の計算にも遡って適用する' },
+    ],
+    correctIds: ['b'],
+    explanation: '成立済み未施行の制度は、施行中の制度とは区別し、適用開始日を明示したうえで将来時点の計算に使います。成立していない提案段階の議論とは扱いが異なります。',
+    wrongExplanations: {
+      a: '適用開始日前の期間については現行制度ではありません。開始日以降の計算にのみ使います。',
+      c: '法律として成立している点で、提案・検討段階の議論とは区別されます。無視するのではなく、適用時点を明示して扱います。',
+      d: '過去の期間の計算には、当時の制度を適用します。成立した制度を遡って使うことはしません。',
     },
     sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
   },
@@ -185,6 +329,42 @@ export const QUESTIONS_4: Question[] = [
     sources: [SRC.fsaInvest], reviewStatus: 'draft',
   },
   {
+    id: 'Q-N01-3', lessonId: 'N-01', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: '行動バイアスの影響を抑えるための対策として、最も適切なものはどれか。',
+    options: [
+      { id: 'a', text: '相場の状況に応じて、その都度の判断で柔軟に売買する' },
+      { id: 'b', text: '売買ルールを事前に決め、判断の根拠を記録し、反証となる情報を確認する手順を組み込む' },
+      { id: 'c', text: 'バイアスの種類と名前を覚えれば、判断への影響はなくなる' },
+      { id: 'd', text: '判断に迷ったときは、周囲の多数派と同じ行動を取る' },
+    ],
+    correctIds: ['b'],
+    explanation: 'バイアスは「気をつける」だけでは防ぎにくく、売買ルールの事前設定、判断根拠の記録、反証の確認といった手続きとして対策を組み込むことが有効です。',
+    wrongExplanations: {
+      a: 'その都度の判断は、バイアスの影響を最も受けやすい形です。事前のルール化が対策になります。',
+      c: '知識や経験があってもバイアスは生じます。知ることと、手続きで防ぐことは別です。',
+      d: '多数派に合わせる行動は群集行動そのものであり、バイアスの対策にはなりません。',
+    },
+    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N01-4', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'understand',
+    prompt: '「自分の予測はよく当たる」と考え、1つの銘柄に資金の大半を投じ、頻繁に売買している。この行動に最も関係が深いバイアスはどれか。',
+    options: [
+      { id: 'a', text: '確証バイアス' },
+      { id: 'b', text: 'アンカリング' },
+      { id: 'c', text: 'FOMO' },
+      { id: 'd', text: '過信' },
+    ],
+    correctIds: ['d'],
+    explanation: '自分の予測精度を実際より高く見積もる過信は、過剰な取引や集中投資を招きます。',
+    wrongExplanations: {
+      a: '確証バイアスは、自分の仮説を支持する情報ばかりを集める傾向です。',
+      b: 'アンカリングは、最初に見た価格等に判断が引きずられる傾向です。',
+      c: 'FOMOは、上昇相場への乗り遅れ不安から、根拠の確認なしに飛びつく行動です。',
+    },
+    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+  },
+  {
     id: 'Q-N02-1', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'understand',
     prompt: '流動性危機で価格下落が増幅する仕組みとして正しいものはどれか。',
     options: [
@@ -217,6 +397,42 @@ export const QUESTIONS_4: Question[] = [
       a: '正しい理解です。パターンの理解と予測は別のものです。',
       b: '正しい理解です。値上がり自体が根拠になる状態はバブル後期の特徴とされます。',
       d: '正しい理解です。事例ごとの制度・原因・政策対応の違いを考慮する必要があります。',
+    },
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N02-3', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'calculate',
+    prompt: 'ある価格が25%下落した。元の価格に戻るために必要な上昇率はどれか。',
+    options: [
+      { id: 'a', text: '20%' },
+      { id: 'b', text: '25%' },
+      { id: 'c', text: '約33.3%' },
+      { id: 'd', text: '50%' },
+    ],
+    correctIds: ['c'],
+    explanation: '回復に必要な上昇率＝下落率÷（1−下落率）＝0.25÷0.75≒33.3%です。価格100が75へ下がった場合、75から100へ戻るには（100−75）÷75≒33.3%の上昇が必要です。',
+    wrongExplanations: {
+      a: '下落幅25を、回復後の価格125で割った計算です。上昇率の基準は下落後の価格（75）です。',
+      b: '下落率と同じ割合では戻りません。75×1.25＝93.75で、100には届きません。',
+      d: '50%は、下落率が約33.3%の場合に必要となる回復率です。',
+    },
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N02-4', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: 'ある資産について「値上がりしているから買うべきだ」「慎重に評価する人は乗り遅れる」という論調が広がっている。この状況の理解として正しいものはどれか。',
+    options: [
+      { id: 'a', text: '価格上昇そのものが買いの根拠になる段階であり、価格が実体的な価値の評価から離れやすい' },
+      { id: 'b', text: '投資家の多くが慎重な評価を行っている段階である' },
+      { id: 'c', text: '流動性危機がすでに始まっている段階である' },
+      { id: 'd', text: '価格が実体的な価値に収束しつつある段階である' },
+    ],
+    correctIds: ['a'],
+    explanation: 'バブルの一般的な経過では、価格上昇そのものが買いの根拠になり、慎重な評価が「乗り遅れ」と見なされる段階があります。これはバブルの後期に観察される特徴です。',
+    wrongExplanations: {
+      b: '慎重な評価が軽視される論調であり、逆の状況です。',
+      c: '流動性危機は、売りたいときに買い手が現れず大きく下げなければ売れない状態で、この段階とは異なります。',
+      d: '価格上昇を根拠にする買いが広がる局面は、実体的な価値への収束ではなく、乖離が進みやすい段階です。',
     },
     sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
   },
@@ -257,6 +473,42 @@ export const QUESTIONS_4: Question[] = [
     sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
   },
   {
+    id: 'Q-N03-3', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'understand',
+    prompt: 'インサイダー取引が禁止される理由として正しいものはどれか。',
+    options: [
+      { id: 'a', text: '株価が大きく変動するから' },
+      { id: 'b', text: '未公表の重要情報を知る者だけが有利になる取引を許すと、市場の公平性が損なわれるから' },
+      { id: 'c', text: '会社の業績が悪化するから' },
+      { id: 'd', text: '取引の数量が増えすぎるから' },
+    ],
+    correctIds: ['b'],
+    explanation: 'インサイダー取引は、上場会社の未公表の重要情報を知る者が、それを利用して売買する行為です。情報開示によって投資家間の情報格差を縮める仕組みと、市場参加者間の公平性を損なうため、禁止されています。',
+    wrongExplanations: {
+      a: '株価の変動そのものではなく、情報を知る者だけが有利になる不公平が問題です。',
+      c: '禁止の理由は会社の業績ではなく、市場参加者間の公平性です。',
+      d: '取引量の多寡は、禁止の理由ではありません。',
+    },
+    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N03-4', lessonId: 'N-03', type: 'single', difficulty: 2, skill: 'find-error',
+    prompt: '勧誘や助言の評価について誤っているものはどれか。',
+    options: [
+      { id: 'a', text: '金融庁の登録業者であっても、元本が保証されるわけではない' },
+      { id: 'b', text: '助言者が何で報酬を得ているかは、助言を評価する際の確認事項である' },
+      { id: 'c', text: '販売手数料が高い商品ほど、顧客にとって有利な商品である' },
+      { id: 'd', text: '利益相反とは、販売する側の利益と顧客の利益が一致しない構造を指す' },
+    ],
+    correctIds: ['c'],
+    explanation: '手数料の高さは、顧客にとっての有利さを示しません。販売側の報酬が大きい商品には、販売側が勧める動機が生じる利益相反の構造があり、顧客の利益と一致するとは限りません。',
+    wrongExplanations: {
+      a: '正しい理解です。登録は業務の許可であり、元本や商品の安全性の保証ではありません。',
+      b: '正しい理解です。報酬の出どころは、助言の立場を評価する材料になります。',
+      d: '正しい理解です。利益相反は、販売側と顧客の利益が一致しない構造を指します。',
+    },
+    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+  },
+  {
     id: 'Q-N04-1', lessonId: 'N-04', type: 'single', difficulty: 1, skill: 'understand',
     prompt: '投資判断の根拠として、最も信頼性が高い情報の組み合わせはどれか。',
     options: [
@@ -287,6 +539,42 @@ export const QUESTIONS_4: Question[] = [
     explanation: '出典の確認、数値の前提（時点・単位・定義）の確認、事実／仮定／予測の区別が基本手順です。発信者の属性は確認を省略する理由にはなりません。',
     wrongExplanations: {
       d: '知名度と正確さは無関係です。誰の情報でも出典確認が必要です。',
+    },
+    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N04-3', lessonId: 'N-04', type: 'single', difficulty: 2, skill: 'find-error',
+    prompt: '事実・仮定・予測の区別について誤っているものはどれか。',
+    options: [
+      { id: 'a', text: 'アナリストの来期業績予想は、公表資料に基づく分析であるため「事実」として扱ってよい' },
+      { id: 'b', text: '公表された決算数値は「事実」に当たる' },
+      { id: 'c', text: '計算に置いた将来の成長率は「仮定」であり、前提として明示すべきものである' },
+      { id: 'd', text: '予測は外れる可能性があり、事実とは区別して扱う必要がある' },
+    ],
+    correctIds: ['a'],
+    explanation: '業績予想は、根拠に公表資料を使っていても、将来についての見解である「予測」です。事実として扱うと、判断の確実性を誤認します。',
+    wrongExplanations: {
+      b: '正しい区別です。公表された決算数値は、観測や公的記録で確認できる事実です。',
+      c: '正しい区別です。分析の前提として置く数値は仮定であり、明示することが求められます。',
+      d: '正しい区別です。予測は外れる可能性を前提に扱います。',
+    },
+    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
+  },
+  {
+    id: 'Q-N04-4', lessonId: 'N-04', type: 'single', difficulty: 2, skill: 'apply',
+    prompt: '「この投資信託は過去1年で30%上昇」という宣伝を見た。投資判断の材料として扱う際の対応として最も適切なものはどれか。',
+    options: [
+      { id: 'a', text: '宣伝の数値を、そのまま今後1年の期待値として使う' },
+      { id: 'b', text: '上昇率が高い商品ほど安全だと判断する' },
+      { id: 'c', text: '過去の実績が表示されていれば、出典や前提の確認は不要と判断する' },
+      { id: 'd', text: '基準価額の実績を発行体の資料で確認し、その期間の市場全体の動きと比較したうえで、手数料・税金を差し引いた税引後で考える' },
+    ],
+    correctIds: ['d'],
+    explanation: '実績の数値は、表示する期間の切り取り方で印象が変わります。発行体の資料で実績を確認し、市場全体の動きと比較し、税引後で評価することが、宣伝を判断材料に変える手順です。',
+    wrongExplanations: {
+      a: '過去の実績は将来の成果を保証するものではなく、期待値としてそのまま使うことはできません。',
+      b: '上昇率の高さは、将来の安全性を示すものではありません。',
+      c: '実績の表示があっても、期間・前提・出典の確認は必要です。',
     },
     sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
   },

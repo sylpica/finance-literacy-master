@@ -39,36 +39,87 @@ const NAV: { path: string; label: string }[] = [
 
 function Home({ go }: { go: (p: string) => void }) {
   const { state } = useApp();
-  const lessonProgress = useMemo(() => {
-    const attempted = new Map<string, Set<string>>();
-    for (const a of state?.attempts ?? []) {
+  const stats = useMemo(() => {
+    const attemptedByLesson = new Map<string, Set<string>>();
+    const firstByQuestion = new Map<string, boolean>();
+    for (const a of [...(state?.attempts ?? [])].sort((x, y) => x.answeredAt - y.answeredAt)) {
       const q = QUESTIONS.find(x => x.id === a.questionId); if (!q) continue;
-      const s = attempted.get(q.lessonId) ?? new Set<string>(); s.add(q.id); attempted.set(q.lessonId, s);
+      const s = attemptedByLesson.get(q.lessonId) ?? new Set<string>(); s.add(q.id); attemptedByLesson.set(q.lessonId, s);
+      if (!firstByQuestion.has(a.questionId)) firstByQuestion.set(a.questionId, a.correct);
     }
-    return attempted;
+    const doneLessons = LESSONS.filter(l => (attemptedByLesson.get(l.id)?.size ?? 0) >= l.questionIds.length && l.questionIds.length > 0).length;
+    const firstTotal = firstByQuestion.size;
+    const firstCorrect = [...firstByQuestion.values()].filter(Boolean).length;
+    const now = Date.now();
+    const dueCount = (state?.schedule ?? []).filter(s => s.dueAt <= now).length;
+    const nextLesson = LESSONS.find(l => (attemptedByLesson.get(l.id)?.size ?? 0) < l.questionIds.length) ?? LESSONS[0];
+    return { attemptedByLesson, doneLessons, firstTotal, firstCorrect, dueCount, nextLesson };
   }, [state]);
+  const nextLesson = stats.nextLesson;
+  const domainProgress = (domainId: string) => {
+    const qs = QUESTIONS.filter(q => q.lessonId.startsWith(`${domainId}-`));
+    const done = qs.filter(q => (stats.attemptedByLesson.get(q.lessonId)?.has(q.id)) ?? false).length;
+    return { done, total: qs.length };
+  };
   return (
     <main>
-      <h2>教材一覧</h2>
-      <p className="meta">全{LESSONS.length}教材・{QUESTIONS.length}問。章の順番は強制しません。前提知識から自由に選べます。株式と暗号資産を最重要分野として厚く扱い、保険・相続は対象外です。</p>
-      <p><button className="primary" onClick={() => go('quiz/random')}>ランダム演習（10問）</button>{' '}
-        <button onClick={() => go('quiz/review')}>復習する</button></p>
-      {DOMAINS.map(d => (
-        <section key={d.id} className="domain-block">
-          <h3>{d.id}. {d.name}</h3>
-          <p className="meta">{d.summary}</p>
-          <div className="lesson-grid">
-            {LESSONS.filter(l => l.domainId === d.id).map(l => (
-              <button key={l.id} className="lesson-card" onClick={() => go(`lesson/${l.id}`)}>
-                <span className="lesson-id">{l.id}{(lessonProgress.get(l.id)?.size ?? 0) >= l.questionIds.length && l.questionIds.length > 0 ? ' ✓学習済み' : lessonProgress.has(l.id) ? ' ✓学習中' : ''}</span>
-                <span className="lesson-title">{l.title}</span>
-                <span className="meta">難易度{l.level}／問題{l.questionIds.length}問{l.reviewStatus === 'draft' ? '／要確認' : ''}</span>
-              </button>
-            ))}
-          </div>
-          <button className="chip" onClick={() => go(`quiz/domain/${d.id}`)}>この分野の問題を解く</button>
-        </section>
-      ))}
+      <section className="hero" aria-label="学習状況">
+        <h2>学習をはじめよう</h2>
+        <div className="stat-grid">
+          <div className="stat"><div className="stat-value">{stats.doneLessons}<span className="meta"> / {LESSONS.length}</span></div><div className="stat-label">学習済みの教材</div></div>
+          <div className="stat"><div className="stat-value">{stats.firstTotal}<span className="meta"> / {QUESTIONS.length}</span></div><div className="stat-label">回答した問題</div></div>
+          <div className="stat"><div className="stat-value">{stats.firstTotal > 0 ? `${Math.round((stats.firstCorrect / stats.firstTotal) * 100)}%` : '—'}</div><div className="stat-label">初見正答率</div></div>
+          <div className="stat"><div className="stat-value">{stats.dueCount}<span className="meta"> 問</span></div><div className="stat-label">復習期限が来た問題</div></div>
+        </div>
+        <div className="progress" role="progressbar" aria-label="全体の進捗" aria-valuemin={0} aria-valuemax={QUESTIONS.length} aria-valuenow={stats.firstTotal}>
+          <div className="progress-fill" style={{ width: `${QUESTIONS.length ? (stats.firstTotal / QUESTIONS.length) * 100 : 0}%` }} />
+        </div>
+        <div className="cta-row">
+          {nextLesson && <button className="primary" onClick={() => go(`lesson/${nextLesson.id}`)}>続きから学ぶ: {nextLesson.id} {nextLesson.title}</button>}
+          <button onClick={() => go('quiz/random')}>ランダム演習（10問）</button>
+          <button onClick={() => go('quiz/review')}>復習する{stats.dueCount > 0 ? `（${stats.dueCount}問）` : ''}</button>
+        </div>
+      </section>
+      {DOMAINS.map(d => {
+        const dp = domainProgress(d.id);
+        return (
+          <section key={d.id} className="domain-block">
+            <div className="domain-head">
+              <h3>{d.id}. {d.name}</h3>
+              <div className="domain-progress">
+                <span className="meta">{dp.done} / {dp.total} 問に回答</span>
+                <div className="progress" role="progressbar" aria-label={`${d.name}の進捗`} aria-valuemin={0} aria-valuemax={dp.total} aria-valuenow={dp.done}>
+                  <div className="progress-fill" style={{ width: `${dp.total ? (dp.done / dp.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+            </div>
+            <p className="meta">{d.summary}</p>
+            <div className="lesson-grid">
+              {LESSONS.filter(l => l.domainId === d.id).map(l => {
+                const done = stats.attemptedByLesson.get(l.id)?.size ?? 0;
+                const total = l.questionIds.length;
+                const status = total > 0 && done >= total ? 'done' : done > 0 ? 'doing' : 'todo';
+                return (
+                  <button key={l.id} className="lesson-card" onClick={() => go(`lesson/${l.id}`)}>
+                    <span className="lesson-card-top">
+                      <span className="lesson-id">{l.id}</span>
+                      <span className={`status-chip ${status}`}>{status === 'done' ? '学習済み' : status === 'doing' ? '学習中' : '未学習'}</span>
+                    </span>
+                    <span className="lesson-title">{l.title}</span>
+                    <span className="meta">難易度{l.level}／問題{total}問{l.reviewStatus === 'draft' ? '／要確認' : ''}</span>
+                    <span className="progress" aria-hidden="true"><span className={`progress-fill${status === 'done' ? ' good' : ''}`} style={{ display: 'block', width: `${total ? (done / total) * 100 : 0}%` }} /></span>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="chip" onClick={() => go(`quiz/domain/${d.id}`)}>この分野の問題を解く</button>
+          </section>
+        );
+      })}
+      <section className="panel" aria-label="このアプリについて">
+        <h3>このアプリについて</h3>
+        <p className="meta">全{LESSONS.length}教材・{QUESTIONS.length}問。章の順番は強制しません。前提知識から自由に選べます。株式と暗号資産を最重要分野として厚く扱い、保険・相続は対象外です。教材から演習へ、間違えた問題は復習へ、という流れで学習がつながります。</p>
+      </section>
     </main>
   );
 }
@@ -78,7 +129,7 @@ function MapPage({ go }: { go: (p: string) => void }) {
     <main>
       <h2>学習マップ（前提知識のつながり）</h2>
       {DOMAINS.map(d => (
-        <section key={d.id}>
+        <section key={d.id} className="panel">
           <h3>{d.id}. {d.name}</h3>
           <ul>
             {LESSONS.filter(l => l.domainId === d.id).map(l => (
@@ -123,17 +174,17 @@ function RegulationsPage() {
   return (
     <main>
       <h2>制度情報（構造化データ）</h2>
-      <p className="meta">制度は本文の固定文章ではなく、適用期間・状態・出典を持つデータとして管理しています。将来の改正案を現行制度として扱いません。</p>
       {REGULATIONS.map(r => (
         <section key={r.id} className="domain-block">
           <h3>{r.name}（{r.jurisdiction}）</h3>
-          <p>状態: <strong>{statusLabel[r.status]}</strong>{r.effectiveFrom ? ` ／ 適用開始: ${r.effectiveFrom}` : ''}{r.announcedAt ? ` ／ 公表日・節目: ${r.announcedAt}` : ''}{r.effectiveTo ? ` ／ 終了: ${r.effectiveTo}` : ''} ／ 対象: {r.appliesTo}</p>
+          <p><span className="badge">{statusLabel[r.status]}</span>{r.effectiveFrom ? ` ／ 適用開始: ${r.effectiveFrom}` : ''}{r.announcedAt ? ` ／ 公表日・節目: ${r.announcedAt}` : ''}{r.effectiveTo ? ` ／ 終了: ${r.effectiveTo}` : ''} ／ 対象: {r.appliesTo}</p>
           <div className="table-scroll"><table><tbody>
             {r.keyNumbers.map((k, i) => <tr key={i}><th>{k.label}</th><td>{k.value}</td></tr>)}
           </tbody></table></div>
           <p className="meta">出典: <a href={r.source.url} target="_blank" rel="noreferrer noopener">{r.source.title}</a>（{r.source.publisher}、確認日 {r.source.checkedAt}）／ データ v{r.version} ／ 履歴: {r.history}</p>
         </section>
       ))}
+      <p className="meta">制度は本文の固定文章ではなく、適用期間・状態・出典を持つデータとして管理しています。将来の改正案を現行制度として扱いません。</p>
     </main>
   );
 }
@@ -143,14 +194,20 @@ function SettingsPage({ go }: { go: (p: string) => void }) {
   return (
     <main>
       <h2>設定</h2>
-      <p>テーマ:
-        <button className={theme === 'dark' ? 'chip active' : 'chip'} onClick={() => setTheme('dark')}>ダーク</button>
-        <button className={theme === 'light' ? 'chip active' : 'chip'} onClick={() => setTheme('light')}>ライト</button></p>
-      <p>表示密度:
-        <button className={density === 'normal' ? 'chip active' : 'chip'} onClick={() => setDensity('normal')}>通常</button>
-        <button className={density === 'dense' ? 'chip active' : 'chip'} onClick={() => setDensity('dense')}>高密度</button></p>
+      <section className="panel">
+        <h3>表示</h3>
+        <p>テーマ:
+          <button className={theme === 'dark' ? 'chip active' : 'chip'} aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')}>ダーク</button>
+          <button className={theme === 'light' ? 'chip active' : 'chip'} aria-pressed={theme === 'light'} onClick={() => setTheme('light')}>ライト</button></p>
+        <p>表示密度:
+          <button className={density === 'normal' ? 'chip active' : 'chip'} aria-pressed={density === 'normal'} onClick={() => setDensity('normal')}>通常</button>
+          <button className={density === 'dense' ? 'chip active' : 'chip'} aria-pressed={density === 'dense'} onClick={() => setDensity('dense')}>高密度</button></p>
+      </section>
+      <section className="panel">
+        <h3>データとこのアプリについて</h3>
       <p>学習データは端末内（IndexedDB）に保存されます。ブラウザの保存領域は永久保持が保証されないため、<button className="linklike" onClick={() => go('data')}>データ管理</button>から定期的にバックアップしてください。</p>
       <p className="meta">このアプリは無料・ログイン不要で、実行時に外部AIや有料APIを使いません。実取引・口座連携・ウォレット接続の機能はなく、秘密鍵やシードフレーズの入力欄もありません。</p>
+      </section>
     </main>
   );
 }
@@ -181,9 +238,12 @@ function Shell() {
   return (
     <div className="app">
       <header>
-        <h1><button className="linklike title" onClick={() => go('')}>資産形成・金融教養マスター</button></h1>
+        <div className="brand">
+          <h1><button className="linklike title" onClick={() => go('')}>資産形成・金融教養マスター</button></h1>
+          <span className="brand-tag">株式・暗号資産を中心に学ぶ、無料の金融教養PWA</span>
+        </div>
         <nav aria-label="主要画面">
-          {NAV.map(n => <button key={n.path + n.label} className={route === n.path ? 'nav active' : 'nav'} onClick={() => go(n.path)}>{n.label}</button>)}
+          {NAV.map(n => <button key={n.path + n.label} className={route === n.path ? 'nav active' : 'nav'} aria-current={route === n.path ? 'page' : undefined} onClick={() => go(n.path)}>{n.label}</button>)}
         </nav>
       </header>
       <ErrorBoundary key={route}>{page}</ErrorBoundary>

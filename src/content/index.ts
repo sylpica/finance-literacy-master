@@ -7,6 +7,9 @@ import { QUESTIONS_1 } from './questions-1';
 import { QUESTIONS_2 } from './questions-2';
 import { QUESTIONS_3 } from './questions-3';
 import { QUESTIONS_4 } from './questions-4';
+import { DOMAINS } from './domains';
+
+export const domainById = new Map(DOMAINS.map(d => [d.id, d]));
 
 export const LESSONS: Lesson[] = [...LESSONS_1, ...LESSONS_2, ...LESSONS_3, ...LESSONS_4];
 export const QUESTIONS: Question[] = [...QUESTIONS_1, ...QUESTIONS_2, ...QUESTIONS_3, ...QUESTIONS_4];
