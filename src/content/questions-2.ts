@@ -10,7 +10,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: 'GDP ＝ 消費＋投資＋政府支出＋輸出−輸入 ＝ 500＋100＋90＋70−60 ＝ 700兆円。輸入は国内で生産されたものではないため差し引きます。',
     wrongExplanations: { a: '輸入を加算してしまった計算です（500＋100＋90＋70＋60＝820）。', c: '輸出と輸入の扱いを取り違えた計算です。', d: '輸入を差し引いていない計算です（500＋100＋90＋70＝760）。' },
-    assumptions: '在庫変動や統計上の不突合はないものとする。', sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
+    assumptions: '在庫変動や統計上の不突合はないものとする。', sources: [SRC.caoSna], reviewStatus: 'verified',
   },
   {
     id: 'Q-E01-2', lessonId: 'E-01', type: 'single', difficulty: 1, skill: 'understand',
@@ -82,7 +82,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: '輸入は、消費や投資に含まれる輸入品の分を差し引くための調整項目であり、輸入の増加それ自体がGDPを機械的に減らすわけではない。消費や投資の増加に伴って輸入が増えることも多い。他の3つは正しい説明である。',
     wrongExplanations: { a: '正しい説明である。実質GDPは基準年の価格で測り、物価変動の影響を取り除く。', c: '正しい説明である。市場で取引されない家計の無償労働はGDPに数えられず、GDPの限界の1つとされる。', d: '正しい説明である。公式な景気判定は国ごとに専門機関が行い、定義は国によって異なる。' },
-    sources: [SRC.bojTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-E01-4', lessonId: 'E-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -91,16 +91,16 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['c'],
     explanation: '実質成長率 ＝ 1.05 ÷ 1.02 − 1 ≒ 0.0294、すなわち約2.94%である。近似式（5 − 2 ＝ 3%）に近い値になるが、厳密には割り算で求める。',
     wrongExplanations: { a: '名目成長率と物価上昇率を足してしまった計算である。物価の影響は差し引く側にある。', b: '近似式（名目成長率 − 物価上昇率）による値である。本問では厳密式で計算するため約2.94%が正しく、3%は近似値にとどまる。', d: '名目成長率を物価上昇率で割った計算（5 ÷ 2）であり、厳密式の形を取り違えている。' },
-    assumptions: '物価上昇率はGDPデフレーターの変化率として扱う。', sources: [SRC.bojTop], reviewStatus: 'draft',
+    assumptions: '物価上昇率はGDPデフレーターの変化率として扱う。', sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-E02-3', lessonId: 'E-02', type: 'single', difficulty: 2, skill: 'apply',
     prompt: '中央銀行が政策金利を引き下げたにもかかわらず、銀行の貸出態度が慎重で企業向け貸出がほとんど増えなかった。この状況の理解として最も適切なものはどれか。',
     options: [{ id: 'a', text: '市場の織り込みが進んだためである' }, { id: 'b', text: '量的緩和が自動的に効果を発揮したためである' }, { id: 'c', text: '期間プレミアムが上昇したためである' }, { id: 'd', text: '金融政策の波及は常に保証されるわけではなく、貸出態度や需要側の慎重さによって弱まる場合がある' }],
     correctIds: ['d'],
-    explanation: '政策金利の引き下げは波及経路の出発点にすぎず、銀行の貸出態度や借り手の慎重さによっては貸出が増えない場合がある（流動性の罠として議論される状況である）。波及は常に保証されない。',
+    explanation: '政策金利の引き下げは波及経路の出発点にすぎず、銀行の貸出態度や借り手の慎重さによっては貸出が増えない場合がある（流動性の罠や、銀行の信用収縮として議論される状況である）。波及は常に保証されない。',
     wrongExplanations: { a: '織り込みは、市場価格が予想される政策を事前に反映する話であり、貸出が増えない理由の説明にはならない。', b: '量的緩和は中央銀行による資産買入れの話であり、本問の引き下げ局面で貸出が増えない理由とは無関係である。', c: '期間プレミアムは長期金利の構成要素であり、市中銀行の貸出が増えない直接の理由にはならない。' },
-    sources: [SRC.bojPolicy], reviewStatus: 'draft',
+    sources: [SRC.bojPolicy], reviewStatus: 'verified',
   },
   {
     id: 'Q-E02-4', lessonId: 'E-02', type: 'single', difficulty: 1, skill: 'understand',
@@ -109,7 +109,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: '中央銀行の見通し表明が人々の期待を通じて期待インフレ率や長期金利を動かす経路は、期待経路である。表明そのものが情報として作用する点が特徴である。',
     wrongExplanations: { a: '金利経路は、政策金利の変更が市場金利・貸出金利を通じて企業投資などに及ぶ経路である。', c: '為替経路は、金利の変化が通貨の価値を動かし、輸出入の採算などに及ぶ経路である。', d: '資産価格経路は、金利の変化が債券・株式の現在価値を動かす経路である。' },
-    sources: [SRC.bojPolicy], reviewStatus: 'draft',
+    sources: [SRC.bojPolicy], reviewStatus: 'verified',
   },
   {
     id: 'Q-E03-3', lessonId: 'E-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -118,7 +118,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '期間プレミアム ＝ 長期金利 − 短期金利予想の平均 ＝ 2.0 − 1.2 ＝ 0.8ポイントである。期間プレミアムは直接観測できず、この差分は推定値として扱う。',
     wrongExplanations: { b: '2つの金利を足してしまった計算である（2.0 ＋ 1.2）。期間プレミアムは差分で求める。', c: '短期金利予想の平均そのものであり、期間プレミアムではない。', d: '引き算の向きが逆である。長期金利の方が高いため、差はプラスになる。' },
-    sources: [SRC.bojTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-E03-4', lessonId: 'E-03', type: 'single', difficulty: 2, skill: 'apply',
@@ -127,7 +127,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '債務比率の安定性は、債務残高の絶対額ではなく名目金利と名目成長率の関係で評価する。金利（2%）が成長率（3%）を下回る状態では、プライマリーバランスが多少赤字でも比率が安定しやすい。',
     wrongExplanations: { b: '前提が逆である。本問では金利2%が成長率3%を下回っている。金利が成長率を上回る場合の説明である。', c: '赤字でも、金利と成長率の関係によっては比率が安定し得る。「必ず発散する」は誤りである。', d: '利払い負担を通じて金利は債務比率の動きに直接関係する。無関係ではない。' },
-    sources: [SRC.bojPolicy], reviewStatus: 'draft',
+    sources: [SRC.bojPolicy], reviewStatus: 'verified',
   },
   {
     id: 'Q-E04-3', lessonId: 'E-04', type: 'multi', difficulty: 2, skill: 'understand',
@@ -136,7 +136,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a', 'b'],
     explanation: '経常収支は、貿易・サービス収支、第一次所得収支（海外投資からの利子・配当など）、第二次所得収支の合計である。株式の購入や外貨準備の増減は資本・金融収支の側の取引であり、経常収支には含まれない。',
     wrongExplanations: { c: '株式の購入は資本・金融取引であり、経常収支の構成項目ではない。その保有から生じる配当の受取は第一次所得収支に入る点と区別する。', d: '外貨準備の増減は金融収支に記録されるものであり、経常収支の構成項目ではない。' },
-    sources: [SRC.bojTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-E04-4', lessonId: 'E-04', type: 'single', difficulty: 2, skill: 'apply',
@@ -145,7 +145,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '歴史的な金融危機に共通するのは、レバレッジ（借入れによる投資）の積み上がり、流動性の過小評価、危機時の資金引き揚げの速さである。ただし直接の引き金と構造は事例ごとに異なり、単一の物語で一般化はできない。',
     wrongExplanations: { b: '購買力平価は長期的な為替の目安であり、危機の共通要素として教材が挙げるものではない。', c: '期間プレミアムは長期金利の構成要素であり、危機の引き金として事例に共通に挙げられるものではない。', d: '期待インフレ率の低下は危機の共通要素ではない。危機時に焦点になるのは資金の流れと流動性である。' },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-F01-1', lessonId: 'F-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -171,7 +171,7 @@ export const QUESTIONS_2: Question[] = [
     options: [{ id: 'a', text: '1,200円' }, { id: 'b', text: '6,000円' }, { id: 'c', text: '12,000円' }, { id: 'd', text: '20,000円' }],
     correctIds: ['c'],
     explanation: '0.2%では 2,000,000 × 0.002 ＝ 4,000円、0.8%では 2,000,000 × 0.008 ＝ 16,000円。差は 16,000 − 4,000 ＝ 12,000円です。この差は運用成績と無関係に毎年発生します。',
-    wrongExplanations: { a: '率の読み違いによる計算です。', b: '片方のファンド分だけを計算した値に近い誤りです。差額を求める必要があります。', d: '元本に対する割合の計算が誤っています。' },
+    wrongExplanations: { a: '率の差0.6%を0.06%と読み違えた計算です（200万円×0.0006＝1,200円）。', b: '率の差を0.3%として計算した誤りです（200万円×0.003＝6,000円）。差し引くのは率同士（0.8%−0.2%＝0.6%）です。', d: '2つの率を合計して1%として計算した誤りです（200万円×0.01＝20,000円）。求めるのは差額です。' },
     assumptions: '期間中の元本の増減はなく、信託報酬のみを比較する。', sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
@@ -190,7 +190,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['c'],
     explanation: '日次リセットのため、日ごとに2倍します。100 × (1 − 0.20) × (1 ＋ 0.20) ＝ 100 × 0.80 × 1.20 ＝ 96。なお原指数自体も 100 × 0.90 × 1.10 ＝ 99 であり、レバレッジ型の目減り（減価）がより大きいことが分かります。',
     wrongExplanations: { a: '上下が相殺されて元に戻るという誤解です。日次で倍率をかけるため戻りません。', b: '原指数そのものの2日後の値です。レバレッジ型ではありません。', d: '期間騰落率に単純に2倍をかけた誤った計算です。経路依存性のためそのようにはなりません。' },
-    assumptions: '手数料・コスト・乖離はなく、日次騰落率に正確に倍率がかかるものとする。', sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    assumptions: '手数料・コスト・乖離はなく、日次騰落率に正確に倍率がかかるものとする。', sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F03-2', lessonId: 'F-03', type: 'single', difficulty: 2, skill: 'find-error',
@@ -199,7 +199,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: 'REITは取引所に上場する証券であり、価格は不動産市況だけでなく株式市場全体の動きや金利の影響も受けます。「現物そのもので市場の影響を受けない」は誤りです。',
     wrongExplanations: { a: '正しい説明です。金はキャッシュフローを生まない資産です。', c: '正しい説明です。賃料収入が分配の中心的な原資です。', d: '正しい説明です。利子を生まない金の保有の機会費用は実質金利と関係します。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F04-1', lessonId: 'F-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -226,7 +226,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '現在価値 ＝ 105 ÷ (1 ＋ 0.05) ＝ 105 ÷ 1.05 ＝ 100円である。将来のキャッシュフローを市場利回りで割り引いた合計が債券価格になる。',
     wrongExplanations: { b: '105 × (1 − 0.05) ＝ 99.75円とした計算である。割り引きは利率を引くのではなく、(1 ＋ 利回り）で割る。', c: '割り引きをしていない、将来の受取額そのものである。', d: '105 × 1.05 と、割り増す方向に計算した誤りである。現在価値は将来の受取額より小さくなる。' },
-    assumptions: '1年後の単一のキャッシュフローとして計算し、税・手数料は考えない。', sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    assumptions: '1年後の単一のキャッシュフローとして計算し、税・手数料は考えない。', sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F01-4', lessonId: 'F-01', type: 'single', difficulty: 2, skill: 'find-error',
@@ -235,7 +235,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['c'],
     explanation: '信用スプレッドは景気悪化局面で拡大しやすい性質がある。デフォルトへの懸念が高まるためであり、「縮小しやすい」は誤りである。',
     wrongExplanations: { a: '正しい説明である。信用力が低い債券ほど上乗せは大きくなる。', b: '正しい説明である。回収の見込みが低いほどスプレッドは大きくなる。', d: '正しい説明である。高い利回りは信用リスクや流動性リスクの対価である場合が多く、高いほど得とは限らない。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F02-3', lessonId: 'F-02', type: 'multi', difficulty: 2, skill: 'understand',
@@ -244,7 +244,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a', 'b'],
     explanation: 'トラッキングエラーは、対象指数とファンドの収益率の差のばらつきであり、小さいほど連動の精度が高いことを示す。信託報酬率はコストの率、乖離率は市場価格と基準価額の差であり、それぞれ別の概念である。',
     wrongExplanations: { c: '信託報酬率は保有期間中に差し引かれるコストの率であり、トラッキングエラーとは別の概念である。', d: '市場価格と基準価額の差は乖離率と呼ばれ、トラッキングエラーとは区別される。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F02-4', lessonId: 'F-02', type: 'single', difficulty: 2, skill: 'apply',
@@ -253,7 +253,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['d'],
     explanation: '信託報酬のほかに売買手数料、監査費用、指数の使用料などがかかる場合があり、実際に負担した総額は運用報告書の実質コスト（総経費率）で確認する。表示された信託報酬だけでは総額は分からない。',
     wrongExplanations: { a: '信託報酬は主要なコストだが、それ以外の費用を含まない。総額の確認には不十分である。', b: '騰落率は運用成果の変動であり、負担したコストの内訳を示すものではない。', c: 'トラッキングエラーは指数との連動の精度を示す指標であり、コストの総額を示すものではない。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F03-3', lessonId: 'F-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -262,7 +262,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: 'インバース型は日次の騰落率に−1倍をかけるため、100 × (1 − 0.05) × (1 − 0.05) ＝ 100 × 0.95 × 0.95 ＝ 90.25 である。日次リセットのため、2日分の騰落をまとめて計算はしない。',
     wrongExplanations: { b: '期間騰落率（2日で+10%）に−1倍をまとめて適用した計算である。日次でリセットされるため90にはならない。', c: '原指数そのものの2日後の値（100 × 1.05 × 1.05）である。インバース型では日々の符号が逆になる。', d: '1日分だけを反映した値である。2日目は95に対してさらに−5%がかかる。' },
-    assumptions: '手数料・コスト・乖離はなく、日次騰落率に正確に倍率がかかるものとする。', sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    assumptions: '手数料・コスト・乖離はなく、日次騰落率に正確に倍率がかかるものとする。', sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F03-4', lessonId: 'F-03', type: 'single', difficulty: 2, skill: 'understand',
@@ -271,7 +271,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['c'],
     explanation: 'レバレッジ型は日次リセットで毎日の騰落に倍率をかけるため、同じ期間騰落率でも、値動きの経路（一方向に動くか、上下を繰り返すか）によって結果が変わる。これを経路依存性という。',
     wrongExplanations: { a: '手数料は結果を目減りさせる要素だが、期間騰落率から計算できない本質的な理由は経路依存性である。', b: '配当の扱いは指数の設計の話であり、日次リセットによる経路依存性とは別の問題である。', d: '対象指数が日々入れ替わるわけではない。倍率のかけ直しが理由である。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F04-3', lessonId: 'F-04', type: 'single', difficulty: 1, skill: 'calculate',
@@ -280,7 +280,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['d'],
     explanation: '加重平均リターン ＝ 0.7 × 8 ＋ 0.3 × 1 ＝ 5.6 ＋ 0.3 ＝ 5.9% である。各資産のリターンを保有比率で重み付けして合計する。',
     wrongExplanations: { a: '比率で重み付けせず単純平均した計算である（(8 ＋ 1) ÷ 2）。保有比率が異なるため単純平均は使えない。', b: '2つのリターンをそのまま合計した値である。比率の概念が抜けている。', c: '株式の寄与（5.6%）だけを計算し、債券の寄与（0.3%）を足し忘れた値である。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F04-4', lessonId: 'F-04', type: 'single', difficulty: 2, skill: 'find-error',
@@ -289,7 +289,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: '為替ヘッジは為替変動の影響を抑える代わりに、金利差に応じたヘッジコストが発生する。リスクとコストの両方が消えるわけではなく、「完全になくすことができる」は誤りである。',
     wrongExplanations: { a: '正しい説明である。ヘッジコストは2国間の金利差に左右される。', c: '正しい説明である。コストの分だけ、ヘッジなしより不利になる局面もある。', d: '正しい説明である。厳密には (1＋現地リターン） × (1＋為替変動率） − 1 で計算する。' },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
 ];
 
@@ -373,7 +373,7 @@ QUESTIONS_2.push(
     correctIds: ['d'],
     explanation: '合計は 2 ＋ 5 ＋ 8 ＝ 15 で、h ＝ 15 mod 10 ＝ 5 である。mod 10 は、10で割った余りを取る操作である。',
     wrongExplanations: { a: '余りを取る前の合計そのものである。mod 10 の計算が抜けている。', b: '15 ÷ 10 の商（1）であり、求めるのは余りの方である。', c: 'データの個数（3個）であり、ハッシュ値ではない。' },
-    assumptions: '玩具ハッシュは教材用の単純化モデルであり、実際の暗号学的ハッシュ関数とは強度が異なる。', sources: [SRC.bitcoinPaper], reviewStatus: 'draft',
+    assumptions: '玩具ハッシュは教材用の単純化モデルであり、実際の暗号学的ハッシュ関数とは強度が異なる。', sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
   },
   {
     id: 'Q-G01-4', lessonId: 'G-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -382,7 +382,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: '各ブロックには直前のブロックのハッシュ値が含まれている。過去の記録を書き換えるとそのブロックのハッシュ値が変わり、後続のブロックが保持する値と一致しなくなるため、改ざんを検知できる。',
     wrongExplanations: { a: '入力がわずかに変わるだけでハッシュ値は大きく変わる（雪崩効果）。変わるからこそ検知できる。', b: '影響はそのブロックだけにとどまらない。後続ブロックとの整合が取れなくなる点が検知の仕組みである。', d: '台帳が消去されるわけではない。多数の参加者が台帳を共有しており、整合しない書き換えは受け入れられない。' },
-    sources: [SRC.bitcoinPaper], reviewStatus: 'draft',
+    sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
   },
   {
     id: 'Q-G02-3', lessonId: 'G-02', type: 'single', difficulty: 2, skill: 'calculate',
@@ -391,7 +391,7 @@ QUESTIONS_2.push(
     correctIds: ['d'],
     explanation: '総発行量 ≒ 1,050万BTC × (1 ＋ 1/2 ＋ 1/4 ＋ …) ＝ 1,050万 × 2 ＝ 約2,100万BTC である。端数処理のため厳密な総量はこれをわずかに下回る。これが発行上限の根拠となる計算である。',
     wrongExplanations: { a: '最初の半減期間だけの発行量である。その後の期間の発行も合計する必要がある。', b: '半減によって各期間の発行量は等比級数的に減るため、合計は有限の値に収束する。', c: '等比級数の和を4とした誤りである。1 ＋ 1/2 ＋ 1/4 ＋ … の和は2である。' },
-    sources: [SRC.bitcoinPaper], reviewStatus: 'draft',
+    sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
   },
   {
     id: 'Q-G02-4', lessonId: 'G-02', type: 'single', difficulty: 2, skill: 'find-error',
@@ -400,7 +400,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'PoWの確定は確率的である。1つのブロックに入っただけでは完全確定とは言えず、後続ブロックの積み重ねによって書き換えが現実的に困難になっていく。「絶対に不可能になる」は誤りである。',
     wrongExplanations: { a: '正しい説明である。書き換えには後続すべてのブロックの計算をやり直す必要が生じる。', c: '正しい説明である。これをファイナリティの確率的性質という。', d: '正しい説明である。計算能力の集中が進むと、この前提は弱まる。' },
-    sources: [SRC.bitcoinPaper], reviewStatus: 'draft',
+    sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
   },
   {
     id: 'Q-G03-3', lessonId: 'G-03', type: 'single', difficulty: 1, skill: 'understand',
@@ -409,7 +409,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: 'スラッシングは、PoSで不正を行った検証者の預け資産を没収する仕組みであり、誠実な行動を促すために設けられている。',
     wrongExplanations: { a: 'ロールアップは、L2で多数の取引をまとめてL1に記録する技術であり、検証者への罰則ではない。', b: 'ガスはスマートコントラクト実行の手数料の単位であり、没収の仕組みではない。', d: 'ブリッジは異なるチェーン間で資産を移す仕組みであり、検証者への罰則ではない。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
     id: 'Q-G03-4', lessonId: 'G-03', type: 'single', difficulty: 2, skill: 'apply',
@@ -418,7 +418,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'ブリッジは資産を預かる構造上、不正流出の対象となってきた要注意の要素である。L2やブリッジの安全性はL1と同一ではなく、構造固有のリスクを理解して使う必要がある。',
     wrongExplanations: { a: 'L2の資産の安全性はL1と全く同じではない。ブリッジや運営構造に固有のリスクがある。', c: '取引には手数料（ガス）がかかる。かからないという保証はない。', d: 'ロールアップは取引の結果やデータをL1に記録することで成り立つ。記録しないという説明は誤りである。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
     id: 'Q-G04-3', lessonId: 'G-04', type: 'single', difficulty: 1, skill: 'calculate',
@@ -427,7 +427,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: '候補数は 2^16 ＝ 65,536通りである。ビット長が2倍になると候補数は2倍ではなく 2^8 倍（256倍）になる。256ビットでは候補数がおよそ10^77通りとなり、総当たりは現実的でなくなる。',
     wrongExplanations: { a: 'ビット長が2倍だから候補数も2倍（256 × 2）という誤りである。候補数は指数的に増える。', b: '2^10 で計算した値である。16ビットは 2^16 で計算する。', d: '2^12 で計算した値である。指数の取り違えに注意する。' },
-    sources: [SRC.bitcoinPaper], reviewStatus: 'draft',
+    sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
   },
   {
     id: 'Q-G04-4', lessonId: 'G-04', type: 'single', difficulty: 1, skill: 'find-error',
@@ -436,7 +436,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'カストディでは第三者が鍵を管理するため、その事業者の破綻リスクを利用者も引き受ける。「一切影響がない」は誤りである。',
     wrongExplanations: { a: '正しい説明である。ただし利便性と引き換えに、マルウェア等のリスクにさらされる。', c: '正しい説明である。ただし購入経路の改ざんや保管ミスなど、別のリスクは残る。', d: '正しい説明である。写真やクラウドに保存すると漏洩の経路が広がる。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H01-1', lessonId: 'H-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -463,7 +463,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: '支払額 ＝ 想定元本 × 資金調達率 ＝ 2,000,000 × 0.0003 ＝ 600円。価格が動かなくても、建玉を維持するだけでこのコストが回数分積み上がります。',
     wrongExplanations: { a: '率を0.003%として計算した誤りです。', c: '率を0.3%として計算した誤りです。', d: '桁を取り違えた計算です。' },
-    assumptions: '資金調達率の符号と支払い側は取引所の規則に従うものとし、本問では支払う側と明示した。', sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    assumptions: '資金調達率の符号と支払い側は取引所の規則に従うものとし、本問では支払う側と明示した。', sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-2', lessonId: 'H-02', type: 'single', difficulty: 3, skill: 'understand',
@@ -472,7 +472,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '公開台帳に現れるのはオンチェーンの移転のみで、取引所内部の売買は現れません。アドレスと所有者の対応も不完全なため、指標は観測事実として扱い、意図や価格の断定には使いません。',
     wrongExplanations: { b: 'オンチェーン記録は改ざん困難性を持つ公開データです。問題は網羅性と解釈の側にあります。', c: 'アドレスの所有者は一般に公開されておらず、推定に頼る部分が大きいのが実情です。', d: '自己管理ウォレット間の移動など複数の解釈があり、意図も将来価格も確定しません。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H03-1', lessonId: 'H-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -481,7 +481,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: '担保比率 ＝ 担保価値 ÷ 発行額面総額 × 100 ＝ 8,000万 ÷ 5,000万 × 100 ＝ 160%。ただし比率は担保価格の変動で下がり得るため、この値だけで安全性が完結するわけではありません。',
     wrongExplanations: { a: '分子と分母を逆にした計算です（5,000万 ÷ 8,000万）。', b: '担保と発行額が等しい場合の値であり、本問の数値とは異なります。', d: '担保と発行額を合計して割るなど、比率の定義を取り違えた計算です。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H03-2', lessonId: 'H-03', type: 'single', difficulty: 2, skill: 'apply',
@@ -490,7 +490,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '法定通貨担保型のペッグの根拠は、準備資産の実在と質、そして保有者が額面で償還できることです。担保の開示と償還条件の確認が評価の出発点になります。',
     wrongExplanations: { b: '価格安定の実績は将来の安定を保証しません。裏付けの確認が先です。', c: '宣伝や評判は検証可能な裏付けにはなりません。', d: '取扱いの広さは流動性の目安にはなっても、担保の健全性を示しません。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H04-1', lessonId: 'H-04', type: 'single', difficulty: 3, skill: 'calculate',
@@ -517,7 +517,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '時価総額 ＝ 価格 × 流通供給量 ＝ 3 × 4,000万 ＝ 1.2億ドルである。最大供給量で計算した2.4億ドルはFDVであり、時価総額とは区別する。',
     wrongExplanations: { b: '最大供給量で計算した値であり、それはFDVである。時価総額には流通供給量を使う。', c: '流通供給量と最大供給量の平均（6,000万）で計算した誤りである。時価総額は流通供給量のみを使う。', d: '流通供給量そのものであり、価格を掛けていない。' },
-    assumptions: '価格は現在の値のままとする。', sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    assumptions: '価格は現在の値のままとする。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
     id: 'Q-H01-4', lessonId: 'H-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -526,7 +526,7 @@ QUESTIONS_2.push(
     correctIds: ['d'],
     explanation: 'ステーキング報酬の原資が新規発行である場合、自分の報酬率（10%）が全体のインフレ率（12%）を下回れば、ネットワーク全体に対する保有割合は相対的に下がる。名目の利回りだけでなく、希薄化を差し引いて考える必要がある。',
     wrongExplanations: { a: '報酬は保有量を増やすが、割合は全体の発行量との比較で決まる。必ず増えるとは言えない。', b: '新規発行は全保有者の割合を薄めるため、保有割合に直接関係する。', c: 'バーンは供給を減らす要素だが、発行量との差し引きで決まるため、必ず増えるとは限らない。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-3', lessonId: 'H-02', type: 'single', difficulty: 2, skill: 'understand',
@@ -535,7 +535,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '永久先物には満期がない。満期による現物価格への収束が働かない代わりに、資金調達率の授受によって現物価格へ近づける設計になっている。',
     wrongExplanations: { b: '満期日の受け渡しは通常の先物の決済方法である。永久先物に満期日はない。', c: '通常の先物には満期が存在する。説明が逆になっている。', d: '満期の有無と、価格を現物へ寄せる仕組みに明確な違いがある。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-4', lessonId: 'H-02', type: 'single', difficulty: 2, skill: 'apply',
@@ -544,7 +544,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '証拠金が維持水準を割り込んだ建玉は強制的に決済（清算）され、その決済の売りが価格をさらに押し下げ、次の清算を誘発する。これが清算の連鎖であり、短時間の大きな変動の要因になる。',
     wrongExplanations: { b: '資金調達率は定期的な調整金の授受であり、強制決済の連鎖とは別の仕組みである。コスト要因ではあっても、急落を増幅する機構ではない。', c: 'オンチェーン指標の解釈は市場心理の背景にはなり得るが、強制決済の連鎖という増幅の仕組みそのものではない。', d: '分別管理は事業者破綻時の資産保全の話であり、価格急落の増幅とは関係がない。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H03-3', lessonId: 'H-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -553,7 +553,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: '下落後の担保価値は 200 × (1 − 0.25) ＝ 150ドル相当である。担保比率 ＝ 150 ÷ 100 × 100 ＝ 150% である。過剰担保が緩衝材として働いた形だが、下落が続けば清算水準に近づく。',
     wrongExplanations: { a: '担保価格の下落を反映していない値である。担保価値は市場価格で変動する。', b: '下落率を半分の12.5%として計算した値である（200 × 0.875 ＝ 175）。本問の下落率は25%である。', d: '下落後の担保価値を元の担保価値で割った値である（150 ÷ 200）。担保比率の分母は発行済みステーブルコインの額面総額である。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H03-4', lessonId: 'H-03', type: 'single', difficulty: 2, skill: 'find-error',
@@ -562,7 +562,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'ステーブルコインは銀行預金ではなく、預金保険の対象でもない。その安定性は発行体と担保の仕組みに依存する。「銀行預金と全く同じ」は誤りである。',
     wrongExplanations: { a: '正しい説明である。準備資産の実在と質、償還条件の確認が評価の出発点になる。', c: '正しい説明である。価格変動の大きい担保を使うため、過剰担保と清算で健全性を保つ設計である。', d: '正しい説明である。過去には安定した実績のあった設計でもペッグが大きく崩れた事例が知られている。' },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-H04-3', lessonId: 'H-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -571,7 +571,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: '借入上限 ＝ 担保価値 × 60% ＝ 20万円 × 0.6 ＝ 12万円である。担保価値の全額を借りられるわけではなく、上限と清算水準の管理がレンディングの要点である。',
     wrongExplanations: { a: '担保価値の全額であり、上限の割合を適用していない。過剰担保の仕組みでは全額は借りられない。', c: '残りの40%（1 − 0.6）を掛けた値である。借入上限は担保価値に60%を掛ける。', d: '担保価値を割合で割った値である（20 ÷ 0.6）。上限は掛け算で求める。' },
-    assumptions: '提示した60%はこの問題のための前提であり、実際のプロトコルの条件は個別に異なる。', sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    assumptions: '提示した60%はこの問題のための前提であり、実際のプロトコルの条件は個別に異なる。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
   {
     id: 'Q-H04-4', lessonId: 'H-04', type: 'single', difficulty: 2, skill: 'apply',
@@ -580,6 +580,6 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: '取引の順序を利用して利益を得る行為はMEVと呼ばれ、フロントランニングはその代表例である。約定価格が不利になる形で、利用者の実質的なコストになる。',
     wrongExplanations: { a: 'オラクルの異常は不当な清算や借入の問題であり、本問のような注文の割り込みとは別の仕組みである。', c: '資金調達率は永久先物の価格調整のための授受であり、DEXの注文順序とは関係がない。', d: 'インパーマネントロスは、流動性提供者が価格変動によって負う「保有し続けた場合」との差であり、注文の割り込みとは別の現象である。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'draft',
+    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
   },
 );

@@ -20,8 +20,8 @@ export function LessonPage({ lessonId, go }: { lessonId: string; go: (path: stri
   return (
     <main>
       <p className="breadcrumb">
-        <button className="linklike" onClick={() => go('')}>ホーム</button>
-        {' ／ '}{domain ? `${domain.id}. ${domain.name}` : lesson.domainId}{' ／ '}{lesson.id}
+        <button onClick={() => go('')}>← 教材一覧へ</button>
+        {' '}<span className="meta">{domain ? `${domain.id}. ${domain.name}` : lesson.domainId}</span>
       </p>
       <h2>{lesson.id} {lesson.title}</h2>
       <div className="chip-row" aria-label="教材の情報">

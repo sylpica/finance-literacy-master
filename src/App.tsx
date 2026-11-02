@@ -63,8 +63,29 @@ function Home({ go }: { go: (p: string) => void }) {
   };
   return (
     <main>
-      <section className="hero" aria-label="学習状況">
-        <h2>学習をはじめよう</h2>
+      {(() => {
+        const next = stats.dueCount > 0
+          ? { title: `復習が${stats.dueCount}問たまっています`, body: '期限の来た問題から先に片付けると、記憶の定着効率が上がります。', label: '復習をはじめる', path: 'quiz/review' }
+          : stats.doneLessons < LESSONS.length && nextLesson
+            ? { title: '教材の続きを学びましょう', body: `${nextLesson.id} ${nextLesson.title} が次の教材です。教材で概念を押さえてから演習に進む流れが基本です。`, label: '教材を開く', path: `lesson/${nextLesson.id}` }
+            : { title: '演習でアウトプットしましょう', body: '教材は一通り学習済みです。演習で初見正答率を測りましょう。', label: '演習をはじめる', path: 'quiz/random' };
+        return (
+          <section className="hero" aria-label="次にやること">
+            <h2>次にやること：{next.title}</h2>
+            <p>{next.body}</p>
+            <button className="primary" onClick={() => go(next.path)}>{next.label}</button>
+          </section>
+        );
+      })()}
+      <section className="panel" aria-label="学習の流れ">
+        <h3>学習の流れ</h3>
+        <ol className="flow">
+          <li><button onClick={() => nextLesson && go(`lesson/${nextLesson.id}`)}><b>教材</b><span>学習済み {stats.doneLessons}／{LESSONS.length}件</span></button></li>
+          <li><button onClick={() => go('quiz/random')}><b>演習</b><span>累計 {stats.firstTotal}問に回答</span></button></li>
+          <li><button onClick={() => go('quiz/review')}><b>復習</b><span>期限の来た問題 {stats.dueCount}問</span></button></li>
+        </ol>
+      </section>
+      <section className="panel" aria-label="学習状況">
         <div className="stat-grid">
           <div className="stat"><div className="stat-value">{stats.doneLessons}<span className="meta"> / {LESSONS.length}</span></div><div className="stat-label">学習済みの教材</div></div>
           <div className="stat"><div className="stat-value">{stats.firstTotal}<span className="meta"> / {QUESTIONS.length}</span></div><div className="stat-label">回答した問題</div></div>
@@ -73,11 +94,6 @@ function Home({ go }: { go: (p: string) => void }) {
         </div>
         <div className="progress" role="progressbar" aria-label="全体の進捗" aria-valuemin={0} aria-valuemax={QUESTIONS.length} aria-valuenow={stats.firstTotal}>
           <div className="progress-fill" style={{ width: `${QUESTIONS.length ? (stats.firstTotal / QUESTIONS.length) * 100 : 0}%` }} />
-        </div>
-        <div className="cta-row">
-          {nextLesson && <button className="primary" onClick={() => go(`lesson/${nextLesson.id}`)}>続きから学ぶ: {nextLesson.id} {nextLesson.title}</button>}
-          <button onClick={() => go('quiz/random')}>ランダム演習（10問）</button>
-          <button onClick={() => go('quiz/review')}>復習する{stats.dueCount > 0 ? `（${stats.dueCount}問）` : ''}</button>
         </div>
       </section>
       {DOMAINS.map(d => {

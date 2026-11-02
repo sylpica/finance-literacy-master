@@ -136,7 +136,7 @@ export const LESSONS_1: Lesson[] = [
     misconceptions: ['空売りの最大損失は売却代金が上限ではなく、理論上無限大である', 'レバレッジは利益だけでなく損失率も同じ倍率で拡大する'],
     related: ['B-02'],
     questionIds: ['Q-B04-1', 'Q-B04-2', 'Q-B04-3', 'Q-B04-4'],
-    sources: [SRC.fsaTop],
+    sources: [SRC.fsaTop, SRC.jpxMargin],
     reviewStatus: 'verified',
   },
   {

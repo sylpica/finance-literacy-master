@@ -14,6 +14,8 @@ export const SRC = {
   idecoOfficial: { title: 'iDeCo公式サイト', publisher: '国民年金基金連合会', url: 'https://www.ideco-koushiki.jp/', checkedAt: d },
   bojTop: { title: '日本銀行ウェブサイト', publisher: '日本銀行', url: 'https://www.boj.or.jp/', checkedAt: d },
   bojPolicy: { title: '金融政策の概要', publisher: '日本銀行', url: 'https://www.boj.or.jp/mopo/outline/index.htm', checkedAt: d },
+  caoSna: { title: 'SNA (National Accounts of Japan)', publisher: '内閣府 経済社会総合研究所', url: 'https://www.esri.cao.go.jp/en/sna/menu.html', checkedAt: d },
+  jpxMargin: { title: '信用取引の概要', publisher: '日本取引所グループ', url: 'https://www.jpx.co.jp/equities/trading/margin/outline/01.html', checkedAt: d },
   edinet: { title: 'EDINET（金融商品取引法に基づく有価証券報告書等の開示書類に関する電子開示システム）', publisher: '金融庁', url: 'https://disclosure2.edinet-fsa.go.jp/', checkedAt: d },
   secEdgar: { title: 'EDGAR Application Programming Interfaces', publisher: 'U.S. Securities and Exchange Commission', url: 'https://www.sec.gov/search-filings/edgar-application-programming-interfaces', checkedAt: d },
   bitcoinPaper: { title: 'Bitcoin: A Peer-to-Peer Electronic Cash System', publisher: 'Satoshi Nakamoto (bitcoin.org)', url: 'https://bitcoin.org/bitcoin.pdf', checkedAt: d },

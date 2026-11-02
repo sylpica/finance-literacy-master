@@ -15,7 +15,7 @@ export const LESSONS_2: Lesson[] = [
     },
     misconceptions: ['GDPが増えれば全員の暮らしが良くなるとは限らない（分配や物価を別に見る必要がある）', '輸入が増えるとGDPが機械的に減るわけではない（輸入は国内生産分の調整項目であり、消費や投資の増加に伴って輸入も増えることが多い）', '物価上昇率が下がること（ディスインフレ）と物価水準自体が下がること（デフレ）は別である'],
     related: ['E-02', 'E-04', 'A-01'], questionIds: ['Q-E01-1', 'Q-E01-2', 'Q-E01-3', 'Q-E01-4'],
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.caoSna, SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'E-02', domainId: 'E', title: '金融政策と波及経路', version: 1, level: 2,

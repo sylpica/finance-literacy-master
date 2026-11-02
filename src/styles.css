@@ -68,6 +68,14 @@ header {
 .brand { display: flex; align-items: center; flex-shrink: 0; }
 h1 { font-size: 15px; margin: 0; line-height: 1.2; }
 h1 .title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; }
+h1 .title::before { content: ""; display: inline-block; width: 0.6em; height: 0.6em; border-radius: 50%; background: var(--accent); margin-right: 0.45em; }
+/* 学習の流れ（G検定アプリと共通の型） */
+.flow { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+.flow li { flex: 1 1 150px; }
+.flow button { width: 100%; height: 100%; text-align: left; border-radius: var(--radius-s); padding: 0.6rem 0.8rem; background: var(--panel-2); }
+.flow button b { display: block; font-size: 1rem; }
+.flow button span { color: var(--muted); font-size: 0.88rem; }
+.flow button::before { counter-increment: step; content: counter(step); display: inline-flex; align-items: center; justify-content: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 700; margin-bottom: 0.3rem; }
 nav { display: flex; gap: 5px; flex-wrap: nowrap; overflow-x: auto; flex: 1; scrollbar-width: thin; }
 button {
   font: inherit; color: var(--text); background: var(--panel);
@@ -199,8 +207,7 @@ footer { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 24px;
 /* レスポンシブ */
 @media (max-width: 640px) {
   .app { padding: 0 10px 44px; }
-  h1, h1 .title { font-size: 17px; }
-  .brand-tag { display: none; }
+  h1, h1 .title { font-size: 14px; }
   h2 { font-size: 1.25rem; }
   .num-field span:first-child { min-width: 128px; }
   table { min-width: 330px; }

@@ -55,7 +55,7 @@ export const QUESTIONS_4: Question[] = [
       c: '利益60万円は再利用額とは関係ありません。枠は簿価ベースで管理されます。',
       d: '売却した分の枠は消滅するのではなく、簿価分が翌年以降に再利用できます。',
     },
-    sources: [SRC.fsaNisa], reviewStatus: 'draft',
+    sources: [SRC.fsaNisa], reviewStatus: 'verified',
   },
   {
     id: 'Q-M01-4', lessonId: 'M-01', type: 'single', difficulty: 2, skill: 'find-error',
@@ -73,7 +73,7 @@ export const QUESTIONS_4: Question[] = [
       b: '正しい記述です。成長投資枠でも、一部の商品は対象外とされています。',
       d: '正しい記述です。再利用できるのは簿価分で、時期は翌年以降です。',
     },
-    sources: [SRC.fsaNisa], reviewStatus: 'draft',
+    sources: [SRC.fsaNisa], reviewStatus: 'verified',
   },
   {
     id: 'Q-M02-1', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'understand',
@@ -91,7 +91,7 @@ export const QUESTIONS_4: Question[] = [
       c: '掛金限度額は国民年金・厚生年金等の加入区分や企業年金の有無により異なります。',
       d: 'iDeCoの資産は原則として60歳まで引き出すことができません。',
     },
-    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M02-2', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'apply',
@@ -109,7 +109,7 @@ export const QUESTIONS_4: Question[] = [
       c: '受取時は退職所得または公的年金等として課税され、受取方法で税負担が変わるため検討が必要です。',
       d: '所得控除の節税効果は限界税率によって異なり、課税所得がない場合は効果が生じません。',
     },
-    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M02-3', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'calculate',
@@ -127,7 +127,7 @@ export const QUESTIONS_4: Question[] = [
       c: '所得税20%だけで計算した値です。合計30%で計算すると10.8万円になります。',
       d: '掛金の全額が戻ってくるわけではありません。節税額は掛金に限界税率を掛けた概算です。',
     },
-    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M02-4', lessonId: 'M-02', type: 'single', difficulty: 2, skill: 'find-error',
@@ -145,7 +145,7 @@ export const QUESTIONS_4: Question[] = [
       b: '正しい記述です。年金は公的年金等の雑所得として課税されます。',
       c: '正しい記述です。入口の節税だけでなく出口の課税を含めて評価します。',
     },
-    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.idecoOfficial, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M03-1', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -163,7 +163,7 @@ export const QUESTIONS_4: Question[] = [
       b: '税率を20%ちょうどとした概算で、実際の税率20.315%とは異なります。',
       d: '税率の取り違えです。20.315%を正しく掛けると203,150円になります。',
     },
-    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax], reviewStatus: 'verified',
   },
   {
     id: 'Q-M03-2', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'understand',
@@ -181,7 +181,7 @@ export const QUESTIONS_4: Question[] = [
       c: 'NISA口座内の損失は損益通算・繰越控除の対象になりません。',
       d: '繰越期間は翌年以降3年間が上限です。',
     },
-    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax], reviewStatus: 'verified',
   },
   {
     id: 'Q-M03-3', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -199,7 +199,7 @@ export const QUESTIONS_4: Question[] = [
       b: '損益通算をしない場合の税額です（80万円×20.315%）。通算すると課税対象は30万円になります。',
       d: '利益と損失を合計した130万円に税率を掛けた値です。損失は利益から差し引いて通算します。',
     },
-    sources: [SRC.ntaStockTax], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax], reviewStatus: 'verified',
   },
   {
     id: 'Q-M03-4', lessonId: 'M-03', type: 'single', difficulty: 2, skill: 'apply',
@@ -217,7 +217,7 @@ export const QUESTIONS_4: Question[] = [
       c: '元本払戻金3万円を課税対象と取り違えています。課税対象は普通分配金2万円です。',
       d: '普通分配金は課税対象です。また取得価額の下げ幅は、元本払戻金の3万円分だけです。',
     },
-    sources: [SRC.ntaStockTax, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M04-1', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -236,7 +236,7 @@ export const QUESTIONS_4: Question[] = [
       d: 'これは税引前の金額です。非課税口座の場合に相当します。',
     },
     assumptions: '運用期間中の配当課税・売買を無視し、売却時に利益へ一括課税する単純化モデル',
-    sources: [SRC.ntaStockTax, SRC.fsaNisa], reviewStatus: 'draft',
+    sources: [SRC.ntaStockTax, SRC.fsaNisa], reviewStatus: 'verified',
   },
   {
     id: 'Q-M04-2', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'find-error',
@@ -254,7 +254,7 @@ export const QUESTIONS_4: Question[] = [
       c: '正しい扱いです。過去の期間の計算には当時の制度を使います。',
       d: '正しい扱いです。未確認の情報は未確認と明示し、確定値として表示しません。',
     },
-    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M04-3', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -272,7 +272,7 @@ export const QUESTIONS_4: Question[] = [
       c: '費用ありの場合の利益額（148.0万円−100万円）そのものです。2つの場合の金額の差ではありません。',
       d: '費用なしの場合の利益額（162.9万円−100万円）そのものです。2つの場合の金額の差ではありません。',
     },
-    sources: [SRC.fsaNisa, SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaNisa, SRC.ntaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-M04-4', lessonId: 'M-04', type: 'single', difficulty: 2, skill: 'apply',
@@ -290,7 +290,7 @@ export const QUESTIONS_4: Question[] = [
       c: '法律として成立している点で、提案・検討段階の議論とは区別されます。無視するのではなく、適用時点を明示して扱います。',
       d: '過去の期間の計算には、当時の制度を適用します。成立した制度を遡って使うことはしません。',
     },
-    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop, SRC.ntaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N01-1', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'understand',
@@ -308,7 +308,7 @@ export const QUESTIONS_4: Question[] = [
       c: '確証バイアスは自分の仮説を支持する情報だけを集める傾向です。',
       d: 'FOMOは上昇相場への乗り遅れ不安による衝動的な買いです。',
     },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-N01-2', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'calculate',
@@ -326,7 +326,7 @@ export const QUESTIONS_4: Question[] = [
       b: '50×1.75＝87.5で、100には届きません。',
       d: '150%は下落率60%（100→40）の場合の回復率です。',
     },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-N01-3', lessonId: 'N-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -344,7 +344,7 @@ export const QUESTIONS_4: Question[] = [
       c: '知識や経験があってもバイアスは生じます。知ることと、手続きで防ぐことは別です。',
       d: '多数派に合わせる行動は群集行動そのものであり、バイアスの対策にはなりません。',
     },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-N01-4', lessonId: 'N-01', type: 'single', difficulty: 1, skill: 'understand',
@@ -362,7 +362,7 @@ export const QUESTIONS_4: Question[] = [
       b: 'アンカリングは、最初に見た価格等に判断が引きずられる傾向です。',
       c: 'FOMOは、上昇相場への乗り遅れ不安から、根拠の確認なしに飛びつく行動です。',
     },
-    sources: [SRC.fsaInvest], reviewStatus: 'draft',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-N02-1', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'understand',
@@ -380,7 +380,7 @@ export const QUESTIONS_4: Question[] = [
       c: '危機時には現金化の必要から、質の高い資産も売られます。',
       d: '流動性危機では取引が滞り、価格は大きく飛んで形成されます。',
     },
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N02-2', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'find-error',
@@ -398,7 +398,7 @@ export const QUESTIONS_4: Question[] = [
       b: '正しい理解です。値上がり自体が根拠になる状態はバブル後期の特徴とされます。',
       d: '正しい理解です。事例ごとの制度・原因・政策対応の違いを考慮する必要があります。',
     },
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N02-3', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'calculate',
@@ -416,7 +416,7 @@ export const QUESTIONS_4: Question[] = [
       b: '下落率と同じ割合では戻りません。75×1.25＝93.75で、100には届きません。',
       d: '50%は、下落率が約33.3%の場合に必要となる回復率です。',
     },
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N02-4', lessonId: 'N-02', type: 'single', difficulty: 2, skill: 'apply',
@@ -434,7 +434,7 @@ export const QUESTIONS_4: Question[] = [
       c: '流動性危機は、売りたいときに買い手が現れず大きく下げなければ売れない状態で、この段階とは異なります。',
       d: '価格上昇を根拠にする買いが広がる局面は、実体的な価値への収束ではなく、乖離が進みやすい段階です。',
     },
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N03-1', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'understand',
@@ -452,7 +452,7 @@ export const QUESTIONS_4: Question[] = [
       c: '破綻の原因は資金繰りの構造であり、金利環境に限定されません。',
       d: '全員同時の出金がなくても、新規流入が細れば支払いは滞ります。',
     },
-    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N03-2', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'apply',
@@ -470,7 +470,7 @@ export const QUESTIONS_4: Question[] = [
       b: '紹介経路は安全性の根拠になりません。無登録業者である時点で重大な問題です。',
       d: '有名人の紹介や広告は、運用実態の裏付けにはなりません。',
     },
-    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N03-3', lessonId: 'N-03', type: 'single', difficulty: 1, skill: 'understand',
@@ -488,7 +488,7 @@ export const QUESTIONS_4: Question[] = [
       c: '禁止の理由は会社の業績ではなく、市場参加者間の公平性です。',
       d: '取引量の多寡は、禁止の理由ではありません。',
     },
-    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N03-4', lessonId: 'N-03', type: 'single', difficulty: 2, skill: 'find-error',
@@ -506,7 +506,7 @@ export const QUESTIONS_4: Question[] = [
       b: '正しい理解です。報酬の出どころは、助言の立場を評価する材料になります。',
       d: '正しい理解です。利益相反は、販売側と顧客の利益が一致しない構造を指します。',
     },
-    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N04-1', lessonId: 'N-04', type: 'single', difficulty: 1, skill: 'understand',
@@ -524,7 +524,7 @@ export const QUESTIONS_4: Question[] = [
       c: '同じ元の転載は独立した裏付けにはなりません。',
       d: '販売資料の想定利回りは予測であり、利益相反の観点からも一次情報による確認が必要です。',
     },
-    sources: [SRC.edinet, SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.edinet, SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-N04-2', lessonId: 'N-04', type: 'multi', difficulty: 2, skill: 'apply',
@@ -540,7 +540,7 @@ export const QUESTIONS_4: Question[] = [
     wrongExplanations: {
       d: '知名度と正確さは無関係です。誰の情報でも出典確認が必要です。',
     },
-    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
+    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'verified',
   },
   {
     id: 'Q-N04-3', lessonId: 'N-04', type: 'single', difficulty: 2, skill: 'find-error',
@@ -558,7 +558,7 @@ export const QUESTIONS_4: Question[] = [
       c: '正しい区別です。分析の前提として置く数値は仮定であり、明示することが求められます。',
       d: '正しい区別です。予測は外れる可能性を前提に扱います。',
     },
-    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
+    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'verified',
   },
   {
     id: 'Q-N04-4', lessonId: 'N-04', type: 'single', difficulty: 2, skill: 'apply',
@@ -576,6 +576,6 @@ export const QUESTIONS_4: Question[] = [
       b: '上昇率の高さは、将来の安全性を示すものではありません。',
       c: '実績の表示があっても、期間・前提・出典の確認は必要です。',
     },
-    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'draft',
+    sources: [SRC.fsaTop, SRC.edinet], reviewStatus: 'verified',
   },
 ];

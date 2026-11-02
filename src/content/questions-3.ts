@@ -56,7 +56,7 @@ export const QUESTIONS_3: Question[] = [
       c: '銀行型の本人確認や再発行の手続きは原則として存在せず、漏洩・紛失後の回復を前提にした設計はできません。',
       d: 'シードフレーズは秘密鍵の復元情報です。漏洩すれば秘密鍵が漏れたのと同じ結果になります。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I01-4', lessonId: 'I-01', type: 'single', difficulty: 2, skill: 'find-error',
@@ -74,7 +74,7 @@ export const QUESTIONS_3: Question[] = [
       b: '正しい説明です。復元情報はオフラインで複数保管することが対策になります。',
       c: '正しい説明です。保管を分けることで、1回の事故で失う上限を設計できます。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I02-1', lessonId: 'I-02', type: 'single', difficulty: 3, skill: 'compare',
@@ -129,7 +129,7 @@ export const QUESTIONS_3: Question[] = [
       b: '逆です。預かり資産が大きい構造ほど、侵害時の被害は大きくなりやすいと教材は述べています。',
       d: 'DeFiプロトコルには、分別管理の義務主体が存在しない場合があります。取引所の制度とは別に考える必要があります。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I02-4', lessonId: 'I-02', type: 'multi', difficulty: 3, skill: 'understand',
@@ -146,7 +146,7 @@ export const QUESTIONS_3: Question[] = [
       b: '監査は範囲内の確認であり、安全の保証ではありません。',
       d: '管理者キーやアップグレード権限が残る設計も多く、運営者リスクは残ります。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I03-1', lessonId: 'I-03', type: 'single', difficulty: 2, skill: 'understand',
@@ -200,7 +200,7 @@ export const QUESTIONS_3: Question[] = [
       b: '自己申告と、登録制度による監督・検査の裏付けは別物です。',
       c: '分別管理は資産の混同を防ぐ仕組みであり、価格下落を補填しません。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I03-4', lessonId: 'I-03', type: 'single', difficulty: 2, skill: 'understand',
@@ -218,7 +218,7 @@ export const QUESTIONS_3: Question[] = [
       b: '逆です。利用者の暗号資産の大部分は、コールドウォレット等で管理する枠組みとされています。',
       d: '分別管理は金銭の信託等を含む制度全体を指し、アドレスの割当てだけを意味しません。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I04-1', lessonId: 'I-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -273,7 +273,7 @@ export const QUESTIONS_3: Question[] = [
       c: '報酬として取得した場合は、取得時の時価で所得を認識します。円への換金を待つ必要はありません。',
       d: '含み益は未実現であり、売却・交換・決済使用などの時点で損益を計算します。',
     },
-    sources: [SRC.ntaCrypto], reviewStatus: 'draft',
+    sources: [SRC.ntaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-I04-4', lessonId: 'I-04', type: 'single', difficulty: 2, skill: 'find-error',
@@ -291,7 +291,7 @@ export const QUESTIONS_3: Question[] = [
       c: '正しい説明です。暗号資産の利益は原則として雑所得として総合課税の対象になります。',
       d: '正しい説明です。決済への使用も課税関係が生じる時点の一つです。',
     },
-    sources: [SRC.ntaCrypto, SRC.ntaCryptoCalc], reviewStatus: 'draft',
+    sources: [SRC.ntaCrypto, SRC.ntaCryptoCalc], reviewStatus: 'verified',
   },
   {
     id: 'Q-J01-1', lessonId: 'J-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -345,7 +345,7 @@ export const QUESTIONS_3: Question[] = [
       b: '指標は過去価格の要約であり、決算・事故・制度変更などの新しい材料の影響を消すものではありません。',
       c: 'パラメータを結果に合わせて探すのは過剰最適化であり、過去にだけ合う設定になる危険があります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J01-4', lessonId: 'J-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -363,7 +363,7 @@ export const QUESTIONS_3: Question[] = [
       c: '教材は、相場環境によって指標の有効性が「変わる」と述べています。「一切機能しない」とまでは言えません。',
       d: '都合の良いパラメータを後から探すのは過剰最適化の入口であり、判断の改善にはなりません。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J02-1', lessonId: 'J-02', type: 'single', difficulty: 3, skill: 'calculate',
@@ -418,7 +418,7 @@ export const QUESTIONS_3: Question[] = [
       b: '単純リターンを期末価格で割った誤りです（25÷125＝20%）。分母は期初価格の100です。',
       d: '単純リターンは価格そのもの（125）ではなく変化率であり、対数リターンの0.223は約22.3%を表します。割合と%表示を取り違えています。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J02-4', lessonId: 'J-02', type: 'single', difficulty: 3, skill: 'understand',
@@ -436,7 +436,7 @@ export const QUESTIONS_3: Question[] = [
       c: '裾が厚いとは、極端な値の起きやすさが想定より高いという意味です。',
       d: 'ファットテールは1つの分布の形の性質であり、2資産間の相関とは無関係です。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J03-1', lessonId: 'J-03', type: 'single', difficulty: 3, skill: 'calculate',
@@ -491,7 +491,7 @@ export const QUESTIONS_3: Question[] = [
       c: '0.09は推定値そのものであり、標準誤差で割る前の値です。',
       d: '0.03は標準誤差そのものであり、t値ではありません。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J03-4', lessonId: 'J-03', type: 'single', difficulty: 3, skill: 'apply',
@@ -509,7 +509,7 @@ export const QUESTIONS_3: Question[] = [
       b: '同じデータで最も良い設定を探すのはデータスヌーピングであり、過去への当てはめを強めます。',
       c: 'コストや税金を除いた成績は実装後の結果とずれます。含めて評価する必要があります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J04-1', lessonId: 'J-04', type: 'multi', difficulty: 3, skill: 'apply',
@@ -563,7 +563,7 @@ export const QUESTIONS_3: Question[] = [
       c: '正しい説明です。試した戦略の総数を記録することも対策の一つです。',
       d: '正しい説明です。これがルックアヘッドバイアスの定義そのものです。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-J04-4', lessonId: 'J-04', type: 'single', difficulty: 3, skill: 'understand',
@@ -581,7 +581,7 @@ export const QUESTIONS_3: Question[] = [
       b: '期間を前に進めて繰り返すことがウォークフォワードの特徴であり、一度だけの検証とは異なります。',
       d: '検証期間に合わせて直すのは、知り得ない情報の使用と過剰最適化にあたります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K01-1', lessonId: 'K-01', type: 'single', difficulty: 3, skill: 'calculate',
@@ -636,7 +636,7 @@ export const QUESTIONS_3: Question[] = [
       c: '期待リターンは重みによる加重平均であり、相関は影響しません。相関が効くのは分散の側です。',
       d: '相関が1のとき分散は0にはなりません。2資産が完全に同じ動きをするため、分散は残ります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K01-4', lessonId: 'K-01', type: 'single', difficulty: 3, skill: 'calculate',
@@ -655,7 +655,7 @@ export const QUESTIONS_3: Question[] = [
       c: '0.0256は標準偏差の加重平均16%を二乗した値です。先に標準偏差を平均してから二乗する手順は誤りです。',
     },
     assumptions: '重みは0.6と0.4、相関係数0で一定とする。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K02-1', lessonId: 'K-02', type: 'single', difficulty: 3, skill: 'calculate',
@@ -711,7 +711,7 @@ export const QUESTIONS_3: Question[] = [
       d: '約12.3%は、境界ちょうどの9%まで含めた3件の平均（（16＋12＋9）÷3）です。CVaRはVaRを「超えた」損失の平均です。',
     },
     assumptions: '離散的なシナリオの単純平均として計算する。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K02-4', lessonId: 'K-02', type: 'single', difficulty: 3, skill: 'find-error',
@@ -729,7 +729,7 @@ export const QUESTIONS_3: Question[] = [
       b: '正しい説明です。下方偏差のみを使う点がシャープレシオとの違いです。',
       d: '正しい説明です。回復には下落率以上の上昇が必要になる非対称性があります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K03-1', lessonId: 'K-03', type: 'single', difficulty: 3, skill: 'calculate',
@@ -783,7 +783,7 @@ export const QUESTIONS_3: Question[] = [
       b: '見直しをしなければ、価格変動でずれた比率のままリスク水準が目標から離れ続けます。',
       d: 'リバランスの主な目的は「値上がりした資産を売り、下がった資産を買う」規律と、リスク水準の維持です。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K03-4', lessonId: 'K-03', type: 'single', difficulty: 3, skill: 'calculate',
@@ -802,7 +802,7 @@ export const QUESTIONS_3: Question[] = [
       d: '合計額が同じでも比率がずれていればリスク水準が変わるため、リバランスの対象になります。',
     },
     assumptions: '取引コストと税金は考慮しない。価格は売買中に変動しないものとする。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K04-1', lessonId: 'K-04', type: 'single', difficulty: 3, skill: 'calculate',
@@ -858,7 +858,7 @@ export const QUESTIONS_3: Question[] = [
       c: '144は2期目のリターンを掛けた後、取り崩し15を引く前の残高です。',
     },
     assumptions: '取り崩しは各期末に15で固定。手数料・税金は考慮しない。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-K04-4', lessonId: 'K-04', type: 'single', difficulty: 3, skill: 'understand',
@@ -876,7 +876,7 @@ export const QUESTIONS_3: Question[] = [
       c: 'ヘッジにもコストがかかります。コストなしにリスクだけを消す仕組みではありません。',
       d: 'モデルリスクは、モデルの誤りや前提の置き違いによるリスクであり、ヘッジ取引で消えるものではありません。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L01-1', lessonId: 'L-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -932,13 +932,13 @@ export const QUESTIONS_3: Question[] = [
       d: '20%の価格上昇で自己資金の全額を失うのは、およそレバレッジ5倍の空売りに相当します。本問は2倍です。',
     },
     assumptions: '価格変動は建玉全体に一律に適用され、スリッページ・金利・貸株料・手数料はないものとする（線形近似）。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L01-4', lessonId: 'L-01', type: 'single', difficulty: 2, skill: 'understand',
     prompt: 'レバレッジ取引の「非線形リスク」の説明として正しいものはどれか。',
     options: [
-      { id: 'a', text: '損失は常に、建玉の下落率に自己資金を掛けた額に正確に比例する' },
+      { id: 'a', text: '損失は常に、価格変動率にレバレッジ倍率を掛けた割合で正確に決まる' },
       { id: 'b', text: '手数料が高い市場ほど、非線形リスクは小さくなる' },
       { id: 'c', text: '強制決済や清算による売りが価格をさらに押し下げ、損失が加速する構造があり、線形の近似を超えた損失が生じうる' },
       { id: 'd', text: '非線形リスクは、価格が上昇するときだけに生じる' },
@@ -950,7 +950,7 @@ export const QUESTIONS_3: Question[] = [
       b: '手数料の水準と、清算が連鎖する構造の有無は無関係です。',
       d: '下落局面での清算連鎖が典型例です。上昇時だけの現象ではありません。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L02-1', lessonId: 'L-02', type: 'single', difficulty: 3, skill: 'calculate',
@@ -1006,7 +1006,7 @@ export const QUESTIONS_3: Question[] = [
       d: '配当は差し引くべきところを加算しています（206＋6）。配当は保有者が受け取る便益です。',
     },
     assumptions: '単利の簡略式を用い、保管費用・取引コスト・貸借料は考慮しない。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L02-4', lessonId: 'L-02', type: 'single', difficulty: 3, skill: 'find-error',
@@ -1024,7 +1024,7 @@ export const QUESTIONS_3: Question[] = [
       b: '正しい説明です。相対取引では清算機関の保証がなく、相手方の信用リスクが残ります。',
       c: '正しい説明です。コンタンゴとバックワーデーションは、価格関係の呼び名です。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L03-1', lessonId: 'L-03', type: 'single', difficulty: 3, skill: 'calculate',
@@ -1080,7 +1080,7 @@ export const QUESTIONS_3: Question[] = [
       d: '符号が逆です。プットの買い手は原資産の下落で利益、上昇ではプレミアム分の損失になります。',
     },
     assumptions: '満期時点の計算とし、取引コストは考慮しない。',
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L03-4', lessonId: 'L-03', type: 'single', difficulty: 3, skill: 'understand',
@@ -1098,7 +1098,7 @@ export const QUESTIONS_3: Question[] = [
       c: 'デルタは近似であり、価格が動けばデルタ自体も変化します（それがガンマです）。損益の完全な予測にはなりません。',
       d: '逆です。ガンマは満期が近く、行使価格付近で大きくなります。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'draft',
+    sources: [SRC.fsaTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-L04-1', lessonId: 'L-04', type: 'single', difficulty: 2, skill: 'calculate',
@@ -1154,7 +1154,7 @@ export const QUESTIONS_3: Question[] = [
       c: '9,000円は率を0.3%（0.003）と取り違えた結果です。',
     },
     assumptions: '建玉金額は当該インターバルを通じて300万円で一定とし、率は取引所公表の−0.03%とする。',
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
   {
     id: 'Q-L04-4', lessonId: 'L-04', type: 'single', difficulty: 3, skill: 'apply',
@@ -1172,6 +1172,6 @@ export const QUESTIONS_3: Question[] = [
       c: '逆です。建玉の総量とレバレッジの偏りが大きいほど、小さな価格変動でも多数の強制清算が連鎖しやすくなります。',
       d: '資金調達率は、取引所への手数料ではなく、建玉を持つロングとショートの間の交換です。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'draft',
+    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
   },
 ];

@@ -14,6 +14,7 @@
 | iDeCo公式サイト | 国民年金基金連合会 | https://www.ideco-koushiki.jp/ | iDeCoの制度構造・3つの税制優遇（監査対応で追加、2026-11-02確認） |
 | 暗号資産等に関する税務上の取扱い及び計算書 | 国税庁 | https://www.nta.go.jp/publication/pamph/shotoku/kakuteishinkokukankei/kasoutuka/index.htm | 暗号資産の所得計算（総平均法/移動平均法） |
 | 金融政策の概要 | 日本銀行 | https://www.boj.or.jp/mopo/outline/index.htm | 金融政策・公開市場操作 |
+| 信用取引の概要 | 日本取引所グループ | https://www.jpx.co.jp/equities/trading/margin/outline/01.html | 信用取引の仕組み（委託保証金30%以上、追証は20%割れ、品貸料（逆日歩）、制度信用の返済期限6か月）（出典具体化で追加、2026-11-02確認） |
 | EDINET | 金融庁 | https://disclosure2.edinet-fsa.go.jp/ | 有価証券報告書等の開示 |
 | EDGAR APIs | 米国SEC | https://www.sec.gov/search-filings/edgar-application-programming-interfaces | 米国開示資料 |
 | Bitcoin: A Peer-to-Peer Electronic Cash System | Satoshi Nakamoto | https://bitcoin.org/bitcoin.pdf | Bitcoinの設計（一次資料） |
@@ -22,3 +23,4 @@
 ## データの権利
 - 収録データはすべて自作の教材文・架空数値例のみ。実市場データは再配布条件を確認できないため公開リポジトリに含めない（DECISIONS D7）。
 - CSV取込機能で利用者が持ち込むデータは端末内でのみ処理し、外部送信しない。
+| SNA (National Accounts of Japan) | 内閣府 経済社会総合研究所 | https://www.esri.cao.go.jp/en/sna/menu.html | 国民経済計算（GDP統計の所管）（出典具体化で追加、2026-11-02確認） |
