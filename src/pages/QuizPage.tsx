@@ -6,15 +6,21 @@ import type { Question } from '../types';
 
 export type QuizMode = { kind: 'lesson'; lessonId: string } | { kind: 'domain'; domainId: string } | { kind: 'review' } | { kind: 'random' } | { kind: 'weak' };
 
-export function selectQuestions(mode: QuizMode, state: { schedule: { questionId: string; dueAt: number }[]; attempts: { questionId: string; correct: boolean }[] } | null): Question[] {
+export function selectQuestions(mode: QuizMode, state: { schedule: { questionId: string; dueAt: number }[]; attempts: { questionId: string; correct: boolean; answeredAt: number }[] } | null): Question[] {
   const now = Date.now();
   switch (mode.kind) {
     case 'lesson': return QUESTIONS.filter(q => q.lessonId === mode.lessonId);
     case 'domain': return QUESTIONS.filter(q => q.lessonId.startsWith(`${mode.domainId}-`));
     case 'review': {
-      const due = new Set((state?.schedule ?? []).filter(s => isDue(s, now)).map(s => s.questionId));
-      const wrongIds = new Set((state?.attempts ?? []).filter(a => !a.correct).map(a => a.questionId));
-      return QUESTIONS.filter(q => due.has(q.id) || wrongIds.has(q.id));
+      // 対象は「期限到来の問題」と「直近の回答が誤答でまだ立て直せていない問題」。
+      // 一度でも間違えた問題を永久に対象にすると、立て直し済みの問題が期限管理と矛盾して残り続ける（監査指摘）。
+      // 並びは期限の古い順（スケジュールがない誤答問題は末尾）。
+      const dueAt = new Map((state?.schedule ?? []).map(s => [s.questionId, s.dueAt]));
+      const latest = new Map<string, boolean>();
+      for (const a of [...(state?.attempts ?? [])].sort((x, y) => x.answeredAt - y.answeredAt)) latest.set(a.questionId, a.correct);
+      const picked = QUESTIONS.filter(q => (dueAt.get(q.id) ?? Infinity) <= now || latest.get(q.id) === false);
+      picked.sort((a, b) => (dueAt.get(a.id) ?? Infinity) - (dueAt.get(b.id) ?? Infinity));
+      return picked;
     }
     case 'weak': {
       const wrong = new Map<string, number>();

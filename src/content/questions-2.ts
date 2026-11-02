@@ -1,7 +1,7 @@
 import type { Question } from '../types';
 import { SRC } from './sources';
 
-// 担当2：分野E・F・G・H の問題（各教材2問）
+// 担当2：分野E・F・G・H の問題（各教材4問）
 export const QUESTIONS_2: Question[] = [
   {
     id: 'Q-E01-1', lessonId: 'E-01', type: 'single', difficulty: 1, skill: 'calculate',
@@ -9,7 +9,7 @@ export const QUESTIONS_2: Question[] = [
     options: [{ id: 'a', text: '820兆円' }, { id: 'b', text: '700兆円' }, { id: 'c', text: '630兆円' }, { id: 'd', text: '760兆円' }],
     correctIds: ['b'],
     explanation: 'GDP ＝ 消費＋投資＋政府支出＋輸出−輸入 ＝ 500＋100＋90＋70−60 ＝ 700兆円。輸入は国内で生産されたものではないため差し引きます。',
-    wrongExplanations: { a: '輸入を加算してしまった計算です（500＋100＋90＋70＋60＝820）。', c: '輸出と輸入の扱いを取り違えた計算です。', d: '輸入を差し引いていない計算です（500＋100＋90＋70＝760）。' },
+    wrongExplanations: { a: '輸入を加算してしまった計算です（500＋100＋90＋70＋60＝820）。', c: '輸出を加え忘れた計算です（500＋100＋90−60＝630）。輸出は国内で生産された財・サービスへの海外からの需要として加算します。', d: '輸入を差し引いていない計算です（500＋100＋90＋70＝760）。' },
     assumptions: '在庫変動や統計上の不突合はないものとする。', sources: [SRC.caoSna], reviewStatus: 'verified',
   },
   {
@@ -73,7 +73,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '高金利通貨が買われやすいのはリスク選好が安定した局面の傾向にすぎず、危機時には高金利通貨ほど売られる場合があります。「必ず」は誤りです。他の3つは正しい説明です。',
     wrongExplanations: { b: '正しい説明です。購買力平価への収束は緩やかとされます。', c: '正しい説明です。日本の経常黒字は所得収支が中心です。', d: '正しい説明です。安全性への逃避は危機時の典型的な資金の動きです。' },
-    sources: [SRC.bojTop, SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.bojTop], reviewStatus: 'verified',
   },
   {
     id: 'Q-E01-3', lessonId: 'E-01', type: 'single', difficulty: 2, skill: 'find-error',
@@ -82,7 +82,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: '輸入は、消費や投資に含まれる輸入品の分を差し引くための調整項目であり、輸入の増加それ自体がGDPを機械的に減らすわけではない。消費や投資の増加に伴って輸入が増えることも多い。他の3つは正しい説明である。',
     wrongExplanations: { a: '正しい説明である。実質GDPは基準年の価格で測り、物価変動の影響を取り除く。', c: '正しい説明である。市場で取引されない家計の無償労働はGDPに数えられず、GDPの限界の1つとされる。', d: '正しい説明である。公式な景気判定は国ごとに専門機関が行い、定義は国によって異なる。' },
-    sources: [SRC.bojTop], reviewStatus: 'verified',
+    sources: [SRC.caoSna], reviewStatus: 'verified',
   },
   {
     id: 'Q-E01-4', lessonId: 'E-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -145,7 +145,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['a'],
     explanation: '歴史的な金融危機に共通するのは、レバレッジ（借入れによる投資）の積み上がり、流動性の過小評価、危機時の資金引き揚げの速さである。ただし直接の引き金と構造は事例ごとに異なり、単一の物語で一般化はできない。',
     wrongExplanations: { b: '購買力平価は長期的な為替の目安であり、危機の共通要素として教材が挙げるものではない。', c: '期間プレミアムは長期金利の構成要素であり、危機の引き金として事例に共通に挙げられるものではない。', d: '期待インフレ率の低下は危機の共通要素ではない。危機時に焦点になるのは資金の流れと流動性である。' },
-    sources: [SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.bojFsr], reviewStatus: 'verified',
   },
   {
     id: 'Q-F01-1', lessonId: 'F-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -181,7 +181,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: 'ETFは上場しているため株式のように市場価格で取引され、基準価額との乖離が生じることがあります。投資信託は一般に1日1回の基準価額で、価格が分からないまま注文する形です。',
     wrongExplanations: { a: '両者の説明が入れ替わっています。', c: '投資信託は取引所ではなく販売会社などを通じて売買します。', d: '投資信託は注文時点では基準価額が確定していないのが一般的です。' },
-    sources: [SRC.fsaInvest, SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F03-1', lessonId: 'F-03', type: 'single', difficulty: 2, skill: 'calculate',
@@ -217,7 +217,7 @@ export const QUESTIONS_2: Question[] = [
     correctIds: ['b'],
     explanation: '相関係数は過去データから計算される統計量で、危機時に上昇する事例が観測されています。分散効果は目安として使い、過信しないことが重要です。',
     wrongExplanations: { a: '相関は市場環境で変化します。不変ではありません。', c: '相関の高い資産同士の組み合わせでは効果が小さく、損失を必ず防げるわけではありません。', d: '危機時にはむしろ相関が上がり、ともに下がる場合があることが本問の前提です。' },
-    sources: [SRC.fsaInvest, SRC.bojTop], reviewStatus: 'verified',
+    sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
     id: 'Q-F01-3', lessonId: 'F-01', type: 'single', difficulty: 1, skill: 'calculate',
@@ -261,7 +261,7 @@ export const QUESTIONS_2: Question[] = [
     options: [{ id: 'a', text: '90.25' }, { id: 'b', text: '90' }, { id: 'c', text: '110.25' }, { id: 'd', text: '95' }],
     correctIds: ['a'],
     explanation: 'インバース型は日次の騰落率に−1倍をかけるため、100 × (1 − 0.05) × (1 − 0.05) ＝ 100 × 0.95 × 0.95 ＝ 90.25 である。日次リセットのため、2日分の騰落をまとめて計算はしない。',
-    wrongExplanations: { b: '期間騰落率（2日で+10%）に−1倍をまとめて適用した計算である。日次でリセットされるため90にはならない。', c: '原指数そのものの2日後の値（100 × 1.05 × 1.05）である。インバース型では日々の符号が逆になる。', d: '1日分だけを反映した値である。2日目は95に対してさらに−5%がかかる。' },
+    wrongExplanations: { b: '日次騰落率を単純に合計した+10%に、−1倍をまとめて適用した計算である（100×（1−0.10）＝90）。日次リセットでは1日ごとに倍率がかかるため、複数日の騰落率を合計してから倍率をかけることはできない。', c: '原指数そのものの2日後の値（100 × 1.05 × 1.05）である。インバース型では日々の符号が逆になる。', d: '1日分だけを反映した値である。2日目は95に対してさらに−5%がかかる。' },
     assumptions: '手数料・コスト・乖離はなく、日次騰落率に正確に倍率がかかるものとする。', sources: [SRC.fsaInvest], reviewStatus: 'verified',
   },
   {
@@ -310,7 +310,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'ハッシュ関数は一方向の変換であり、出力から入力を復元することは想定されていません。復号を前提とする暗号化とは異なります。',
     wrongExplanations: { a: '正しい説明です。雪崩効果と呼ばれる性質です。', c: '正しい説明です。過去の記録を書き換えると以降のハッシュが合わなくなります。', d: '正しい説明です。ハッシュは復号を前提としません。' },
-    sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
+    sources: [SRC.nistFips1804], reviewStatus: 'verified',
   },
   {
     id: 'Q-G02-1', lessonId: 'G-02', type: 'single', difficulty: 2, skill: 'calculate',
@@ -337,7 +337,7 @@ QUESTIONS_2.push(
     correctIds: ['c'],
     explanation: '手数料 ＝ 50,000 × 30 ＝ 1,500,000Gwei。ETH換算は 1,500,000 ÷ 10^9 ＝ 0.0015ETH。手数料は送金額ではなく計算量とガス価格で決まります。',
     wrongExplanations: { a: 'GweiからETHへの換算（10^9で割る）をしていない誤りです。', b: '換算の桁が1つずれています。', d: '換算の桁が1つずれて小さくなっています。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    sources: [SRC.ethereumGas], reviewStatus: 'verified',
   },
   {
     id: 'Q-G03-2', lessonId: 'G-03', type: 'single', difficulty: 2, skill: 'compare',
@@ -373,7 +373,7 @@ QUESTIONS_2.push(
     correctIds: ['d'],
     explanation: '合計は 2 ＋ 5 ＋ 8 ＝ 15 で、h ＝ 15 mod 10 ＝ 5 である。mod 10 は、10で割った余りを取る操作である。',
     wrongExplanations: { a: '余りを取る前の合計そのものである。mod 10 の計算が抜けている。', b: '15 ÷ 10 の商（1）であり、求めるのは余りの方である。', c: 'データの個数（3個）であり、ハッシュ値ではない。' },
-    assumptions: '玩具ハッシュは教材用の単純化モデルであり、実際の暗号学的ハッシュ関数とは強度が異なる。', sources: [SRC.bitcoinPaper], reviewStatus: 'verified',
+    assumptions: '玩具ハッシュは教材用の単純化モデルであり、実際の暗号学的ハッシュ関数とは強度が異なる。', sources: [SRC.nistFips1804], reviewStatus: 'verified',
   },
   {
     id: 'Q-G01-4', lessonId: 'G-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -441,11 +441,11 @@ QUESTIONS_2.push(
   {
     id: 'Q-H01-1', lessonId: 'H-01', type: 'single', difficulty: 2, skill: 'calculate',
     prompt: '価格5ドル、流通供給量2,000万トークン、最大供給量5,000万トークンのとき、FDV（完全希薄化後評価額）はいくらか。',
-    options: [{ id: 'a', text: '1億ドル' }, { id: 'b', text: '2.5億ドル' }, { id: 'c', text: '5億ドル' }, { id: 'd', text: '2,500万ドル' }],
+    options: [{ id: 'a', text: '1億ドル' }, { id: 'b', text: '2.5億ドル' }, { id: 'c', text: '1.5億ドル' }, { id: 'd', text: '2,500万ドル' }],
     correctIds: ['b'],
     explanation: 'FDV ＝ 価格 × 最大供給量 ＝ 5 × 5,000万 ＝ 2.5億ドル。なお時価総額は 5 × 2,000万 ＝ 1億ドルであり、未発行分を含むFDVとは区別します（価格が現在値のままという仮定の計算です）。',
-    wrongExplanations: { a: 'それは流通供給量で計算した時価総額です。FDVは最大供給量を使います。', c: '供給量の読み違いによる計算です。', d: '価格と供給量の掛け算が誤っています。' },
-    assumptions: '現在の価格が全量発行時も維持されるというFDV定義上の仮定に基づく。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    wrongExplanations: { a: 'それは流通供給量で計算した時価総額です。FDVは最大供給量を使います。', c: '未発行分（最大供給量−流通供給量＝5,000万−2,000万＝3,000万）だけに価格を掛けた値です。FDVは最大供給量の全体に価格を掛けます。', d: '最大供給量の桁を読み違えた計算です（5ドル×500万＝2,500万ドル）。' },
+    assumptions: '現在の価格が全量発行時も維持されるというFDV定義上の仮定に基づく。', sources: [SRC.coingeckoFdv], reviewStatus: 'verified',
   },
   {
     id: 'Q-H01-2', lessonId: 'H-01', type: 'single', difficulty: 2, skill: 'understand',
@@ -454,7 +454,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'アンロックは、創業者や投資家への割当分などロックされていたトークンが売却可能になる出来事です。新規発行ではありませんが、市場に出回り得る量が増えるため売り圧力の観点で確認されます。',
     wrongExplanations: { a: '上限の引き上げは発行スケジュールや仕様変更の話で、アンロックとは異なります。', c: 'バーンは供給を減らす操作であり、アンロックの逆方向の出来事です。', d: '上場廃止は取引所側の措置であり、トークンのロックとは関係ありません。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    sources: [SRC.coingeckoFdv], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-1', lessonId: 'H-02', type: 'single', difficulty: 2, skill: 'calculate',
@@ -463,7 +463,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: '支払額 ＝ 想定元本 × 資金調達率 ＝ 2,000,000 × 0.0003 ＝ 600円。価格が動かなくても、建玉を維持するだけでこのコストが回数分積み上がります。',
     wrongExplanations: { a: '率を0.003%として計算した誤りです。', c: '率を0.3%として計算した誤りです。', d: '桁を取り違えた計算です。' },
-    assumptions: '資金調達率の符号と支払い側は取引所の規則に従うものとし、本問では支払う側と明示した。', sources: [SRC.fsaCrypto], reviewStatus: 'verified',
+    assumptions: '資金調達率の符号と支払い側は取引所の規則に従うものとし、本問では支払う側と明示した。', sources: [SRC.dydxFunding], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-2', lessonId: 'H-02', type: 'single', difficulty: 3, skill: 'understand',
@@ -499,7 +499,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: 'k ＝ 200 × 200 ＝ 40,000。投入後は A ＝ 220 になるため、Bは 40,000 ÷ 220 ≒ 181.82 がプールに残り、受け取りは 200 − 181.82 ≒ 18.18。投入量より受け取りが少ないのは、取引自体がプール内比率を動かす価格影響のためです。',
     wrongExplanations: { a: 'プール内比率が変わらないと仮定した誤りです。AMMでは取引で比率が動き、等量交換にはなりません。', c: 'kの計算または割り算過程の誤りです。再計算すると約18.18になります。', d: '受け取りが投入を上回ることは、定数積の仕組み上あり得ません（手数料なし条件）。' },
-    assumptions: '手数料なし、単一の取引のみで、外部市場との裁定は考えない。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    assumptions: '手数料なし、単一の取引のみで、外部市場との裁定は考えない。', sources: [SRC.uniswapV3], reviewStatus: 'verified',
   },
   {
     id: 'Q-H04-2', lessonId: 'H-04', type: 'single', difficulty: 3, skill: 'understand',
@@ -517,7 +517,7 @@ QUESTIONS_2.push(
     correctIds: ['a'],
     explanation: '時価総額 ＝ 価格 × 流通供給量 ＝ 3 × 4,000万 ＝ 1.2億ドルである。最大供給量で計算した2.4億ドルはFDVであり、時価総額とは区別する。',
     wrongExplanations: { b: '最大供給量で計算した値であり、それはFDVである。時価総額には流通供給量を使う。', c: '流通供給量と最大供給量の平均（6,000万）で計算した誤りである。時価総額は流通供給量のみを使う。', d: '流通供給量そのものであり、価格を掛けていない。' },
-    assumptions: '価格は現在の値のままとする。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    assumptions: '価格は現在の値のままとする。', sources: [SRC.coingeckoFdv], reviewStatus: 'verified',
   },
   {
     id: 'Q-H01-4', lessonId: 'H-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -526,7 +526,7 @@ QUESTIONS_2.push(
     correctIds: ['d'],
     explanation: 'ステーキング報酬の原資が新規発行である場合、自分の報酬率（10%）が全体のインフレ率（12%）を下回れば、ネットワーク全体に対する保有割合は相対的に下がる。名目の利回りだけでなく、希薄化を差し引いて考える必要がある。',
     wrongExplanations: { a: '報酬は保有量を増やすが、割合は全体の発行量との比較で決まる。必ず増えるとは言えない。', b: '新規発行は全保有者の割合を薄めるため、保有割合に直接関係する。', c: 'バーンは供給を減らす要素だが、発行量との差し引きで決まるため、必ず増えるとは限らない。' },
-    sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    sources: [SRC.coingeckoFdv], reviewStatus: 'verified',
   },
   {
     id: 'Q-H02-3', lessonId: 'H-02', type: 'single', difficulty: 2, skill: 'understand',
@@ -571,7 +571,7 @@ QUESTIONS_2.push(
     correctIds: ['b'],
     explanation: '借入上限 ＝ 担保価値 × 60% ＝ 20万円 × 0.6 ＝ 12万円である。担保価値の全額を借りられるわけではなく、上限と清算水準の管理がレンディングの要点である。',
     wrongExplanations: { a: '担保価値の全額であり、上限の割合を適用していない。過剰担保の仕組みでは全額は借りられない。', c: '残りの40%（1 − 0.6）を掛けた値である。借入上限は担保価値に60%を掛ける。', d: '担保価値を割合で割った値である（20 ÷ 0.6）。上限は掛け算で求める。' },
-    assumptions: '提示した60%はこの問題のための前提であり、実際のプロトコルの条件は個別に異なる。', sources: [SRC.ethereumDocs], reviewStatus: 'verified',
+    assumptions: '提示した60%はこの問題のための前提であり、実際のプロトコルの条件は個別に異なる。', sources: [SRC.aaveLiquidations], reviewStatus: 'verified',
   },
   {
     id: 'Q-H04-4', lessonId: 'H-04', type: 'single', difficulty: 2, skill: 'apply',

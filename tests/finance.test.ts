@@ -94,3 +94,16 @@ describe('暗号資産モデル', () => {
   it('ヘルスファクター', () => close(F.healthFactor(100, 0.8, 50), 1.6));
   it('ステーキング: APR12%月次複利の実効利回り', () => close(F.stakingEffectiveAnnual(0.12, 12, 0, 0), Math.pow(1.01, 12) - 1, 1e-12));
 });
+
+describe('監査指摘の回帰（計算系）', () => {
+  it('irr: 両端同符号でも内部の解を検出する（[-100, 230, -132] の解は10%と20%）', () => {
+    const r = F.irr([-100, 230, -132]);
+    expect(Math.abs(r - 0.1) < 1e-6 || Math.abs(r - 0.2) < 1e-6).toBe(true);
+  });
+  it('irr: 解がない場合は不存在と断定しない文言で例外にする', () => {
+    expect(() => F.irr([100, 100, 100])).toThrow(/検出できません/);
+  });
+  it('timeWeightedReturn: 空配列は例外（他関数と一貫）', () => {
+    expect(() => F.timeWeightedReturn([])).toThrow();
+  });
+});

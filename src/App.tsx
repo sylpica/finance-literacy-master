@@ -141,22 +141,32 @@ function Home({ go }: { go: (p: string) => void }) {
 }
 
 function MapPage({ go }: { go: (p: string) => void }) {
+  const { state } = useApp();
+  const [onlyBookmarked, setOnlyBookmarked] = useState(false);
+  const bookmarked = new Set((state?.bookmarks ?? []).map(b => b.lessonId));
+  const visible = (domainId: string) => LESSONS.filter(l => l.domainId === domainId && (!onlyBookmarked || bookmarked.has(l.id)));
   return (
     <main>
       <h2>学習マップ（前提知識のつながり）</h2>
-      {DOMAINS.map(d => (
+      <p>
+        <button className={onlyBookmarked ? 'chip active' : 'chip'} aria-pressed={onlyBookmarked} onClick={() => setOnlyBookmarked(v => !v)}>★ ブックマークのみ（{bookmarked.size}件）</button>
+        <span className="meta"> ブックマークは各教材ページの「★ ブックマーク」で付け外しできます。</span>
+      </p>
+      {DOMAINS.map(d => visible(d.id).length > 0 && (
         <section key={d.id} className="panel">
           <h3>{d.id}. {d.name}</h3>
           <ul>
-            {LESSONS.filter(l => l.domainId === d.id).map(l => (
+            {visible(d.id).map(l => (
               <li key={l.id}>
                 <button className="linklike" onClick={() => go(`lesson/${l.id}`)}>{l.id} {l.title}</button>
+                {bookmarked.has(l.id) && <span className="badge" aria-label="ブックマーク済み">★</span>}
                 {l.prerequisites.length > 0 && <span className="meta"> ← 前提: {l.prerequisites.map(p => `${p} ${lessonById.get(p)?.title ?? ''}`).join('、')}</span>}
               </li>
             ))}
           </ul>
         </section>
       ))}
+      {onlyBookmarked && bookmarked.size === 0 && <p>ブックマークした教材はまだありません。各教材ページの「★ ブックマーク」から追加できます。</p>}
     </main>
   );
 }
@@ -230,6 +240,7 @@ function SettingsPage({ go }: { go: (p: string) => void }) {
 
 function Shell() {
   const [route, go] = useHashRoute();
+  const { storageWarning } = useApp();
   const parts = route.split('/');
   let page: React.ReactNode;
   if (route === '') page = <Home go={go} />;
@@ -261,6 +272,7 @@ function Shell() {
           {NAV.map(n => <button key={n.path + n.label} className={route === n.path ? 'nav active' : 'nav'} aria-current={route === n.path ? 'page' : undefined} onClick={() => go(n.path)}>{n.label}</button>)}
         </nav>
       </header>
+      {storageWarning && <p className="warn" role="alert">保存先（IndexedDB）への読み書きに失敗したため、学習データはこのタブを開いている間のみ保持されます。タブを閉じると失われるため、データ管理からバックアップを保存してください。</p>}
       <ErrorBoundary key={route}>{page}</ErrorBoundary>
       <footer><p className="meta">学習専用アプリです。投資助言ではなく、将来の価格・リターンを保証しません。制度情報は出典と確認日を確認してください。</p></footer>
     </div>

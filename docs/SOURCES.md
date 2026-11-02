@@ -16,7 +16,19 @@
 | 金融政策の概要 | 日本銀行 | https://www.boj.or.jp/mopo/outline/index.htm | 金融政策・公開市場操作 |
 | 信用取引の概要 | 日本取引所グループ | https://www.jpx.co.jp/equities/trading/margin/outline/01.html | 信用取引の仕組み（委託保証金30%以上、追証は20%割れ、品貸料（逆日歩）、制度信用の返済期限6か月）（出典具体化で追加、2026-11-02確認） |
 | EDINET | 金融庁 | https://disclosure2.edinet-fsa.go.jp/ | 有価証券報告書等の開示 |
-| EDGAR APIs | 米国SEC | https://www.sec.gov/search-filings/edgar-application-programming-interfaces | 米国開示資料 |
+| 売買成立の方法｜内国株の売買制度 | 日本取引所グループ | https://www.jpx.co.jp/equities/trading/domestic/04.html | 指値・成行、価格優先・時間優先、板寄せ・ザラバ、特別気配（二重監査で追加、2026-11-02確認） |
+| インサイダー取引規制 | 日本取引所グループ | https://www.jpx.co.jp/regulation/preventing/insider/index.html | インサイダー取引の定義・禁止理由・罰則（二重監査で追加、2026-11-02確認） |
+| 適時開示情報（TDnet）の概要 | 日本取引所グループ | https://www.jpx.co.jp/markets/paid-info-listing/tdnet/ | TDnetによる適時開示・決算短信の配信（二重監査で追加、2026-11-02確認） |
+| iDeCoの概要 | 厚生労働省 | https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/nenkin/kyoshutsu/ideco.html | 加入区分別の拠出限度額、拠出・運用・受取の3段階の税制（二重監査で追加、2026-11-02確認） |
+| 分配金・換金／償還の知識 | 資産運用業協会 | https://www.imaj.or.jp/special/toushin-qa100/dividend_redemption/ | 普通分配金（課税）と元本払戻金・特別分配金（非課税）、個別元本（二重監査で追加、2026-11-02確認） |
+| 金融システムレポート | 日本銀行 | https://www.boj.or.jp/research/brp/fsr/index.htm | 金融システムの安定性・金融循環・危機の分析（二重監査で追加、2026-11-02確認） |
+| 企業会計基準第21号「企業結合に関する会計基準」 | 企業会計基準委員会（ASBJ） | https://www.asb-j.jp/jp/wp-content/uploads/sites/4/ketsugou_20190422.pdf | のれんの会計処理（第32項：20年以内で規則的償却）（二重監査で追加、2026-11-02確認） |
+| FIPS 180-4 Secure Hash Standard | NIST | https://csrc.nist.gov/pubs/fips/180-4/upd1/final | ハッシュ関数の標準仕様（SHA-2等）（二重監査で追加、2026-11-02確認） |
+| Gas and fees | ethereum.org | https://ethereum.org/developers/docs/gas/ | ガスの定義、手数料＝使用量×価格、Gwei（二重監査で追加、2026-11-02確認） |
+| Uniswap v3 Core (Whitepaper) | Uniswap Labs | https://uniswap.org/whitepaper-v3.pdf | 定数積 AMM（x·y=k）の原著（二重監査で追加、2026-11-02確認） |
+| Health Factor & Liquidations | Aave | https://www.aave.org/help/borrowing/liquidations | ヘルスファクター・清算閾値・清算の仕組み（二重監査で追加、2026-11-02確認） |
+| Default funding rates on dYdX | dYdX Operations | https://help.dydx.trade/en/articles/166992-default-funding-rates-on-dydx | 永久先物の資金調達率の仕組みと支払い方向（二重監査で追加、2026-11-02確認） |
+| What Is Fully Diluted Valuation (FDV) In Crypto? | CoinGecko | https://www.coingecko.com/learn/what-is-fully-diluted-valuation-fdv-in-crypto | FDV＝価格×総供給量、時価総額＝価格×流通供給量の定義（二重監査で追加、2026-11-02確認） |
 | Bitcoin: A Peer-to-Peer Electronic Cash System | Satoshi Nakamoto | https://bitcoin.org/bitcoin.pdf | Bitcoinの設計（一次資料） |
 | Ethereum development documentation | ethereum.org | https://ethereum.org/developers/docs/ | EVM・スマートコントラクト・ガス |
 

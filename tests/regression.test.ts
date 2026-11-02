@@ -72,7 +72,7 @@ describe('selectQuestions', () => {
     const otherQ = QUESTIONS[1] as (typeof QUESTIONS)[number];
     const qs = selectQuestions({ kind: 'review' }, {
       schedule: [{ questionId: someQ.id, dueAt: now - 1000 }],
-      attempts: [{ questionId: otherQ.id, correct: false }],
+      attempts: [{ questionId: otherQ.id, correct: false, answeredAt: now - 500 }],
     });
     const ids = qs.map(q => q.id);
     expect(ids).toContain(someQ.id); expect(ids).toContain(otherQ.id);

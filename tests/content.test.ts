@@ -13,9 +13,9 @@ describe('教材カバレッジ', () => {
     for (const d of DOMAINS) expect(LESSONS.filter(l => l.domainId === d.id).length, `分野${d.id}`).toBe(4);
   });
   it('教材IDが一意', () => { expect(new Set(LESSONS.map(l => l.id)).size).toBe(LESSONS.length); });
-  it('各教材に4問 = 224問', () => {
-    expect(QUESTIONS.length).toBe(224);
-    for (const l of LESSONS) expect(l.questionIds.length, l.id).toBe(4);
+  it('各教材に4問以上 = 226問（資料読解C-04・企業比較D-01に各1問追加）', () => {
+    expect(QUESTIONS.length).toBe(226);
+    for (const l of LESSONS) expect(l.questionIds.length, l.id).toBeGreaterThanOrEqual(4);
   });
 });
 describe('教材の整合性', () => {

@@ -30,6 +30,13 @@ describe('習熟度（初見重視）', () => {
     ], qs);
     expect(m2.get('A-01')).toBe(0.5);
   });
+  it('分母は教材の全問題: 一部だけ正答しても100%にならない（監査指摘の回帰）', () => {
+    const two: Question[] = [qs[0] as Question, { ...(qs[0] as Question), id: 'Q-A01-2' }];
+    const m = masteryByLesson([{ questionId: 'Q-A01-1', selectedIds: ['a'], correct: true, answeredAt: 1 }], two);
+    expect(m.get('A-01')).toBe(0.5);
+    const m0 = masteryByLesson([], two);
+    expect(m0.get('A-01')).toBe(0);
+  });
 });
 describe('CSV検証', () => {
   it('正常データを通し、重複・負値を弾く', () => {
@@ -44,10 +51,27 @@ describe('CSV検証', () => {
   it('CSVインジェクション無害化', () => { expect(sanitizeCell('=SUM(A1)')).toBe("'=SUM(A1)"); expect(sanitizeCell('-5')).toBe('-5'); });
 });
 describe('バックアップ検証', () => {
+  const base = { format: 'finance-literacy-master-backup', version: 1, attempts: [], schedule: [], bookmarks: [], notes: [], virtual: [] };
   it('正しい形式を受け付け、異形式・異バージョンを拒否する', () => {
-    const ok = JSON.stringify({ format: 'finance-literacy-master-backup', version: 1, attempts: [], schedule: [], bookmarks: [], notes: [], virtual: [] });
-    expect(parseBackup(ok).attempts).toEqual([]);
+    expect(parseBackup(JSON.stringify(base)).attempts).toEqual([]);
     expect(() => parseBackup(JSON.stringify({ format: 'other', version: 1 }))).toThrow();
-    expect(() => parseBackup(JSON.stringify({ format: 'finance-literacy-master-backup', version: 2, attempts: [], schedule: [], bookmarks: [], notes: [], virtual: [] }))).toThrow();
+    expect(() => parseBackup(JSON.stringify({ ...base, version: 2 }))).toThrow();
+  });
+  it('深い検証: 型・範囲・一意性の不正を拒否する（監査指摘の回帰）', () => {
+    const bad = [
+      { ...base, attempts: [{ questionId: 'Q', correct: true, answeredAt: 1, selectedIds: [1] }] },
+      { ...base, schedule: [{ questionId: 'Q', ease: 9, intervalDays: 1, repetitions: 0, dueAt: 1 }] },
+      { ...base, schedule: [{ questionId: 'Q', ease: 2.5, intervalDays: 1, repetitions: 0, dueAt: 1 }, { questionId: 'Q', ease: 2.5, intervalDays: 1, repetitions: 0, dueAt: 1 }] },
+      { ...base, bookmarks: [{ lessonId: 'A-01' }] },
+      { ...base, virtual: [{ caseId: 'C', score: 1, doneAt: 1, chosen: { k: 'not-array' } }] },
+    ];
+    for (const b of bad) expect(() => parseBackup(JSON.stringify(b))).toThrow();
+    const good = { ...base, schedule: [{ questionId: 'Q', ease: 2.5, intervalDays: 1, repetitions: 0, dueAt: 1 }], bookmarks: [{ lessonId: 'A-01', createdAt: 1 }] };
+    expect(parseBackup(JSON.stringify(good)).schedule.length).toBe(1);
+  });
+  it('銘柄へのサニタイズ適用: 数式風の銘柄は無害化される', () => {
+    const t = parseCsv('date,symbol,close\n2026-01-05,=EVIL,100\n');
+    const r = validateMarketRows(t, { date: 0, symbol: 1, close: 2 });
+    expect(r.ok[0]?.symbol).toBe("'=EVIL");
   });
 });

@@ -220,7 +220,7 @@ function RiskSim() {
     <NumField label="乱数シード" value={v.seed} set={x => setV({ ...v, seed: x })} min={1} max={9999} />
     <p>ヒストリカルVaR(95%, 1日): 損失 {formatPct(varRes.var)} 以内が95% ／ CVaR(95%): ワースト5%の平均損失 {formatPct(varRes.cvar)} ／ 期間最大ドローダウン {formatPct(mdd)}</p>
     <LineChart label="生成した価格系列" points={priceSeries.map((y, i) => ({ x: i, y }))} />
-    <Note>価格系列は正規乱数で生成した教材用データです（実データではありません）。VaRは「超えた場合の損失の大きさ」を示さず、分布の仮定に依存します。</Note>
+    <Note>価格系列は正規乱数で生成した教材用データです（実データではありません）。VaRは「超えた場合の損失の大きさ」を示さず、分布の仮定に依存します。分位の取り方は切り捨て側の規約のため、実効の信頼水準は名目よりわずかに高く（損失の見積もりはやや保守的に）なります。</Note>
     <Reset onClick={() => setV(DEF)} /></div>);
 }
 function OptionSim() {
@@ -235,13 +235,14 @@ function OptionSim() {
     <NumField label="満期まで" value={v.days} set={x => setV({ ...v, days: x })} min={7} max={365} step={7} unit="日" />
     <p>理論価格 {formatNum(bs.price)}円（内在価値 {formatNum(bs.intrinsic)}円＋時間価値 {formatNum(bs.timeValue)}円）／ デルタ {formatNum(bs.delta)} ／ ガンマ {formatNum(bs.gamma)}</p>
     <LineChart label="満期時の損益" points={payoff} color="#fbbf24" />
-    <Note>ブラック・ショールズは「ボラティリティ一定・価格が対数正規分布・連続取引可能」等の前提に依存します。現実のボラティリティ・スマイルや流動性は反映されません。</Note>
+    <Note>ブラック・ショールズは「ボラティリティ一定・価格が対数正規分布・連続取引可能」等の前提に依存します。現実のボラティリティ・スマイルや流動性は反映されません。このシミュレーターはヨーロピアン型（満期にのみ行使可能）で配当なしを前提とし、無リスク金利は1%に固定しています。配当のある原資産では理論価格が変わります。</Note>
     <Reset onClick={() => setV(DEF)} /></div>);
 }
 function LeverageSim() {
   const DEF = { entry: 100000, lev: 5, mmr: 0.5, funding: 0.01, periods: 30, notional: 500000 };
   const [v, setV] = useState(DEF);
-  let liq = NaN; try { liq = F.liquidationPriceLong(v.entry, v.lev, v.mmr / 100); } catch { /* 範囲外 */ }
+  let liq = NaN; let liqError = '';
+  try { liq = F.liquidationPriceLong(v.entry, v.lev, v.mmr / 100); } catch (e) { liqError = e instanceof Error ? e.message : '計算範囲外です'; }
   return (<div><h3>レバレッジ清算価格（ロング）</h3>
     <NumField label="参入価格" value={v.entry} set={x => setV({ ...v, entry: x })} min={1000} max={1000000} step={1000} unit="円" />
     <NumField label="レバレッジ" value={v.lev} set={x => setV({ ...v, lev: x })} min={1} max={25} unit="倍" />
@@ -249,7 +250,7 @@ function LeverageSim() {
     <NumField label="想定元本" value={v.notional} set={x => setV({ ...v, notional: x })} min={10000} max={5000000} step={10000} unit="円" />
     <NumField label="資金調達率（1期間）" value={v.funding} set={x => setV({ ...v, funding: x })} min={-0.1} max={0.3} step={0.01} unit="%" />
     <NumField label="保有期間数" value={v.periods} set={x => setV({ ...v, periods: x })} min={1} max={90} />
-    <p>簡易清算価格: {Number.isFinite(liq) ? `${formatNum(liq)}円（参入から ${formatPct(liq / v.entry - 1)}）` : '計算範囲外です'} ／ 資金調達コスト累計 {formatYen(F.fundingCost(v.notional, v.funding / 100, v.periods))}</p>
+    <p>簡易清算価格: {Number.isFinite(liq) ? `${formatNum(liq)}円（参入から ${formatPct(liq / v.entry - 1)}）` : `計算できません（${liqError}）`} ／ 資金調達コスト累計 {formatYen(F.fundingCost(v.notional, v.funding / 100, v.periods))}</p>
     <Note>清算価格は維持証拠金率を用いた教材用の近似式であり、取引所ごとの証拠金階層・マーク価格方式とは異なります。実際の清算条件は利用する取引所の仕様で確認してください。</Note>
     <Reset onClick={() => setV(DEF)} /></div>);
 }

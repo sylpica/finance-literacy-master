@@ -1,7 +1,7 @@
 import type { Question } from '../types';
 import { SRC } from './sources';
 
-// 担当3: 分野I,J,K,L の問題（各教材2問 = 32問）。計算はすべて検算済み。
+// 担当3: 分野I,J,K,L の問題（各教材4問 = 64問）。計算はすべて検算済み。
 export const QUESTIONS_3: Question[] = [
   {
     id: 'Q-I01-1', lessonId: 'I-01', type: 'single', difficulty: 2, skill: 'apply',
@@ -111,7 +111,7 @@ export const QUESTIONS_3: Question[] = [
       d: '上限は表示された評価額に連動するため、価格操作の影響を受けます。これがオラクル攻撃の要点です。',
     },
     assumptions: '金利や他の利用者の借入状況は考慮せず、担保係数は60%で一定とする。',
-    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
+    sources: [SRC.aaveLiquidations], reviewStatus: 'verified',
   },
   {
     id: 'Q-I02-3', lessonId: 'I-02', type: 'single', difficulty: 3, skill: 'apply',
@@ -895,7 +895,7 @@ export const QUESTIONS_3: Question[] = [
       d: '8%の下落で全額を失うのは、およそレバレッジ12.5倍の場合に相当します。',
     },
     assumptions: '価格変動は建玉全体に一律に適用され、スリッページ・金利・手数料はないものとする（線形近似）。',
-    sources: [SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.jpxMargin], reviewStatus: 'verified',
   },
   {
     id: 'Q-L01-2', lessonId: 'L-01', type: 'single', difficulty: 2, skill: 'find-error',
@@ -913,7 +913,7 @@ export const QUESTIONS_3: Question[] = [
       b: '正しい説明です。急変時の価格の跳び（窓）が理由の一つです。',
       d: '正しい説明です。保有コストは短期向けとされる理由の一つです。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.jpxMargin], reviewStatus: 'verified',
   },
   {
     id: 'Q-L01-3', lessonId: 'L-01', type: 'single', difficulty: 2, skill: 'calculate',
@@ -932,7 +932,7 @@ export const QUESTIONS_3: Question[] = [
       d: '20%の価格上昇で自己資金の全額を失うのは、およそレバレッジ5倍の空売りに相当します。本問は2倍です。',
     },
     assumptions: '価格変動は建玉全体に一律に適用され、スリッページ・金利・貸株料・手数料はないものとする（線形近似）。',
-    sources: [SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.jpxMargin], reviewStatus: 'verified',
   },
   {
     id: 'Q-L01-4', lessonId: 'L-01', type: 'single', difficulty: 2, skill: 'understand',
@@ -950,7 +950,7 @@ export const QUESTIONS_3: Question[] = [
       b: '手数料の水準と、清算が連鎖する構造の有無は無関係です。',
       d: '下落局面での清算連鎖が典型例です。上昇時だけの現象ではありません。',
     },
-    sources: [SRC.fsaTop], reviewStatus: 'verified',
+    sources: [SRC.jpxMargin], reviewStatus: 'verified',
   },
   {
     id: 'Q-L02-1', lessonId: 'L-02', type: 'single', difficulty: 3, skill: 'calculate',
@@ -1117,7 +1117,7 @@ export const QUESTIONS_3: Question[] = [
       d: '10,000円は率を1%と取り違えた結果です。',
     },
     assumptions: '建玉金額は当該インターバルを通じて100万円で一定とし、率は取引所公表の+0.01%とする。',
-    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
+    sources: [SRC.dydxFunding], reviewStatus: 'verified',
   },
   {
     id: 'Q-L04-2', lessonId: 'L-04', type: 'single', difficulty: 3, skill: 'understand',
@@ -1154,7 +1154,7 @@ export const QUESTIONS_3: Question[] = [
       c: '9,000円は率を0.3%（0.003）と取り違えた結果です。',
     },
     assumptions: '建玉金額は当該インターバルを通じて300万円で一定とし、率は取引所公表の−0.03%とする。',
-    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
+    sources: [SRC.dydxFunding], reviewStatus: 'verified',
   },
   {
     id: 'Q-L04-4', lessonId: 'L-04', type: 'single', difficulty: 3, skill: 'apply',
@@ -1172,6 +1172,6 @@ export const QUESTIONS_3: Question[] = [
       c: '逆です。建玉の総量とレバレッジの偏りが大きいほど、小さな価格変動でも多数の強制清算が連鎖しやすくなります。',
       d: '資金調達率は、取引所への手数料ではなく、建玉を持つロングとショートの間の交換です。',
     },
-    sources: [SRC.fsaCrypto], reviewStatus: 'verified',
+    sources: [SRC.dydxFunding], reviewStatus: 'verified',
   },
 ];

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Note, ReviewScheduleItem, StudyAttempt, VirtualRecord } from './types';
-import { loadState, addAttempt, saveScheduleItem, toggleBookmark, saveNote, addVirtual, replaceState, wipeState, type AppState } from './store/db';
+import { loadState, addAttempt, saveScheduleItem, toggleBookmark, saveNote, addVirtual, replaceState, wipeState, setStorageFailureListener, type AppState } from './store/db';
 import { applyReview, initSchedule } from './learning/srs';
 
 interface Ctx {
@@ -11,6 +11,8 @@ interface Ctx {
   addVirtual: (r: VirtualRecord) => Promise<void>;
   importState: (s: AppState) => Promise<void>;
   wipe: () => Promise<void>;
+  /** 保存・読込に失敗しメモリ保持に切り替わった場合に true（UI で警告を表示する） */
+  storageWarning: boolean;
   density: 'normal' | 'dense';
   setDensity: (d: 'normal' | 'dense') => void;
   theme: 'dark' | 'light';
@@ -26,6 +28,8 @@ function writeSetting(key: string, value: string) { try { localStorage.setItem(k
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState | null>(null);
+  const [storageWarning, setStorageWarning] = useState(false);
+  useEffect(() => { setStorageFailureListener(() => setStorageWarning(true)); return () => setStorageFailureListener(null); }, []);
   const [density, setDensityState] = useState<'normal' | 'dense'>(() => readSetting('flm-density', ['normal', 'dense'], 'normal'));
   const [theme, setThemeState] = useState<'dark' | 'light'>(() => readSetting('flm-theme', ['dark', 'light'], 'dark'));
   useEffect(() => { void loadState().then(setState); }, []);
@@ -35,9 +39,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const recordAttempt = useCallback(async (a: StudyAttempt) => {
     if (!state) return;
     let next = await addAttempt(state, a);
-    const existing = next.schedule.find(s => s.questionId === a.questionId) ?? initSchedule(a.questionId, a.answeredAt);
-    const updated: ReviewScheduleItem = applyReview(existing, a.correct, a.answeredAt);
-    next = await saveScheduleItem(next, updated);
+    const existing = next.schedule.find(s => s.questionId === a.questionId);
+    // 期限前（dueAt より前）の再回答ではスケジュールを進めない（監査指摘: 教材演習で同じ問題を
+    // 短時間に繰り返すだけで間隔が上限まで伸び、間隔反復が無効化されていた）。
+    // 回答自体は履歴に記録されるが、間隔の更新は「新規」または「期限到来後」の回答だけが対象。
+    if (!existing || existing.dueAt <= a.answeredAt) {
+      const base = existing ?? initSchedule(a.questionId, a.answeredAt);
+      const updated: ReviewScheduleItem = applyReview(base, a.correct, a.answeredAt);
+      next = await saveScheduleItem(next, updated);
+    }
     setState(next);
   }, [state]);
   const toggleBookmarkFn = useCallback(async (lessonId: string) => { if (state) setState(await toggleBookmark(state, lessonId)); }, [state]);
@@ -49,7 +59,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppCtx.Provider value={{
       state, recordAttempt, toggleBookmark: toggleBookmarkFn, saveNote: saveNoteFn, addVirtual: addVirtualFn,
-      importState, wipe, density, setDensity: setDensityState, theme, setTheme: setThemeState,
+      importState, wipe, storageWarning, density, setDensity: setDensityState, theme, setTheme: setThemeState,
     }}>{children}</AppCtx.Provider>
   );
 }

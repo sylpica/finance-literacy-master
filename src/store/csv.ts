@@ -8,6 +8,12 @@ export function decodeCsvBuffer(buf: ArrayBuffer): string {
   catch { return new TextDecoder('shift-jis').decode(buf); }
 }
 
+/** 文字コード判定のフォールバックが無音だと、文字化けしたまま取り込まれる（監査指摘）。
+ *  置換文字（U+FFFD）が多発している場合は、呼び出し側が利用者へ警告するための目安を返す。 */
+export function replacementCharCount(text: string): number {
+  return (text.match(/�/g) ?? []).length;
+}
+
 export function parseCsv(text: string): CsvTable {
   const rows: string[][] = []; let row: string[] = []; let field = ''; let inQ = false;
   const src = text.replace(/^\uFEFF/, '');
@@ -38,7 +44,8 @@ export function validateMarketRows(table: CsvTable, mapping: { date: number; sym
   table.rows.forEach((r, i) => {
     const line = i + 2;
     const date = (r[mapping.date] ?? '').trim();
-    const symbol = (r[mapping.symbol] ?? '').trim();
+    // 銘柄は将来の再出力（表計算ソフトで開く等）に備えてインジェクション無害化を通す
+    const symbol = sanitizeCell((r[mapping.symbol] ?? '').trim());
     const closeRaw = (r[mapping.close] ?? '').trim();
     // 実在する日付か（Date.parse は 2月31日を3月へ繰り越して解釈するため、成分の往復で確認する）
     const dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);

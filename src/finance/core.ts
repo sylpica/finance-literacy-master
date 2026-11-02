@@ -31,20 +31,35 @@ export function cagr(begin: number, end: number, years: number): number {
   req(begin > 0, 'begin は正'); req(end >= 0, 'end は0以上'); req(years > 0, 'years は正');
   return Math.pow(end / begin, 1 / years) - 1;
 }
-/** 符号変化を含むキャッシュフローのIRR（二分法＋Newton併用ではなく堅牢な二分探索） */
+/** 符号変化を含むキャッシュフローのIRR（二分探索）。
+ *  探索区間の両端が同符号でも内部に解がある場合（例 [-100, 230, -132] は解10%と20%の2つ）があるため、
+ *  区間を走査して最初の符号変化区間を探す。IRR は複数解を持ちうるため、返るのは検出できた解の1つであり、
+ *  「符号変化がありません」と解の不存在を混同しない（監査指摘）。 */
 export function irr(cashflows: number[], guessLow = -0.9999, guessHigh = 100): number {
   req(cashflows.length >= 2, 'キャッシュフローが不足しています');
   const npv = (r: number) => cashflows.reduce((s, cf, t) => s + cf / Math.pow(1 + r, t), 0);
-  let lo = guessLow, hi = guessHigh, flo = npv(lo), fhi = npv(hi);
-  req(flo * fhi < 0, '指定範囲にIRRの符号変化がありません');
-  for (let i = 0; i < 200; i++) {
-    const mid = (lo + hi) / 2, fm = npv(mid);
-    if (Math.abs(fm) < 1e-10) return mid;
-    if (flo * fm < 0) { hi = mid; fhi = fm; } else { lo = mid; flo = fm; }
+  let lo = guessLow, flo = npv(lo);
+  let bracket: [number, number, number] | null = null;
+  // 走査の刻み（約0.01）より狭い間隔に2つの解が同居する場合は検出できない制限がある（第2回再監査で記録）
+  const STEPS = 10000;
+  for (let i = 1; i <= STEPS; i++) {
+    const r = guessLow + ((guessHigh - guessLow) * i) / STEPS;
+    const fr = npv(r);
+    if (fr === 0) return r;
+    if (flo * fr < 0) { bracket = [lo, r, flo]; break; }
+    lo = r; flo = fr;
   }
-  return (lo + hi) / 2;
+  req(bracket !== null, '指定範囲にIRR（符号変化）が検出できません。解が存在しないか、範囲外にある可能性があります');
+  let [a, b, fa] = bracket as [number, number, number];
+  for (let i = 0; i < 200; i++) {
+    const mid = (a + b) / 2, fm = npv(mid);
+    if (Math.abs(fm) < 1e-10) return mid;
+    if (fa * fm < 0) { b = mid; } else { a = mid; fa = fm; }
+  }
+  return (a + b) / 2;
 }
 export function timeWeightedReturn(periodReturns: number[]): number {
+  req(periodReturns.length > 0, 'データが空です');
   return periodReturns.reduce((s, r) => { req(r > -1, '各期リターンは -1 より大'); return s * (1 + r); }, 1) - 1;
 }
 export function mean(xs: number[]): number { req(xs.length > 0, 'データが空です'); return xs.reduce((a, b) => a + b, 0) / xs.length; }
@@ -174,7 +189,9 @@ export function maxDrawdown(series: number[]): number {
   for (const v of series) { if (v > peak) peak = v; if (peak > 0) mdd = Math.min(mdd, v / peak - 1); }
   return mdd; // 負数（例: -0.35 = -35%）
 }
-/** ヒストリカルVaR/CVaR（損失を正の数で返す） */
+/** ヒストリカルVaR/CVaR（損失を正の数で返す）。
+ *  分位の規約（監査指摘で明示）: 位置 idx = floor((1−信頼水準) × n) − 1 を取るため、
+ *  実効テールは名目よりわずかに小さく（例: n=250・95% で実効4.8%）、値はやや保守的（大きめ）に出る。 */
 export function valueAtRisk(returns: number[], confidence = 0.95): { var: number; cvar: number } {
   req(returns.length >= 10, 'VaRには最低10観測が必要です'); req(confidence > 0.5 && confidence < 1, '信頼水準は0.5〜1');
   const sorted = [...returns].sort((a, b) => a - b);
@@ -212,7 +229,7 @@ export function monteCarloWithdrawal(opts: { initial: number; annualWithdrawal: 
 }
 
 // ---- オプション ----
-function ncdf(x: number): number { // Abramowitz-Stegun 近似（誤差 < 7.5e-8）
+function ncdf(x: number): number { // Abramowitz-Stegun 近似（実測の最大誤差は約2.1e-7。オプション価格への影響は最大でも0.01円未満で無視可能）
   const t = 1 / (1 + 0.2316419 * Math.abs(x));
   const d = 0.3989423 * Math.exp(-x * x / 2);
   const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));

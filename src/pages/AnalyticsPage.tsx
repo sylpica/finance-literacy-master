@@ -8,6 +8,10 @@ export function AnalyticsPage({ go }: { go: (path: string) => void }) {
   if (!state) return <main><p>読み込み中…</p></main>;
   const acc = accuracyByDomain(state.attempts, QUESTIONS);
   const mastery = masteryByLesson(state.attempts, QUESTIONS);
+  const attemptedCount = new Map<string, number>();
+  for (const qid of new Set(state.attempts.map(a => a.questionId))) {
+    const q = QUESTIONS.find(x => x.id === qid); if (q) attemptedCount.set(q.lessonId, (attemptedCount.get(q.lessonId) ?? 0) + 1);
+  }
   const now = Date.now();
   const dueIds = new Set(state.schedule.filter(s => s.dueAt <= now).map(s => s.questionId));
   const recs = recommendLessons(state.attempts, QUESTIONS, dueIds);
@@ -31,12 +35,12 @@ export function AnalyticsPage({ go }: { go: (path: string) => void }) {
       <section className="panel">
       <h3>教材別習熟度</h3>
       <div className="table-scroll"><table>
-        <thead><tr><th>教材</th><th>習熟度</th></tr></thead>
+        <thead><tr><th>教材</th><th>習熟度</th><th>回答済み</th></tr></thead>
         <tbody>
-          {LESSONS.filter(l => mastery.has(l.id)).map(l => <tr key={l.id}><td>{l.id} {l.title}</td><td>{Math.round((mastery.get(l.id) ?? 0) * 100)}%</td></tr>)}
-          {mastery.size === 0 && <tr><td colSpan={2}>まだ演習記録がありません</td></tr>}
+          {LESSONS.filter(l => attemptedCount.has(l.id)).map(l => <tr key={l.id}><td>{l.id} {l.title}</td><td>{Math.round((mastery.get(l.id) ?? 0) * 100)}%</td><td>{attemptedCount.get(l.id)}/{QUESTIONS.filter(q => q.lessonId === l.id).length}問</td></tr>)}
+          {attemptedCount.size === 0 && <tr><td colSpan={3}>まだ演習記録がありません</td></tr>}
         </tbody></table></div>
-      <p className="meta">習熟度は「難易度で重み付けし、初見正答を1、再挑戦での正答を0.5」とする説明可能な推定です。反復だけで高くならないよう設計しています。記憶の確率ではありません。</p>
+      <p className="meta">習熟度は「教材の全問題を分母に、難易度で重み付けし、初見正答を1、再挑戦での正答を0.5、未回答を0」とする説明可能な推定です。1問だけ正答しても100%にはなりません。記憶の確率ではありません。</p>
       </section>
       <section className="panel">
       <h3>おすすめの次の一歩</h3>

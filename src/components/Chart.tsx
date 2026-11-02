@@ -11,8 +11,9 @@ export function LineChart({ label, points, color = '#38bdf8', height = 180 }: { 
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${sx(i).toFixed(1)},${sy(p.y).toFixed(1)}`).join(' ');
   return (
     <figure className="chart">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
+      <svg viewBox={`-2 -2 ${W + 4} ${H + 4}`} role="img" aria-label={label}>
         <line x1={P} y1={H - P} x2={W - P} y2={H - P} stroke="#64748b" />
+        {min < 0 && max > 0 && <line x1={P} y1={sy(0)} x2={W - P} y2={sy(0)} stroke="#94a3b8" strokeDasharray="4 3" />}
         <path d={path} fill="none" stroke={color} strokeWidth="2.5" />
         <text x={P} y={14} fill="currentColor" fontSize="12">最大 {formatNum(max)}</text>
         <text x={P} y={H - 6} fill="currentColor" fontSize="12">最小 {formatNum(min)}</text>

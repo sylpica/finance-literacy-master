@@ -28,9 +28,9 @@
   --line-strong: #b7c6da;
   --text: #152233;
   --muted: #51657c;
-  --accent: #0284c7;
+  --accent: #0369a1;
   --accent-ink: #ffffff;
-  --accent-soft: rgba(2, 132, 199, 0.09);
+  --accent-soft: rgba(3, 105, 161, 0.09);
   --accent-2: #b45309;
   --good: #047857;
   --good-soft: rgba(4, 120, 87, 0.09);
@@ -85,13 +85,21 @@ button {
 }
 button:hover { border-color: var(--line-strong); }
 button:disabled { opacity: 0.45; cursor: not-allowed; }
-button.nav { white-space: nowrap; border-radius: 999px; background: transparent; padding: 4px 10px; font-size: 0.88em; min-height: 32px; }
+button.nav { white-space: nowrap; border-radius: 999px; background: transparent; padding: 6px 10px; font-size: 0.88em; min-height: 40px; }
+/* 狭幅ではヘッダーを2段にする（監査指摘: 320px幅でナビ可視幅が85pxしかなく先頭項目すら見切れていた）。
+   ブランド行の下にナビ行を全幅で置き、主要導線の発見可能性を確保する。 */
+@media (max-width: 760px) {
+  header { flex-wrap: wrap; row-gap: 4px; }
+  header nav { flex: 1 1 100%; order: 2; }
+}
 button.nav.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 button.danger { background: var(--bad); color: #fff; border-color: var(--bad); font-weight: 700; }
 button.chip { border-radius: 999px; padding: 6px 12px; min-height: 36px; }
 button.chip.active, button.tab.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 button.linklike { background: none; border: none; padding: 2px 4px; min-height: 0; color: var(--accent); text-align: left; }
+/* リスト内の教材リンクはタップ高さ40pxを確保する（監査指摘: 実測30px）。文中のインラインリンクは対象外 */
+li > button.linklike { min-height: 40px; display: inline-flex; align-items: center; }
 .chip { margin: 2px; }
 
 /* パネルと進捗 */
@@ -185,6 +193,11 @@ textarea { width: 100%; }
 .num-field input[type="range"] { flex: 1; min-width: 120px; accent-color: var(--accent); }
 .num-field input[type="number"] { width: 110px; }
 .sim-list { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+/* 狭幅では選択チップを横スクロール1行にする（監査指摘: 縦積みで約1,012pxを占有し本体が大きく押し下げられていた） */
+@media (max-width: 760px) {
+  .sim-list { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .sim-list .chip { flex: 0 0 auto; white-space: nowrap; }
+}
 .sim-panel { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; background: var(--panel); }
 .sim-note { color: var(--muted); font-size: 0.92em; border-left: 3px solid var(--accent-2); padding-left: 10px; }
 .chart svg { width: 100%; height: auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-s); }
@@ -195,11 +208,12 @@ table { border-collapse: collapse; min-width: 420px; width: 100%; }
 th, td { border: 1px solid var(--line); padding: 7px 11px; text-align: left; }
 thead th { background: var(--panel-2); }
 tbody tr:nth-child(even) { background: var(--panel-2); }
-.check-row { display: block; margin: 7px 0; }
+.check-row { display: flex; align-items: center; gap: 6px; margin: 7px 0; min-height: 40px; }
 .criteria { border: 1px solid var(--line); border-radius: var(--radius); margin: 12px 0; padding: 12px 16px; }
 .criteria legend { font-weight: 700; padding: 0 6px; }
 .error-text { color: var(--bad); }
 .warn-text { color: var(--accent-2); }
+.warn { border: 1px solid var(--accent-2); border-radius: 8px; padding: 8px 12px; color: var(--accent-2); }
 .inline-label { margin-right: 12px; }
 .badge { display: inline-block; border-radius: 999px; padding: 1px 10px; font-size: 0.85em; font-weight: 700; border: 1px solid var(--accent); color: var(--accent); }
 footer { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 24px; }
