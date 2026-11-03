@@ -33,10 +33,10 @@ export function LessonPage({ lessonId, go }: { lessonId: string; go: (path: stri
       </div>
       <div className="tabs" role="tablist" aria-label="解説の層">
         {(Object.keys(layerLabels) as (keyof typeof layerLabels)[]).map(k => (
-          <button key={k} role="tab" aria-selected={layer === k} className={layer === k ? 'tab active' : 'tab'} onClick={() => setLayer(k)}>{layerLabels[k]}</button>
+          <button key={k} id={`tab-${k}`} role="tab" aria-selected={layer === k} aria-controls="lesson-layer-panel" className={layer === k ? 'tab active' : 'tab'} onClick={() => setLayer(k)}>{layerLabels[k]}</button>
         ))}
       </div>
-      <article className="lesson-body" role="tabpanel" aria-label={layerLabels[layer]}><p>{lesson.layers[layer]}</p></article>
+      <article className="lesson-body" id="lesson-layer-panel" role="tabpanel" aria-labelledby={`tab-${layer}`}><p>{lesson.layers[layer]}</p></article>
       <section className="panel">
         <h3>到達目標</h3>
         <ul>{lesson.objectives.map((o, i) => <li key={i}>{o}</li>)}</ul>

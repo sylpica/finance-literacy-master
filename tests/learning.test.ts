@@ -57,6 +57,10 @@ describe('バックアップ検証', () => {
     expect(() => parseBackup(JSON.stringify({ format: 'other', version: 1 }))).toThrow();
     expect(() => parseBackup(JSON.stringify({ ...base, version: 2 }))).toThrow();
   });
+  it('壊れたJSON・null は日本語のエラーメッセージで拒否する（Claude Code監査 P3 の回帰）', () => {
+    expect(() => parseBackup('{broken json')).toThrowError('ファイルがJSONとして読み取れませんでした');
+    expect(() => parseBackup('null')).toThrowError('バックアップ形式が違います');
+  });
   it('深い検証: 型・範囲・一意性の不正を拒否する（監査指摘の回帰）', () => {
     const bad = [
       { ...base, attempts: [{ questionId: 'Q', correct: true, answeredAt: 1, selectedIds: [1] }] },

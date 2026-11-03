@@ -4,6 +4,9 @@ import { isDue } from '../learning/srs';
 import { useApp } from '../state';
 import type { Question } from '../types';
 
+/** 問題の技能区分の表示名（内部識別子をそのまま利用者へ見せない）。 */
+const SKILL_LABELS: Record<string, string> = { understand: '理解', calculate: '計算', compare: '比較', 'find-error': '誤り発見', apply: '応用' };
+
 export type QuizMode = { kind: 'lesson'; lessonId: string } | { kind: 'domain'; domainId: string } | { kind: 'review' } | { kind: 'random' } | { kind: 'weak' };
 
 export function selectQuestions(mode: QuizMode, state: { schedule: { questionId: string; dueAt: number }[]; attempts: { questionId: string; correct: boolean; answeredAt: number }[] } | null): Question[] {
@@ -83,7 +86,7 @@ export function QuizPage({ mode, go }: { mode: QuizMode; go: (path: string) => v
         <div className="progress quiz-progress" role="progressbar" aria-label="演習の進み具合" aria-valuemin={1} aria-valuemax={questions.length} aria-valuenow={idx + 1}>
           <div className="progress-fill" style={{ width: `${((idx + 1) / questions.length) * 100}%` }} />
         </div>
-        <p className="meta">{idx + 1} / {questions.length}問 ／ これまで {score}問正解 ／ {q.id} ／ 教材 {q.lessonId} {lessonById.get(q.lessonId)?.title ?? ''} ／ 難易度 {q.difficulty} ／ {q.skill}</p>
+        <p className="meta">{idx + 1} / {questions.length}問 ／ これまで {score}問正解 ／ {q.id} ／ 教材 {q.lessonId} {lessonById.get(q.lessonId)?.title ?? ''} ／ 難易度 {q.difficulty} ／ {SKILL_LABELS[q.skill] ?? q.skill}</p>
       </div>
       <h2 className="question-prompt">{q.prompt}</h2>
       {q.type === 'multi' && <p className="meta">複数選択：当てはまるものをすべて選んでください</p>}

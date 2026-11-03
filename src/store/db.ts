@@ -141,7 +141,10 @@ const BACKUP_LIMITS = { attempts: 1_000_000, schedule: 20_000, bookmarks: 20_000
  *  なおプロトタイプ汚染については、フィールドを明示的に読み取る実装であり __proto__ の
  *  マージ・代入経路は存在しない（監査で確認済み）。 */
 export function parseBackup(json: string): AppState {
-  let data = JSON.parse(json) as Partial<BackupData>;
+  let data: Partial<BackupData>;
+  try { data = JSON.parse(json) as Partial<BackupData>; }
+  catch { throw new Error('ファイルがJSONとして読み取れませんでした'); }
+  if (!data || typeof data !== 'object') throw new Error('バックアップ形式が違います');
   if (data.format !== 'finance-literacy-master-backup') throw new Error('バックアップ形式が違います');
   let version = data.version;
   // 移行関数が version を前進させない実装でも無限ループにならないよう反復上限を設ける（第2回再監査の指摘）
