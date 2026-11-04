@@ -32,6 +32,15 @@
 | Bitcoin: A Peer-to-Peer Electronic Cash System | Satoshi Nakamoto | https://bitcoin.org/bitcoin.pdf | Bitcoinの設計（一次資料） |
 | Ethereum development documentation | ethereum.org | https://ethereum.org/developers/docs/ | EVM・スマートコントラクト・ガス |
 
+| 所得税法等の一部を改正する法律案・法律案要綱（令和8年法律第12号） | 財務省 | https://www.mof.go.jp/about_mof/bills/221diet/index.html | 特定暗号資産の分離課税（15%）・3年繰越、未成年者のNISA（年60万円・600万円）、防衛特別所得税の創設（監査ラウンド2で追加、2026-11-03確認） |
+| 防衛特別所得税及び復興特別所得税（源泉徴収関係）Q&A（令和8年5月） | 国税庁 | https://www.nta.go.jp/publication/pamph/pdf/0026005-024_03.pdf | 防衛特別所得税1%、復興特別所得税1.1%・2047年まで、2027年1月以後適用、合計2.1%不変（Q1）（監査ラウンド2で追加、2026-11-03確認） |
+| EDGAR Full Text Search | 米国証券取引委員会（SEC） | https://www.sec.gov/edgar/search/ | 10-K・10-Q等の米国開示書類の検索（監査ラウンド2で追加、2026-11-03確認） |
+| Stoll (1969) The Relationship Between Put and Call Option Prices, Journal of Finance 24(5) | Hans R. Stoll | https://doi.org/10.1111/j.1540-6261.1969.tb01694.x | プット・コール・パリティの原典（書誌はAFA目録・RePEcで確認。本文は未取得） |
+| Wasserstein & Lazar (2016) The ASA's Statement on p-Values, The American Statistician 70(2) | 米国統計学会 | https://doi.org/10.1080/00031305.2016.1154108 | p値の解釈の6原則（出版社ページは取得不可。報道発表の要約で原則を確認） |
+| Harvey, Liu & Zhu (2016) ... and the Cross-Section of Expected Returns, RFS 29(1) | Campbell R. Harvey ほか | https://doi.org/10.1093/rfs/hhv059 | 多重検定とt＞3.0の閾値の提案（要旨をEconPapers・NBERで確認） |
+
+金融庁「NISAを知る」は監査ラウンド2で再確認し（2026-11-03）、2027年1月からの18歳未満のつみたて投資枠（年60万円・限度600万円・12歳以降一定要件で払出し可）の記載を確認した。
+
 ## データの権利
 - 収録データはすべて自作の教材文・架空数値例のみ。実市場データは再配布条件を確認できないため公開リポジトリに含めない（DECISIONS D7）。
 - CSV取込機能で利用者が持ち込むデータは端末内でのみ処理し、外部送信しない。

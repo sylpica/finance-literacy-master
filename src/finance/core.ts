@@ -113,6 +113,28 @@ export function afterTaxGain(principal: number, gain: number, taxRate: number): 
   return principal + gain * (1 - (gain > 0 ? taxRate : 0));
 }
 
+/** NISAと課税口座の比較（月次積立、年末に手数料控除）。NISAの年間枠・生涯枠を超える分は課税口座で運用し、
+ *  最終時点で利益に一括課税する単純化（監査ラウンド2 P2-10: 枠超過でも全額非課税として計算していた）。 */
+export function nisaComparison(inp: { monthly: number; annualReturn: number; years: number; annualFeeRate: number; taxRate: number; annualCap: number; lifetimeCap: number }) {
+  req(inp.monthly >= 0 && inp.years > 0 && inp.years <= 100 && inp.annualReturn > -1, '入力範囲が不正です');
+  req(inp.annualFeeRate >= 0 && inp.annualFeeRate < 1 && inp.taxRate >= 0 && inp.taxRate < 1, '率が不正です');
+  const mr = Math.pow(1 + inp.annualReturn, 1 / 12) - 1;
+  let nisa = 0, over = 0, overBasis = 0, all = 0, basis = 0, nisaContrib = 0;
+  for (let y = 0; y < inp.years; y++) {
+    let yearNisa = 0;
+    for (let m = 0; m < 12; m++) {
+      const toNisa = Math.max(0, Math.min(inp.monthly, inp.annualCap - yearNisa, inp.lifetimeCap - nisaContrib));
+      const rest = inp.monthly - toNisa;
+      nisa = nisa * (1 + mr) + toNisa; over = over * (1 + mr) + rest; all = all * (1 + mr) + inp.monthly;
+      yearNisa += toNisa; nisaContrib += toNisa; overBasis += rest; basis += inp.monthly;
+    }
+    nisa *= 1 - inp.annualFeeRate; over *= 1 - inp.annualFeeRate; all *= 1 - inp.annualFeeRate;
+  }
+  const withNisa = nisa + afterTaxGain(overBasis, over - overBasis, inp.taxRate);
+  const taxableOnly = afterTaxGain(basis, all - basis, inp.taxRate);
+  return { contributed: basis, nisaContrib, overflowContrib: overBasis, withNisa, taxableOnly, diff: withNisa - taxableOnly };
+}
+
 // ---- 株式・評価 ----
 export const per = (price: number, eps: number) => { req(eps !== 0, 'EPS 0 では PER は定義できません'); return price / eps; };
 export const pbr = (price: number, bps: number) => { req(bps !== 0, 'BPS 0 では PBR は定義できません'); return price / bps; };
@@ -173,15 +195,22 @@ export function portfolioStats(weights: number[], expectedReturns: number[], cov
   let v = 0; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) v += (weights[i] as number) * (weights[j] as number) * ((cov[i] as number[])[j] as number);
   return { expected: exp, variance: v, volatility: Math.sqrt(Math.max(v, 0)) };
 }
+/** 2資産の最小分散ポートフォリオの資産1ウェイト（空売りなし: 0〜1に制限） */
+export function minVarianceWeight2(s1: number, s2: number, rho: number): number {
+  req(s1 > 0 && s2 > 0 && rho >= -1 && rho <= 1, '入力が不正です');
+  const den = s1 * s1 + s2 * s2 - 2 * rho * s1 * s2;
+  if (den <= 0) return 0.5; // s1=s2 かつ ρ=1 のときは全配分で同じ分散
+  return Math.min(1, Math.max(0, (s2 * s2 - rho * s1 * s2) / den));
+}
 export function sharpeRatio(returns: number[], riskFree = 0): number {
   const s = std(returns); req(s > 0, '標準偏差0'); return (mean(returns) - riskFree) / s;
 }
+/** ソルティノレシオ（標準定義）: 下方偏差 = sqrt( Σ min(0, r−MAR)² / 全期間数 )。
+ *  監査ラウンド2（P3-17）で、下方リターンだけを分母にする変法から、全期間を分母にする標準定義へ改めた。 */
 export function sortinoRatio(returns: number[], riskFree = 0): number {
-  // 本実装の下方偏差は「下方リターンだけを集めて二乗平均」する変法であり、
-  // 全期間を分母にする標準的な定義とは値が異なる。教材内では定義を明示して使うこと。
-  const downside = returns.filter(r => r < riskFree);
-  req(downside.length > 0, '下方偏差の対象がありません');
-  const dd = Math.sqrt(mean(downside.map(r => (r - riskFree) ** 2)));
+  req(returns.length > 0, 'データが空です');
+  const dd = Math.sqrt(returns.reduce((s, r) => s + Math.min(0, r - riskFree) ** 2, 0) / returns.length);
+  req(dd > 0, '下方偏差が0のためソルティノレシオは定義できません');
   return (mean(returns) - riskFree) / dd;
 }
 export function maxDrawdown(series: number[]): number {
@@ -195,7 +224,8 @@ export function maxDrawdown(series: number[]): number {
 export function valueAtRisk(returns: number[], confidence = 0.95): { var: number; cvar: number } {
   req(returns.length >= 10, 'VaRには最低10観測が必要です'); req(confidence > 0.5 && confidence < 1, '信頼水準は0.5〜1');
   const sorted = [...returns].sort((a, b) => a - b);
-  const idx = Math.max(0, Math.floor((1 - confidence) * sorted.length) - 1);
+  // (1−0.9)×100 が 9.999… となり床関数で1つずれる浮動小数点誤差を、1e-9 単位の丸めで補正する（監査ラウンド2 P3-6）
+  const idx = Math.max(0, Math.floor(Math.round((1 - confidence) * sorted.length * 1e9) / 1e9) - 1);
   const tail = sorted.slice(0, idx + 1);
   return { var: -(sorted[idx] as number), cvar: -mean(tail) };
 }
@@ -264,14 +294,15 @@ export function marketCap(price: number, circulatingSupply: number): number { re
 export function fdv(price: number, maxSupply: number): number { return marketCap(price, maxSupply); }
 export function supplyInflationRate(supplyNow: number, supplyNextYear: number): number { req(supplyNow > 0, '現在供給量は正'); return supplyNextYear / supplyNow - 1; }
 /** 定数積AMM (x*y=k): 手数料控除後の受取量と価格インパクト */
-export function ammSwap(reserveIn: number, reserveOut: number, amountIn: number, feeRate = 0.003): { amountOut: number; priceImpact: number; newPrice: number } {
+export function ammSwap(reserveIn: number, reserveOut: number, amountIn: number, feeRate = 0.003): { amountOut: number; priceImpact: number; pureImpact: number; newPrice: number } {
   req(reserveIn > 0 && reserveOut > 0 && amountIn > 0, 'AMM入力は正'); req(feeRate >= 0 && feeRate < 1, '手数料率が不正です');
   const effIn = amountIn * (1 - feeRate);
   const amountOut = (reserveOut * effIn) / (reserveIn + effIn);
   const spotBefore = reserveOut / reserveIn;
   const execPrice = amountOut / amountIn;
   const newPrice = (reserveOut - amountOut) / (reserveIn + amountIn);
-  return { amountOut, priceImpact: 1 - execPrice / spotBefore, newPrice };
+  // pureImpact: 手数料を除いた価格インパクト（= 投入量 ÷ (準備量＋投入量)）。priceImpact は手数料込みの実効的な不利幅（監査ラウンド2 P2-9）
+  return { amountOut, priceImpact: 1 - execPrice / spotBefore, pureImpact: amountIn / (reserveIn + amountIn), newPrice };
 }
 export function impermanentLoss(priceRatio: number): number { // 価格が ratio 倍になったときのLP対HODL比-1
   req(priceRatio > 0, '価格比は正'); return (2 * Math.sqrt(priceRatio)) / (1 + priceRatio) - 1;
@@ -290,4 +321,130 @@ export function slippageEstimate(orderSize: number, dailyVolume: number, volatil
   // 教材用の単純モデル: 参加率の平方根に比例（市場インパクトの square-root law の簡略形）
   req(dailyVolume > 0 && orderSize >= 0, '入力が不正です');
   return volatility * Math.sqrt(orderSize / dailyVolume);
+}
+
+// ---- バックテスト（監査ラウンド2 P1-4）----
+// 先読み防止を構造で保証する: 戦略関数には各時点で「その時点までの価格」の配列だけを渡し、
+// 時点 t の終値までの情報で決めた目標ウェイトは、翌日（t+1）の終値で約定する（同じ足での約定を避ける）。
+
+/** シード固定の架空日次価格系列（幾何ブラウン運動＋任意のジャンプ・急落ショック）。実在データではない。 */
+export interface SeriesSpec { days: number; annualDrift: number; annualVol: number; seed: number; start?: number; jumpProb?: number; jumpSize?: number; shockDay?: number; shockDrop?: number; haltDays?: number }
+export function generatePriceSeries(spec: SeriesSpec): { prices: number[]; halted: boolean[] } {
+  req(Number.isInteger(spec.days) && spec.days >= 10 && spec.days <= 20000, '日数は10〜20000の整数');
+  req(spec.annualVol >= 0 && spec.annualVol <= 3, 'ボラティリティは0〜300%');
+  const rng = mulberry32(spec.seed);
+  const dt = 1 / 252;
+  const mu = spec.annualDrift, sig = spec.annualVol;
+  const prices = [spec.start ?? 100];
+  const halted = [false];
+  for (let t = 1; t < spec.days; t++) {
+    let r = (mu - 0.5 * sig * sig) * dt + sig * Math.sqrt(dt) * normalRandom(rng);
+    if (spec.jumpProb && rng() < spec.jumpProb) r += (rng() < 0.5 ? -1 : 1) * (spec.jumpSize ?? 0.1);
+    let p = (prices[t - 1] as number) * Math.exp(r);
+    if (spec.shockDay !== undefined && t === spec.shockDay) p *= 1 - (spec.shockDrop ?? 0.3);
+    prices.push(p);
+    halted.push(spec.shockDay !== undefined && t >= spec.shockDay && t < spec.shockDay + (spec.haltDays ?? 0));
+  }
+  return { prices, halted };
+}
+
+export function sma(xs: ArrayLike<number>, n: number): number {
+  req(Number.isInteger(n) && n >= 1 && xs.length >= n, '移動平均の期間が不正です');
+  let s = 0; for (let i = xs.length - n; i < xs.length; i++) s += xs[i] as number;
+  return s / n;
+}
+
+/** 戦略: その時点までの価格履歴（末尾が当日終値）と現在の保有ウェイトから、目標ウェイト（0〜1）を返す。null は売買しない。 */
+export type Strategy = (history: Float64Array, currentWeight: number) => number | null;
+export const buyAndHold: Strategy = () => 1;
+export function smaCross(short: number, long: number): Strategy {
+  req(short >= 1 && long > short, '短期 < 長期 の期間が必要です');
+  return h => (h.length < long ? 0 : sma(h, short) > sma(h, long) ? 1 : 0);
+}
+export function periodicRebalance(weight: number, every: number): Strategy {
+  req(weight >= 0 && weight <= 1 && every >= 1, 'リバランス条件が不正です');
+  return h => ((h.length - 1) % every === 0 ? weight : null);
+}
+
+/** 売買費用（約定代金に対する率）。fee: 手数料、spread: 売買の気配差（片道で半分を負担）、slippage: 発注による価格の不利な動き */
+export interface TradingCosts { fee: number; spread: number; slippage: number }
+export interface BacktestResult { equity: number[]; trades: number; totalCost: number; turnover: number }
+export function runBacktest(prices: readonly number[], strategy: Strategy, costs: TradingCosts, initial = 1_000_000, halted?: readonly boolean[]): BacktestResult {
+  req(prices.length >= 2 && prices.every(p => Number.isFinite(p) && p > 0), '価格系列は2点以上の正の数');
+  req(costs.fee >= 0 && costs.spread >= 0 && costs.slippage >= 0 && costs.fee + costs.spread / 2 + costs.slippage < 0.5, '費用率が不正です');
+  const unit = costs.fee + costs.spread / 2 + costs.slippage;
+  let cash = initial, shares = 0, trades = 0, totalCost = 0, traded = 0;
+  const equity = [initial];
+  const all = Float64Array.from(prices);
+  for (let t = 0; t < prices.length - 1; t++) {
+    // 当日までの情報のみを渡す（構造的な先読み防止）。subarray はコピーせず長さ t+1 の窓を作るため、
+    // 戦略側から t+1 以降の要素には添字でもアクセスできない（undefined になる）。
+    const history = all.subarray(0, t + 1);
+    const px = prices[t] as number;
+    const w = (shares * px) / (cash + shares * px);
+    const target = strategy(history, Number.isFinite(w) ? w : 0);
+    const next = prices[t + 1] as number;
+    if (target !== null && !(halted?.[t + 1] ?? false)) {
+      const tw = Math.min(1, Math.max(0, target));
+      const value = cash + shares * next;
+      // 約定後のウェイトが目標どおりになる株数変化（費用は現金から支払う）。
+      // 買い: Δ = (tw·V − 保有額) / (P·(1 + tw·u))、売り: Δ = (tw·V − 保有額) / (P·(1 − tw·u))
+      const gap = tw * value - shares * next;
+      const delta = gap / (next * (1 + (gap >= 0 ? 1 : -1) * tw * unit));
+      const want = shares + delta;
+      if (Math.abs(delta * next) > value * 1e-6) {
+        const notional = Math.abs(delta) * next;
+        const cost = notional * unit;
+        cash -= delta * next + cost; shares = want;
+        trades++; totalCost += cost; traded += notional;
+      }
+    }
+    equity.push(cash + shares * next);
+  }
+  return { equity, trades, totalCost, turnover: traded / initial };
+}
+
+export interface PerfSummary { totalReturn: number; cagr: number; annualVol: number; sharpe: number; maxDrawdown: number }
+export function summarizeEquity(equity: readonly number[], periodsPerYear = 252): PerfSummary {
+  req(equity.length >= 2 && (equity[0] as number) > 0, '資産推移が不正です');
+  const rets: number[] = [];
+  for (let i = 1; i < equity.length; i++) rets.push((equity[i] as number) / (equity[i - 1] as number) - 1);
+  const totalReturn = (equity[equity.length - 1] as number) / (equity[0] as number) - 1;
+  const years = rets.length / periodsPerYear;
+  const cagr = totalReturn <= -1 ? -1 : Math.pow(1 + totalReturn, 1 / years) - 1;
+  const sd = rets.length > 1 ? std(rets) : 0;
+  return { totalReturn, cagr, annualVol: sd * Math.sqrt(periodsPerYear), sharpe: sd > 0 ? (mean(rets) / sd) * Math.sqrt(periodsPerYear) : 0, maxDrawdown: maxDrawdown([...equity]) };
+}
+
+/** 過剰最適化の体験: 前半（in-sample）で SMA の期間を総当たりして最良を選び、同じ期間を後半（out-of-sample）に適用する。 */
+export function smaGridSearch(prices: readonly number[], split: number, costs: TradingCosts, shorts: number[], longs: number[]) {
+  req(split > 1 && split < prices.length - 1, '分割点が不正です');
+  const trials: { short: number; long: number; inSample: number; outSample: number }[] = [];
+  for (const s of shorts) for (const l of longs) {
+    if (l <= s) continue;
+    const r = runBacktest(prices, smaCross(s, l), costs);
+    const eq = r.equity;
+    trials.push({ short: s, long: l, inSample: (eq[split] as number) / (eq[0] as number) - 1, outSample: (eq[eq.length - 1] as number) / (eq[split] as number) - 1 });
+  }
+  req(trials.length > 0, '総当たりの組合せがありません');
+  const best = trials.reduce((a, b) => (b.inSample > a.inSample ? b : a));
+  const holdOut = (prices[prices.length - 1] as number) / (prices[split] as number) - 1;
+  const holdIn = (prices[split] as number) / (prices[0] as number) - 1;
+  const medianOut = [...trials.map(t => t.outSample)].sort((a, b) => a - b)[Math.floor(trials.length / 2)] as number;
+  return { trials, best, holdIn, holdOut, medianOut };
+}
+
+/** サバイバーシップ・バイアスの体験: 架空の銘柄群のうち、途中で上場廃止（価格が開始時の delistAt 倍未満）になった銘柄を除くと平均成績がどう見えるか。
+ *  廃止銘柄は廃止時点の価格で精算（残余価値 recovery 倍）したものとして全銘柄平均に含める。 */
+export function survivorshipDemo(n: number, spec: Omit<SeriesSpec, 'seed'>, seed: number, delistAt = 0.3, recovery = 0) {
+  req(Number.isInteger(n) && n >= 2 && n <= 500, '銘柄数は2〜500');
+  const all: number[] = []; const survivors: number[] = []; let delisted = 0;
+  for (let i = 0; i < n; i++) {
+    const { prices } = generatePriceSeries({ ...spec, seed: seed * 1000 + i });
+    const p0 = prices[0] as number;
+    const k = prices.findIndex(p => p < p0 * delistAt);
+    if (k >= 0) { delisted++; all.push(((prices[k] as number) * recovery) / p0 - 1); }
+    else { const r = (prices[prices.length - 1] as number) / p0 - 1; all.push(r); survivors.push(r); }
+  }
+  return { meanAll: mean(all), meanSurvivors: survivors.length ? mean(survivors) : NaN, delisted, n };
 }

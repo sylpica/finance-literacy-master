@@ -12,7 +12,7 @@ interface Ctx {
   importState: (s: AppState) => Promise<void>;
   wipe: () => Promise<void>;
   /** 保存・読込に失敗しメモリ保持に切り替わった場合に true（UI で警告を表示する） */
-  storageWarning: boolean;
+  storageWarning: false | 'failed' | 'blocked';
   density: 'normal' | 'dense';
   setDensity: (d: 'normal' | 'dense') => void;
   theme: 'dark' | 'light';
@@ -28,8 +28,8 @@ function writeSetting(key: string, value: string) { try { localStorage.setItem(k
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState | null>(null);
-  const [storageWarning, setStorageWarning] = useState(false);
-  useEffect(() => { setStorageFailureListener(() => setStorageWarning(true)); return () => setStorageFailureListener(null); }, []);
+  const [storageWarning, setStorageWarning] = useState<false | 'failed' | 'blocked'>(false);
+  useEffect(() => { setStorageFailureListener(kind => setStorageWarning(prev => (prev === 'failed' ? prev : kind === 'ok' ? false : kind))); return () => setStorageFailureListener(null); }, []);
   const [density, setDensityState] = useState<'normal' | 'dense'>(() => readSetting('flm-density', ['normal', 'dense'], 'normal'));
   const [theme, setThemeState] = useState<'dark' | 'light'>(() => readSetting('flm-theme', ['dark', 'light'], 'dark'));
   useEffect(() => { void loadState().then(setState); }, []);

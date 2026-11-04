@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { decodeCsvBuffer, parseCsv, replacementCharCount, validateMarketRows, type CsvTable } from '../store/csv';
 import { exportBackup, parseBackup, summarizeBackup, type AppState } from '../store/db';
 import { useApp } from '../state';
-import { LineChart } from '../components/Chart';
+import { LineChart, formatPct } from '../components/Chart';
+import * as F from '../finance/core';
 
 // データ管理（指示書 §9.2-11, §11, §12）: CSV取込プレビューと検証、バックアップ/復元
 export function DataPage() {
@@ -30,8 +31,10 @@ export function DataPage() {
   const downloadBackup = () => {
     const blob = new Blob([JSON.stringify(exportBackup(state), null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'finance-literacy-master-backup.json'; a.click();
-    URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url; a.download = `finance-literacy-master-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    // 直後に解放すると iOS Safari 等で保存前に URL が無効になることがあるため、少し待ってから解放する（監査 P3-13）
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
   };
   // 復元は2段階にする（監査指摘 P1: ファイルを選んだ瞬間の無確認・全件上書きは、誤ったファイルで現在の履歴を不可逆に失わせる）。
   // まず検証と件数プレビューだけを行い、利用者が内容を確認してから置換する。
@@ -52,7 +55,6 @@ export function DataPage() {
       <h2>データ管理</h2>
       <section className="panel">
         <h3>市場データCSVの取込</h3>
-        <p className="meta">対応形式: 日付列（YYYY-MM-DD）・銘柄列・価格（終値）列を含むCSV。UTF-8 / Shift_JIS に対応します。取り込んだデータは検証プレビュー用で、端末外に送信されません。調整前/調整後の株価の区別は元のデータ提供元の定義に従ってください。</p>
         <input type="file" accept=".csv,text/csv" onChange={e => { const f = e.target.files?.[0]; if (f) void onCsv(f); e.target.value = ''; }} aria-label="CSVファイルを選択" />
         {csvMessage && <p aria-live="polite">{csvMessage}</p>}
         {table && (
@@ -73,7 +75,10 @@ export function DataPage() {
                 <p>有効 {result.ok.length}行 ／ エラー {result.errors.length}件 ／ 警告 {result.warnings.length}件</p>
                 {result.errors.slice(0, 10).map((e, i) => <p key={i} className="error-text">{e}</p>)}
                 {result.warnings.slice(0, 5).map((w, i) => <p key={i} className="warn-text">{w}</p>)}
-                {result.errors.length === 0 && series.length > 1 && <LineChart label="取込データのプレビュー" points={series.map(r => ({ x: r.date, y: r.close }))} />}
+                {result.errors.length === 0 && series.length > 1 && <>
+                  <CsvStats closes={series.map(r => r.close)} symbol={series[0]?.symbol ?? ''} />
+                  <LineChart label="取込データのプレビュー" xLabel="日付" yLabel="終値" points={series.map(r => ({ x: r.date, y: r.close }))} />
+                </>}
               </div>
             )}
           </div>
@@ -81,7 +86,7 @@ export function DataPage() {
       </section>
       <section className="panel">
         <h3>学習データのバックアップと復元</h3>
-        <p className="meta">ブラウザの保存領域は、ブラウザの判断で削除されることがあり永久保持は保証されません。大切な学習記録は定期的にバックアップしてください。</p>
+        <p className="warn-text">ブラウザの保存領域は永久保持が保証されません。定期的にバックアップしてください。</p>
         <button className="primary" onClick={downloadBackup}>バックアップをダウンロード（JSON）</button>{' '}
         <label className="file-label">復元するファイルを選ぶ
           <input type="file" accept=".json,application/json" onChange={e => { const f = e.target.files?.[0]; if (f) void onRestore(f); e.target.value = ''; }} />
@@ -102,6 +107,22 @@ export function DataPage() {
           : <span><button className="danger" onClick={() => { void (async () => { try { await wipe(); setMessage('学習データを消去しました'); } catch { setMessage('消去に失敗しました。もう一度お試しください'); } setConfirmWipe(false); })(); }}>本当に消去する</button>{' '}
             <button onClick={() => setConfirmWipe(false)}>キャンセル</button></span>}
       </section>
+      <p className="meta page-foot">CSVは日付列（YYYY-MM-DD）・銘柄列・終値列を含む形式で、UTF-8 / Shift_JIS に対応します。取り込んだデータは端末内での検証・分析専用で、端末外に送信されず、学習データにも保存されません。分割・配当の調整の有無は提供元の定義に従い、利用条件（再配布の可否）は利用者が提供元で確認してください。統計は日付順の終値から計算し、取引日の欠けは補間しません。バックアップには学習データ（回答履歴・復習・ブックマーク・メモ・仮想投資）が含まれ、テーマ等の表示設定は含まれません。</p>
     </main>
+  );
+}
+
+/** 取り込んだ終値系列の基本統計（監査ラウンド2 P2-18: 取込がプレビューで終わり分析に使えなかった） */
+function CsvStats({ closes, symbol }: { closes: number[]; symbol: string }) {
+  if (closes.length < 11) return <p className="meta">{symbol}: 統計の計算には11行以上が必要です。</p>;
+  const rets = closes.slice(1).map((c, i) => c / (closes[i] as number) - 1);
+  const v = F.valueAtRisk(rets, 0.95);
+  return (
+    <dl className="kpis">
+      <div className="kpi"><dt>{symbol} 期間リターン</dt><dd>{formatPct((closes.at(-1) as number) / (closes[0] as number) - 1)}</dd></div>
+      <div className="kpi"><dt>日次ボラティリティ</dt><dd>{formatPct(F.std(rets), 2)}</dd></div>
+      <div className="kpi"><dt>最大ドローダウン</dt><dd>{formatPct(F.maxDrawdown(closes))}</dd></div>
+      <div className="kpi"><dt>ヒストリカルVaR 95%</dt><dd>損失 {formatPct(v.var, 2)}</dd></div>
+    </dl>
   );
 }

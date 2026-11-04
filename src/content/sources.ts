@@ -4,7 +4,7 @@ import type { SourceReference } from '../types';
 const d = '2026-11-02';
 export const SRC = {
   fsaTop: { title: '金融庁ウェブサイト', publisher: '金融庁', url: 'https://www.fsa.go.jp/', checkedAt: d },
-  fsaNisa: { title: 'NISAを知る：NISA特設ウェブサイト', publisher: '金融庁', url: 'https://www.fsa.go.jp/policy/nisa2/know/index.html', checkedAt: d },
+  fsaNisa: { title: 'NISAを知る：NISA特設ウェブサイト', publisher: '金融庁', url: 'https://www.fsa.go.jp/policy/nisa2/know/index.html', checkedAt: '2026-11-03' },
   fsaInvest: { title: '資産形成の基本：NISA特設ウェブサイト', publisher: '金融庁', url: 'https://www.fsa.go.jp/policy/nisa2/invest/', checkedAt: d },
   fsaCrypto: { title: '暗号資産の利用者のみなさまへ', publisher: '金融庁', url: 'https://www.fsa.go.jp/policy/virtual_currency/', checkedAt: d },
   ntaTop: { title: '国税庁ウェブサイト', publisher: '国税庁', url: 'https://www.nta.go.jp/', checkedAt: d },
@@ -31,6 +31,12 @@ export const SRC = {
   uniswapV3: { title: 'Uniswap v3 Core (Whitepaper)', publisher: 'Uniswap Labs', url: 'https://uniswap.org/whitepaper-v3.pdf', checkedAt: d },
   aaveLiquidations: { title: 'Health Factor & Liquidations', publisher: 'Aave', url: 'https://www.aave.org/help/borrowing/liquidations', checkedAt: d },
   dydxFunding: { title: 'Default funding rates on dYdX', publisher: 'dYdX Operations', url: 'https://help.dydx.trade/en/articles/166992-default-funding-rates-on-dydx', checkedAt: d },
+  mofTaxBill2026: { title: '所得税法等の一部を改正する法律案（令和8年2月20日提出、令和8年3月31日成立・公布、令和8年法律第12号）・法律案要綱', publisher: '財務省', url: 'https://www.mof.go.jp/about_mof/bills/221diet/index.html', checkedAt: '2026-11-03' },
+  ntaDefenseTaxQa: { title: '防衛特別所得税及び復興特別所得税（源泉徴収関係）Q&A（令和8年5月）', publisher: '国税庁', url: 'https://www.nta.go.jp/publication/pamph/pdf/0026005-024_03.pdf', checkedAt: '2026-11-03' },
+  secEdgarSearch: { title: 'EDGAR Full Text Search', publisher: 'U.S. Securities and Exchange Commission (SEC)', url: 'https://www.sec.gov/edgar/search/', checkedAt: '2026-11-03' },
+  stoll1969: { title: 'The Relationship Between Put and Call Option Prices（Journal of Finance 24(5), 801–824, 1969）', publisher: 'Hans R. Stoll', url: 'https://doi.org/10.1111/j.1540-6261.1969.tb01694.x', checkedAt: '2026-11-03', note: '書誌情報はAFAの巻号目録とRePEc/IDEASで確認' },
+  asaPvalue2016: { title: "The ASA's Statement on p-Values: Context, Process, and Purpose（The American Statistician 70(2), 2016）", publisher: 'Ronald L. Wasserstein, Nicole A. Lazar（American Statistical Association）', url: 'https://doi.org/10.1080/00031305.2016.1154108', checkedAt: '2026-11-03', note: '6原則のうち「p値は効果の大きさや重要性を測らない」等は報道発表の要約で確認' },
+  harveyLiuZhu2016: { title: '... and the Cross-Section of Expected Returns（Review of Financial Studies 29(1), 5–68, 2016）', publisher: 'Campbell R. Harvey, Yan Liu, Heqing Zhu', url: 'https://doi.org/10.1093/rfs/hhv059', checkedAt: '2026-11-03', note: 't値3.0超の閾値の提案は要旨（EconPapers・NBER WP 20592）で確認' },
   coingeckoFdv: { title: 'What Is Fully Diluted Valuation (FDV) In Crypto?', publisher: 'CoinGecko', url: 'https://www.coingecko.com/learn/what-is-fully-diluted-valuation-fdv-in-crypto', checkedAt: d },
 } satisfies Record<string, SourceReference>;
 export type SrcKey = keyof typeof SRC;

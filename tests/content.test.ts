@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { LESSONS, QUESTIONS, lessonById, questionById } from '../src/content';
+import { LESSONS, QUESTIONS, lessonById, questionById, lessonIdOfQuestion, TOTAL_QUESTIONS } from '../src/content';
 import { DOMAINS } from '../src/content/domains';
 import { SRC } from '../src/content/sources';
 import { CASES } from '../src/content/cases';
-import { REGULATIONS } from '../src/content/regulations';
+import { REGULATIONS, CALC_RULES } from '../src/content/regulations';
 
 const allowedUrls = new Set(Object.values(SRC).map(s => s.url));
 
@@ -13,8 +13,8 @@ describe('教材カバレッジ', () => {
     for (const d of DOMAINS) expect(LESSONS.filter(l => l.domainId === d.id).length, `分野${d.id}`).toBe(4);
   });
   it('教材IDが一意', () => { expect(new Set(LESSONS.map(l => l.id)).size).toBe(LESSONS.length); });
-  it('各教材に4問以上 = 226問（資料読解C-04・企業比較D-01に各1問追加）', () => {
-    expect(QUESTIONS.length).toBe(226);
+  it('各教材に4問以上 = 232問（資料読解C-04・企業比較D-01に各1問、監査ラウンド2で専門理論の確認問題6問を追加）', () => {
+    expect(QUESTIONS.length).toBe(232);
     for (const l of LESSONS) expect(l.questionIds.length, l.id).toBeGreaterThanOrEqual(4);
   });
 });
@@ -60,6 +60,10 @@ describe('教材の整合性', () => {
   });
 });
 describe('問題の整合性', () => {
+  it('問題IDから教材IDを導出でき、全問で lessonId と一致する（初期バンドルの分割の前提）', () => {
+    for (const q of QUESTIONS) expect(lessonIdOfQuestion(q.id), q.id).toBe(q.lessonId);
+    expect(TOTAL_QUESTIONS).toBe(QUESTIONS.length);
+  });
   it('問題IDが一意', () => { expect(new Set(QUESTIONS.map(q => q.id)).size).toBe(QUESTIONS.length); });
   it('正答が選択肢に含まれ、誤答すべてに理由がある', () => {
     for (const q of QUESTIONS) {
@@ -75,6 +79,15 @@ describe('問題の整合性', () => {
       expect(q.sources.length, q.id).toBeGreaterThan(0);
       for (const s of q.sources) expect(allowedUrls.has(s.url), `${q.id}: ${s.url}`).toBe(true);
     }
+  });
+  it('正答が最長の選択肢である単一正答問題は40%以下（監査ラウンド2 P1-6: 長さが正答の手がかりにならない）', () => {
+    const single = QUESTIONS.filter(q => q.type === 'single');
+    const longest = single.filter(q => {
+      const len = (t: string) => [...t].length;
+      const c = q.options.find(o => o.id === q.correctIds[0])!;
+      return q.options.every(o => o.id === c.id || len(o.text) < len(c.text));
+    }).length;
+    expect(longest / single.length).toBeLessThanOrEqual(0.4);
   });
   it('スキルと難易度が多様である', () => {
     const skills = new Set(QUESTIONS.map(q => q.skill));
@@ -107,5 +120,26 @@ describe('ケースと制度データ', () => {
     const joined = nisa?.keyNumbers.map(k => `${k.label}:${k.value}`).join('|') ?? '';
     expect(joined).toContain('1,800'); // 生涯非課税保有限度額（金融庁確認値）
     expect(joined).toContain('360'); // 年間投資枠合計
+  });
+});
+
+describe('計算用の制度数値と制度データの一致（監査ラウンド2 P2-10）', () => {
+  const kv = (id: string) => new Map(REGULATIONS.find(r => r.id === id)!.keyNumbers.map(k => [k.label, k.value]));
+  const yen = (man: number) => `${(man / 10000).toLocaleString('ja-JP')}万円`;
+  it('NISA の枠', () => {
+    const m = kv('REG-NISA-2024');
+    expect(m.get('年間投資枠（合計）')).toBe(yen(CALC_RULES.nisa.annualTotal));
+    expect(m.get('つみたて投資枠（年間）')).toBe(yen(CALC_RULES.nisa.tsumitateAnnual));
+    expect(m.get('成長投資枠（年間）')).toBe(yen(CALC_RULES.nisa.growthAnnual));
+    expect(m.get('生涯非課税保有限度額（総枠）')).toBe(yen(CALC_RULES.nisa.lifetime));
+    expect(m.get('成長投資枠の上限（生涯限度額の内数）')).toBe(yen(CALC_RULES.nisa.growthLifetime));
+  });
+  it('上場株式等の税率', () => {
+    expect(kv('REG-STOCK-TAX').get('税率（合計）')).toBe(`${(CALC_RULES.listedStockTaxRate * 100).toFixed(3)}%`);
+  });
+  it('成立済み・未施行の制度は施行中データと区別され、適用開始日が未確定なら日付を置かない', () => {
+    const pending = REGULATIONS.filter(r => r.status === 'enacted-not-yet');
+    expect(pending.map(r => r.id).sort()).toEqual(['REG-CRYPTO-TAX-SEPARATE', 'REG-NISA-2027-MINOR', 'REG-STOCK-TAX-2027']);
+    expect(REGULATIONS.find(r => r.id === 'REG-CRYPTO-TAX-SEPARATE')!.effectiveFrom).toBeUndefined();
   });
 });
