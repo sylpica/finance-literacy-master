@@ -1,32 +1,27 @@
 import type { Lesson, Question } from '../types';
-import { LESSONS_1 } from './lessons-1';
-import { LESSONS_2 } from './lessons-2';
-import { LESSONS_3 } from './lessons-3';
-import { LESSONS_4 } from './lessons-4';
 import { QUESTIONS_1 } from './questions-1';
 import { QUESTIONS_2 } from './questions-2';
 import { QUESTIONS_3 } from './questions-3';
 import { QUESTIONS_4 } from './questions-4';
-import { DOMAINS } from './domains';
+import { QUESTIONS_5 } from './questions-5';
+import { LESSONS, lessonById, domainById, lessonIdOfQuestion, TOTAL_QUESTIONS } from './catalog';
 
-export const domainById = new Map(DOMAINS.map(d => [d.id, d]));
-
-export const LESSONS: Lesson[] = [...LESSONS_1, ...LESSONS_2, ...LESSONS_3, ...LESSONS_4];
-export const QUESTIONS: Question[] = [...QUESTIONS_1, ...QUESTIONS_2, ...QUESTIONS_3, ...QUESTIONS_4];
-export const lessonById = new Map(LESSONS.map(l => [l.id, l]));
+export { LESSONS, lessonById, domainById, lessonIdOfQuestion, TOTAL_QUESTIONS };
+export const QUESTIONS: Question[] = [...QUESTIONS_1, ...QUESTIONS_2, ...QUESTIONS_3, ...QUESTIONS_4, ...QUESTIONS_5];
 export const questionById = new Map(QUESTIONS.map(q => [q.id, q]));
 
+/** 横断検索（監査ラウンド2 P2-15: 専門理論・実践例・用語・誤解、問題の選択肢・解説も対象にする。大文字小文字を区別しない） */
 export function searchAll(query: string): { lessons: Lesson[]; questions: Question[] } {
   const q = query.trim().toLowerCase();
   if (!q) return { lessons: [], questions: [] };
   const hit = (s: string) => s.toLowerCase().includes(q);
   return {
-    lessons: LESSONS.filter(l => hit(l.title) || l.terms.some(hit) || hit(l.layers.overview) || hit(l.layers.detail)),
-    questions: QUESTIONS.filter(x => hit(x.prompt)),
+    lessons: LESSONS.filter(l => hit(`${l.id} ${l.title}`) || l.terms.some(hit) || Object.values(l.layers).some(hit) || l.misconceptions.some(hit) || l.objectives.some(hit)),
+    questions: QUESTIONS.filter(x => hit(x.id) || hit(x.prompt) || x.options.some(o => hit(o.text)) || hit(x.explanation)),
   };
 }
 
-/** 選択肢の並べ替え（正答IDを保持する決定的シャッフル: 問題IDからシード生成） */
+/** 選択肢の並べ替え（正答IDを保持する決定的シャッフル: シード文字列から生成） */
 export function shuffledOptions<T extends { id: string }>(options: T[], seedText: string): T[] {
   let seed = 0; for (const ch of seedText) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
   const arr = [...options];

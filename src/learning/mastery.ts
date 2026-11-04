@@ -21,15 +21,36 @@ export function masteryByLesson(attempts: StudyAttempt[], questions: Question[])
   return out;
 }
 
+/** 分野別の正答率。問題ごとに「初回の回答」だけを数える（監査ラウンド2 P2-13: 全回答を数えると、
+ *  同じ問題を繰り返して覚えただけで正答率が上がり、分野全体の理解度を過大評価していた）。
+ *  total は回答した問題数、correct は初回で正答した問題数。 */
 export function accuracyByDomain(attempts: StudyAttempt[], questions: Question[]): Map<string, { total: number; correct: number }> {
-  const lessonDomain = new Map(questions.map(q => [q.id, q.lessonId.split('-')[0] as string]));
+  return firstAttemptAccuracy(attempts, questions, q => q.lessonId.split('-')[0] as string);
+}
+/** 難易度別（1 基礎／2 中級／3 上級）の初回正答率（監査ラウンド2 P2-14） */
+export function accuracyByDifficulty(attempts: StudyAttempt[], questions: Question[]): Map<string, { total: number; correct: number }> {
+  return firstAttemptAccuracy(attempts, questions, q => String(q.difficulty));
+}
+function firstAttemptAccuracy(attempts: StudyAttempt[], questions: Question[], key: (q: Question) => string): Map<string, { total: number; correct: number }> {
+  const byId = new Map(questions.map(q => [q.id, q]));
+  const first = new Map<string, StudyAttempt>();
+  for (const a of attempts) { const f = first.get(a.questionId); if (!f || a.answeredAt < f.answeredAt) first.set(a.questionId, a); }
   const out = new Map<string, { total: number; correct: number }>();
-  for (const a of attempts) {
-    const d = lessonDomain.get(a.questionId); if (!d) continue;
-    const cur = out.get(d) ?? { total: 0, correct: 0 };
-    cur.total += 1; if (a.correct) cur.correct += 1;
-    out.set(d, cur);
+  for (const [qid, a] of first) {
+    const q = byId.get(qid); if (!q) continue;
+    const k = key(q); const cur = out.get(k) ?? { total: 0, correct: 0 };
+    cur.total += 1; if (a.correct) cur.correct += 1; out.set(k, cur);
   }
+  return out;
+}
+/** 学習履歴（日別の回答数と正答数）。日付は端末のローカル時刻で区切る。直近 days 日を古い順に返す。 */
+export function dailyActivity(attempts: StudyAttempt[], now: number, days = 14): { date: string; answered: number; correct: number }[] {
+  const key = (t: number) => { const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const out: { date: string; answered: number; correct: number }[] = [];
+  const idx = new Map<string, number>();
+  const base = new Date(now); base.setHours(12, 0, 0, 0);
+  for (let i = days - 1; i >= 0; i--) { const k = key(base.getTime() - i * 86400000); idx.set(k, out.length); out.push({ date: k, answered: 0, correct: 0 }); }
+  for (const a of attempts) { const i = idx.get(key(a.answeredAt)); if (i === undefined) continue; const r = out[i]!; r.answered++; if (a.correct) r.correct++; }
   return out;
 }
 

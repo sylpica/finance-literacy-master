@@ -79,3 +79,31 @@ describe('バックアップ検証', () => {
     expect(r.ok[0]?.symbol).toBe("'=EVIL");
   });
 });
+
+import { accuracyByDomain, accuracyByDifficulty, dailyActivity } from '../src/learning/mastery';
+import type { Question as Q2 } from '../src/types';
+describe('分野別・難易度別の正答率は初回回答のみ（監査ラウンド2 P2-13/14）', () => {
+  const qs = [
+    { id: 'Q-A01-1', lessonId: 'A-01', difficulty: 1 },
+    { id: 'Q-A01-2', lessonId: 'A-01', difficulty: 2 },
+    { id: 'Q-B01-1', lessonId: 'B-01', difficulty: 2 },
+  ] as unknown as Q2[];
+  const at = (questionId: string, correct: boolean, answeredAt: number) => ({ questionId, correct, answeredAt, selectedIds: [] });
+  it('同じ問題を何度正解しても、初回が誤答なら正答に数えない', () => {
+    const atts = [at('Q-A01-1', false, 1), at('Q-A01-1', true, 2), at('Q-A01-1', true, 3), at('Q-A01-1', true, 4), at('Q-A01-2', true, 5)];
+    const a = accuracyByDomain(atts, qs).get('A')!;
+    expect(a).toEqual({ total: 2, correct: 1 });
+    const d = accuracyByDifficulty(atts, qs);
+    expect(d.get('1')).toEqual({ total: 1, correct: 0 });
+    expect(d.get('2')).toEqual({ total: 1, correct: 1 });
+  });
+  it('日別の学習履歴は直近 n 日を古い順に返し、範囲外の回答は数えない', () => {
+    const now = new Date(2026, 10, 3, 15).getTime();
+    const day = 86400000;
+    const h = dailyActivity([at('Q-A01-1', true, now), at('Q-A01-2', false, now - day), at('Q-B01-1', true, now - 30 * day)], now, 7);
+    expect(h).toHaveLength(7);
+    expect(h.at(-1)).toMatchObject({ date: '2026-11-03', answered: 1, correct: 1 });
+    expect(h.at(-2)).toMatchObject({ date: '2026-11-02', answered: 1, correct: 0 });
+    expect(h.reduce((s, r) => s + r.answered, 0)).toBe(2);
+  });
+});

@@ -20,16 +20,22 @@ let useMemory = false;
 
 /** 保存・読込の失敗を UI へ知らせるための通知（監査指摘: 失敗が無通知でメモリ保持に切り替わると、タブを閉じたときに学習データが失われることに利用者が気づけない）。
  *  メモリ保持への切替はデータを黙って捨てないための保全策だが、切替自体は必ず利用者へ伝える。 */
-let storageFailureListener: (() => void) | null = null;
-export function setStorageFailureListener(fn: (() => void) | null): void { storageFailureListener = fn; }
+let storageFailureListener: ((kind: 'failed' | 'blocked' | 'ok') => void) | null = null;
+export function setStorageFailureListener(fn: ((kind: 'failed' | 'blocked' | 'ok') => void) | null): void { storageFailureListener = fn; }
 function switchToMemory(): void {
-  if (!useMemory) { useMemory = true; storageFailureListener?.(); }
+  if (!useMemory) { useMemory = true; storageFailureListener?.('failed'); }
 }
 
+// 接続は1つを保持して使い回す（監査ラウンド2 P2-16: 操作ごとに開いて閉じないと、将来 DB_VERSION を上げたときに
+// 旧版のタブが接続を持ち続けてアップグレードが待機し、「読み込み中…」で止まる）。
+// 別タブで新しい版が開かれたら onversionchange で接続を閉じ、こちらがブロックされたら onblocked で利用者へ知らせる。
+let dbPromise: Promise<IDBDatabase | null> | null = null;
 function openDb(): Promise<IDBDatabase | null> {
   if (useMemory || typeof indexedDB === 'undefined') return Promise.resolve(null);
-  return new Promise((resolve) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve) => {
+    let req: IDBOpenDBRequest;
+    try { req = indexedDB.open(DB_NAME, DB_VERSION); } catch { switchToMemory(); dbPromise = null; resolve(null); return; }
     req.onupgradeneeded = () => {
       const db = req.result;
       if (!db.objectStoreNames.contains('attempts')) db.createObjectStore('attempts', { autoIncrement: true });
@@ -38,9 +44,17 @@ function openDb(): Promise<IDBDatabase | null> {
       if (!db.objectStoreNames.contains('notes')) db.createObjectStore('notes', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('virtual')) db.createObjectStore('virtual', { autoIncrement: true });
     };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => { switchToMemory(); resolve(null); };
+    req.onblocked = () => { storageFailureListener?.('blocked'); };
+    req.onsuccess = () => {
+      const db = req.result;
+      storageFailureListener?.('ok');
+      db.onversionchange = () => { db.close(); dbPromise = null; };
+      db.onclose = () => { dbPromise = null; };
+      resolve(db);
+    };
+    req.onerror = () => { dbPromise = null; switchToMemory(); resolve(null); };
   });
+  return dbPromise;
 }
 
 function tx<T>(store: string, mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRequest<T>): Promise<T> {
