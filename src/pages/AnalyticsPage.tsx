@@ -26,7 +26,7 @@ export function AnalyticsPage({ go }: { go: (path: string) => void }) {
       <div className="page-head">
         <h2>学習分析</h2>
         <div className="cta-row">
-          <button className="primary" onClick={() => go('quiz/review')}>復習 {dueIds.size}問</button>
+          <button className="primary" onClick={() => go('quiz/review')}>復習をはじめる（期限到来 {dueIds.size}問と直近の誤答が対象）</button>
           <button onClick={() => go('quiz/weak')}>弱点復習</button>
         </div>
       </div>
@@ -49,8 +49,8 @@ export function AnalyticsPage({ go }: { go: (path: string) => void }) {
           <div className="table-scroll"><table className="compact">
             <thead><tr><th>分野</th><th>回答</th><th>初回正答</th><th>正答率</th></tr></thead>
             <tbody>
-              {DOMAINS.map(d => { const a = acc.get(d.id); return (
-                <tr key={d.id}><th>{d.id}. {d.name}</th><td>{a?.total ?? 0}</td><td>{a?.correct ?? 0}</td><td>{pct(a)}</td></tr>); })}
+              {DOMAINS.map(d => { const a = acc.get(d.id); const denom = LESSONS.filter(l => l.domainId === d.id).reduce((s, l) => s + l.questionIds.length, 0); return (
+                <tr key={d.id}><th>{d.id}. {d.name}</th><td>{a?.total ?? 0}/{denom}</td><td>{a?.correct ?? 0}</td><td>{pct(a)}</td></tr>); })}
             </tbody></table></div>
         </section>
         <section className="panel tight wide">

@@ -107,16 +107,39 @@ export interface ReviewScheduleItem {
   lastReviewedAt: number;
 }
 export interface Bookmark { lessonId: string; createdAt: number; }
+/** 問題ごとのブックマーク（監査ラウンド3で追加。教材ブックマークとはキーを分ける） */
+export interface QuestionBookmark { questionId: string; createdAt: number; }
+/** 単語帳カードの学習状態。自己評価は主観評価であり、正答率や記憶確率ではない（指令書4.3）。 */
+export type CardSelfEval = 'known' | 'fuzzy' | 'unknown';
+export interface CardState {
+  cardId: string;
+  bookmarked: boolean;
+  selfEval?: CardSelfEval;
+  updatedAt: number;
+}
+/** 単語帳カード（コンテンツデータ。永続IDは教材IDと用語順から決まる） */
+export interface Flashcard {
+  cardId: string; // 例: FC-A-01-1
+  lessonId: string;
+  domainId: DomainId;
+  term: string; // 表面
+  definition: string; // 裏面
+  cue: string; // 裏スタート時の設問文（用語を含まない）
+  level: Level;
+  sources: SourceReference[];
+}
 export interface Note { id: string; lessonId: string; text: string; updatedAt: number; }
 export interface VirtualRecord { caseId: string; chosen: Record<string, string[]>; score: number; doneAt: number; }
 
 export interface BackupData {
   format: 'finance-literacy-master-backup';
-  version: 1;
+  version: 2;
   exportedAt: string;
   attempts: StudyAttempt[];
   schedule: ReviewScheduleItem[];
   bookmarks: Bookmark[];
+  questionBookmarks: QuestionBookmark[];
+  cardStates: CardState[];
   notes: Note[];
   virtual: VirtualRecord[];
 }

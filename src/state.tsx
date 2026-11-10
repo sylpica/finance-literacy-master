@@ -1,12 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { Note, ReviewScheduleItem, StudyAttempt, VirtualRecord } from './types';
-import { loadState, addAttempt, saveScheduleItem, toggleBookmark, saveNote, addVirtual, replaceState, wipeState, setStorageFailureListener, type AppState } from './store/db';
+import type { CardState, Note, ReviewScheduleItem, StudyAttempt, VirtualRecord } from './types';
+import { loadState, addAttempt, saveScheduleItem, toggleBookmark, toggleQuestionBookmark, saveCardState, saveNote, addVirtual, replaceState, wipeState, setStorageFailureListener, type AppState } from './store/db';
 import { applyReview, initSchedule } from './learning/srs';
 
 interface Ctx {
   state: AppState | null;
   recordAttempt: (a: StudyAttempt) => Promise<void>;
   toggleBookmark: (lessonId: string) => Promise<void>;
+  toggleQuestionBookmark: (questionId: string) => Promise<void>;
+  setCardState: (cs: CardState) => Promise<void>;
   saveNote: (n: Note) => Promise<void>;
   addVirtual: (r: VirtualRecord) => Promise<void>;
   importState: (s: AppState) => Promise<void>;
@@ -51,6 +53,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState(next);
   }, [state]);
   const toggleBookmarkFn = useCallback(async (lessonId: string) => { if (state) setState(await toggleBookmark(state, lessonId)); }, [state]);
+  const toggleQuestionBookmarkFn = useCallback(async (questionId: string) => { if (state) setState(await toggleQuestionBookmark(state, questionId)); }, [state]);
+  const setCardStateFn = useCallback(async (cs: CardState) => { if (state) setState(await saveCardState(state, cs)); }, [state]);
   const saveNoteFn = useCallback(async (n: Note) => { if (state) setState(await saveNote(state, n)); }, [state]);
   const addVirtualFn = useCallback(async (r: VirtualRecord) => { if (state) setState(await addVirtual(state, r)); }, [state]);
   const importState = useCallback(async (s: AppState) => { await replaceState(s); setState(s); }, []);
@@ -58,7 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppCtx.Provider value={{
-      state, recordAttempt, toggleBookmark: toggleBookmarkFn, saveNote: saveNoteFn, addVirtual: addVirtualFn,
+      state, recordAttempt, toggleBookmark: toggleBookmarkFn, toggleQuestionBookmark: toggleQuestionBookmarkFn, setCardState: setCardStateFn, saveNote: saveNoteFn, addVirtual: addVirtualFn,
       importState, wipe, storageWarning, density, setDensity: setDensityState, theme, setTheme: setThemeState,
     }}>{children}</AppCtx.Provider>
   );

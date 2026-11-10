@@ -16,6 +16,8 @@ const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage').then(m => ({ de
 const DataPage = lazy(() => import('./pages/DataPage').then(m => ({ default: m.DataPage })));
 const SearchPage = lazy(() => import('./pages/SearchPage').then(m => ({ default: m.SearchPage })));
 const RegulationsPage = lazy(() => import('./pages/RegulationsPage').then(m => ({ default: m.RegulationsPage })));
+const FlashcardsPage = lazy(() => import('./pages/FlashcardsPage').then(m => ({ default: m.FlashcardsPage })));
+import type { CardsInit } from './pages/FlashcardsPage';
 
 function useHashRoute(): [string, (p: string) => void] {
   const [route, setRoute] = useState(() => window.location.hash.replace(/^#\/?/, ''));
@@ -32,6 +34,7 @@ function useHashRoute(): [string, (p: string) => void] {
 const NAV: { path: string; label: string; match: string[] }[] = [
   { path: '', label: 'ホーム', match: ['', 'lesson'] },
   { path: 'quiz/random', label: '演習', match: ['quiz'] },
+  { path: 'cards', label: '単語帳', match: ['cards'] },
   { path: 'sim', label: 'シミュレーション', match: ['sim'] },
   { path: 'labs', label: '分析ラボ', match: ['labs'] },
   { path: 'virtual', label: '仮想投資', match: ['virtual'] },
@@ -69,7 +72,7 @@ function Home({ go }: { go: (p: string) => void }) {
   const [q, setQ] = useState('');
   const wide = typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia('(min-width: 761px)').matches : true;
   const next = p.dueCount > 0
-    ? { label: `復習 ${p.dueCount}問`, path: 'quiz/review' }
+    ? { label: '今日の復習', path: 'quiz/review' }
     : p.nextLesson && p.doneLessons < LESSONS.length
       ? { label: `続き: ${p.nextLesson.id} ${p.nextLesson.title}`, path: `lesson/${p.nextLesson.id}` }
       : { label: 'ランダム演習', path: 'quiz/random' };
@@ -89,6 +92,13 @@ function Home({ go }: { go: (p: string) => void }) {
         <div><dt>初見正答率</dt><dd>{p.firstTotal > 0 ? `${Math.round((p.firstCorrect / p.firstTotal) * 100)}%` : '—'}</dd></div>
         <div><dt>復習期限</dt><dd>{p.dueCount}<small>問</small></dd></div>
       </dl>
+      <div className="cta-row home-quick" aria-label="学習の入口">
+        <button onClick={() => go('quiz/review')}>今日の復習</button>
+        <button onClick={() => go('cards')}>単語帳</button>
+        <button onClick={() => go('quiz/saved')}>保存した問題</button>
+        <button onClick={() => go('quiz/weak')}>弱点復習</button>
+        <button onClick={() => go('map')}>学習マップ</button>
+      </div>
       <div className="domain-grid">
         {DOMAINS.map(d => {
           const lessons = LESSONS.filter(l => l.domainId === d.id);
@@ -201,8 +211,15 @@ function Shell() {
     const mode: QuizMode = sub === 'lesson' ? { kind: 'lesson', lessonId: parts[2] ?? '' }
       : sub === 'domain' ? { kind: 'domain', domainId: parts[2] ?? '' }
       : sub === 'q' ? { kind: 'single', questionId: parts[2] ?? '' }
-      : sub === 'review' ? { kind: 'review' } : sub === 'weak' ? { kind: 'weak' } : { kind: 'random' };
+      : sub === 'review' ? { kind: 'review' } : sub === 'weak' ? { kind: 'weak' } : sub === 'saved' ? { kind: 'saved' } : { kind: 'random' };
     page = <QuizPage key={route} mode={mode} go={go} />;
+  }
+  else if (head === 'cards') {
+    const sub = parts[1] ?? '';
+    const init: CardsInit = sub === 'lesson' ? { kind: 'lesson', lessonId: parts[2] ?? '' }
+      : sub === 'domain' ? { kind: 'domain', domainId: parts[2] ?? '' }
+      : sub === 'saved' ? { kind: 'saved' } : sub === 'weak' ? { kind: 'weak' } : { kind: 'all' };
+    page = <FlashcardsPage key={route} init={init} go={go} />;
   }
   else if (head === 'sim') page = <SimulatorsPage key={route} initial={parts[1]} go={go} />;
   else if (head === 'labs') page = <LabsPage go={go} />;

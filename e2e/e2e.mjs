@@ -35,8 +35,10 @@ await go('#/lesson/L-03', '.lesson-body');
 await page.getByRole('tab', { name: '概要' }).focus();
 await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight');
 ok('03-04 教材: 矢印キーで専門理論へ、パリティの式', (await page.locator('.lesson-body').textContent()).includes('プット・コール・パリティ'));
-// 5) 問題を解く・6) 解説（誤答理由が表示順の記号で並ぶ）
-await go('#/quiz/lesson/A-01', '.option');
+// 5) 問題を解く・6) 解説（誤答理由が表示順の記号で並ぶ）。ラウンド3で開始前画面（対象件数・出題順シャッフル）を挟む
+await go('#/quiz/lesson/A-01', 'text=開始する');
+await page.getByRole('button', { name: '開始する' }).click();
+await page.waitForSelector('.option');
 const firstOptionText = await page.locator('.option').first().textContent();
 await page.locator('.option').first().click();
 await page.getByRole('button', { name: '回答する' }).click();
@@ -47,7 +49,9 @@ const nextBtn = page.getByRole('button', { name: '次の問題へ' });
 const nb = await nextBtn.boundingBox();
 ok('06b 「次の問題へ」が画面内にある', nb !== null && nb.y + nb.height <= 900);
 // 7) 復習へ登録（間違えるまで回答して復習に出る）
-await go('#/quiz/lesson/A-02', '.option');
+await go('#/quiz/lesson/A-02', 'text=開始する');
+await page.getByRole('button', { name: '開始する' }).click();
+await page.waitForSelector('.option');
 await page.locator('.option').nth(0).click(); await page.getByRole('button', { name: '回答する' }).click(); await page.waitForSelector('.explanation');
 const correct1 = (await page.locator('.explanation').textContent()).includes('正解（');
 await go('#/quiz/review');
@@ -97,6 +101,7 @@ const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('b
 const file = await dl.path();
 const json = JSON.parse(fs.readFileSync(file, 'utf8'));
 ok('13 バックアップ: 形式と回答履歴', json.format === 'finance-literacy-master-backup' && json.attempts.length > 0);
+ok('13a バックアップ: v2（問題ブックマーク・単語帳の状態を含む）', json.version === 2 && Array.isArray(json.questionBookmarks) && Array.isArray(json.cardStates));
 await page.setInputFiles('.file-label input[type="file"]', file);
 await page.waitForSelector('text=この内容で復元する');
 await page.getByRole('button', { name: 'この内容で復元する' }).click();
@@ -124,11 +129,43 @@ await page.waitForSelector('.sim-panel .kpis', { timeout: 8000 }).catch(() => {}
 ok('14b オフライン: 遅延読込のシミュレーターも表示', (await page.locator('.sim-panel .kpis').count()) === 1);
 await ctx.setOffline(false);
 
+// 16) 単語帳（ラウンド3で新設）: 表スタート→反転→保存→自己評価、保存のみ・裏スタート
+await go('#/cards', 'text=開始方向');
+const cardStart = page.locator('button.primary', { hasText: '枚で開始する' });
+ok('16 単語帳: 全用語332枚が対象', /332枚で開始する/.test(await cardStart.textContent() ?? ''));
+await cardStart.click();
+await page.waitForSelector('.flashcard-term');
+await page.locator('.flashcard').click();
+await page.waitForSelector('.flashcard-def');
+ok('16b 単語帳: 反転で定義表示', ((await page.locator('.flashcard-def').textContent()) ?? '').length >= 30);
+await page.locator('.flashcard').click();
+await page.getByRole('button', { name: 'カードを保存する' }).click();
+await page.waitForSelector('button[aria-label="カードの保存を外す"]');
+await page.getByRole('button', { name: '覚えた' }).click();
+await page.waitForTimeout(300);
+await page.getByRole('button', { name: '条件に戻る' }).click();
+await page.waitForSelector('text=開始方向');
+await page.getByRole('button', { name: /保存したカードのみ/ }).click();
+await page.waitForTimeout(300);
+ok('16c 単語帳: 保存のみで1枚', /1枚で開始する/.test(await page.locator('button.primary', { hasText: '枚で開始する' }).textContent() ?? ''));
+await page.getByRole('button', { name: '裏から開始（定義→用語）' }).click();
+await page.locator('button.primary', { hasText: '枚で開始する' }).click();
+await page.waitForSelector('.flashcard-cue');
+ok('16d 単語帳: 裏スタートは設問文から', (await page.locator('.flashcard-term').count()) === 0);
+// 17) 問題ブックマーク → 保存した問題モード
+await go('#/quiz/lesson/A-01', 'text=開始する');
+await page.getByRole('button', { name: '開始する' }).click();
+await page.waitForSelector('.option');
+await page.getByRole('button', { name: 'この問題を保存する' }).click();
+await page.waitForSelector('button[aria-label="この問題の保存を外す"]');
+await go('#/quiz/saved', 'text=開始する');
+ok('17 保存した問題: 対象1問で開始できる', (await text()).includes('対象 1問'));
+
 // モバイル幅（375px）の主要画面: 横はみ出しなし・ページエラーなし
 const mob = await browser.newContext({ viewport: { width: 375, height: 667 } });
 const mp = await mob.newPage();
 mp.on('pageerror', e => errors.push(`mobile: ${String(e)}`));
-for (const r of ['', '#/lesson/D-02', '#/quiz/random', '#/sim/portfolio', '#/virtual', '#/analytics', '#/regulations', '#/data']) {
+for (const r of ['', '#/lesson/D-02', '#/quiz/random', '#/cards', '#/sim/portfolio', '#/virtual', '#/analytics', '#/regulations', '#/data']) {
   await mp.goto(BASE + r, { waitUntil: 'networkidle' }); await mp.waitForTimeout(300);
   ok(`mobile ${r || '(home)'}: 横はみ出しなし`, !(await mp.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1)));
 }
