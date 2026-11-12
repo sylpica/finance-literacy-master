@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { DOMAINS } from './content/domains';
 import { LESSONS, TOTAL_QUESTIONS, lessonById, lessonIdOfQuestion } from './content/catalog';
 import { AppProvider, useApp } from './state';
+import { openSummaryPdf } from './pdf';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LessonPage } from './pages/LessonPage';
 import type { QuizMode } from './pages/QuizPage';
@@ -98,6 +99,7 @@ function Home({ go }: { go: (p: string) => void }) {
         <button onClick={() => go('quiz/saved')}>保存した問題</button>
         <button onClick={() => go('quiz/weak')}>弱点復習</button>
         <button onClick={() => go('map')}>学習マップ</button>
+        <button onClick={() => { void openSummaryPdf(); }}>要点まとめPDF</button>
       </div>
       <div className="domain-grid">
         {DOMAINS.map(d => {

@@ -3,6 +3,7 @@ import { decodeCsvBuffer, parseCsv, replacementCharCount, validateMarketRows, ty
 import { exportBackup, parseBackup, summarizeBackup, type AppState } from '../store/db';
 import { useApp } from '../state';
 import { LineChart, formatPct } from '../components/Chart';
+import { downloadSummaryPdf, openSummaryPdf } from '../pdf';
 import * as F from '../finance/core';
 
 // データ管理（指示書 §9.2-11, §11, §12）: CSV取込プレビューと検証、バックアップ/復元
@@ -53,6 +54,14 @@ export function DataPage() {
   return (
     <main>
       <h2>データ管理</h2>
+      <section className="panel">
+        <h3>要点まとめPDF</h3>
+        <p>全56教材の要点・注意点・重要用語を1冊にまとめたPDFを、アプリ内で開けます（オフラインでも表示できます）。</p>
+        <div className="cta-row">
+          <button className="primary" onClick={() => { void openSummaryPdf(); }}>要点まとめPDFを開く</button>
+          <button onClick={() => { void downloadSummaryPdf(); }}>PDFをダウンロード</button>
+        </div>
+      </section>
       <section className="panel">
         <h3>市場データCSVの取込</h3>
         <input type="file" accept=".csv,text/csv" onChange={e => { const f = e.target.files?.[0]; if (f) void onCsv(f); e.target.value = ''; }} aria-label="CSVファイルを選択" />

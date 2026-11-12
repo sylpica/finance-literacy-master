@@ -23,7 +23,9 @@ export default defineConfig({
         icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,svg,webmanifest,b64}'],
+        // 要点まとめPDF（pdf64）の同梱分 2.31MB を precache 対象に含めるため上限を引き上げる
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },

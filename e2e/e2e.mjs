@@ -161,6 +161,33 @@ await page.waitForSelector('button[aria-label="この問題の保存を外す"]'
 await go('#/quiz/saved', 'text=開始する');
 ok('17 保存した問題: 対象1問で開始できる', (await text()).includes('対象 1問'));
 
+// 18 要点まとめPDF: 開くボタンでポップアップが開き、ダウンロードで同一ファイルが保存され、同梱Base64を復元するとPDFになる
+// （ヘッドレスChromiumにはPDFプラグインが無くポップアップ内の描画自体は検証できないため、描画は実機側の確認事項とする）
+await go('#/data', 'text=要点まとめPDFを開く');
+const popupPromise = page.waitForEvent('popup', { timeout: 15000 }).catch(() => null);
+await page.getByRole('button', { name: '要点まとめPDFを開く' }).click();
+const popup = await popupPromise;
+ok('18 要点まとめPDF: ポップアップが開く', !!popup);
+if (popup) await popup.close();
+const dlPromise = page.waitForEvent('download', { timeout: 15000 }).catch(() => null);
+await page.getByRole('button', { name: 'PDFをダウンロード' }).click();
+const pdfDl = await dlPromise;
+ok('18 要点まとめPDF: ダウンロードが発生する', !!pdfDl);
+if (pdfDl) {
+  // ファイル名は download 属性の日本語名が正。ただし検証環境（POSIXロケールのヘッドレスChromium）では
+  // 日本語ファイル名が化けて 'download' になる既知の環境制約があるため、その場合も許容する（バイト数は次で厳密に検証）。
+  ok('18 要点まとめPDF: ファイル名が一致（環境制約時は download）', ['【資料】金融教養 要点まとめ.pdf', 'download'].includes(pdfDl.suggestedFilename()), pdfDl.suggestedFilename());
+  const dlPath = await pdfDl.path();
+  const dlSize = dlPath ? (await import('node:fs')).statSync(dlPath).size : 0;
+  ok('18 要点まとめPDF: ダウンロードのバイト数が一致', dlSize === 1731955, String(dlSize));
+}
+const pdfHead = await page.evaluate(async () => {
+  const t = await (await fetch('pdf64/finance-summary.b64')).text();
+  const bin = atob(t.replace(/\s+/g, ''));
+  return { head: bin.slice(0, 5), len: bin.length };
+});
+ok('18 要点まとめPDF: 同梱分を復元するとPDF（%PDF-）で1.7MB', pdfHead.head === '%PDF-' && pdfHead.len === 1731955, JSON.stringify(pdfHead));
+
 // モバイル幅（375px）の主要画面: 横はみ出しなし・ページエラーなし
 const mob = await browser.newContext({ viewport: { width: 375, height: 667 } });
 const mp = await mob.newPage();

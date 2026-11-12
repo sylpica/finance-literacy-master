@@ -104,22 +104,23 @@ function AmmFigure() {
 }
 
 function FlowFigure() {
+  // 箱同士と矢印が重ならない配置（各箱の幅と間隔28を固定）
   const boxes = [
-    { x: 30, label: '収入（可処分所得）' },
-    { x: 190, label: '消費支出' },
-    { x: 330, label: '貯蓄' },
-    { x: 450, label: '生活防衛資金→投資' },
+    { x: 16, w: 132, label: '収入（可処分所得）' },
+    { x: 176, w: 118, label: '消費支出' },
+    { x: 322, w: 104, label: '貯蓄' },
+    { x: 454, w: 170, label: '生活防衛資金→投資' },
   ];
   return (
     <svg viewBox="0 0 640 120" role="img" aria-label="家計の資金フロー図" style={{ width: '100%', height: 'auto', display: 'block' }}>
       {boxes.map((b, i) => (
         <g key={b.label}>
-          <rect x={b.x} y={38} width={i === 3 ? 160 : 128} height={44} rx={8} fill="var(--panel-2)" stroke="var(--line-strong)" />
-          <text x={b.x + (i === 3 ? 80 : 64)} y={65} fill="var(--text)" fontSize="13" textAnchor="middle">{b.label}</text>
-          {i < 3 && <text x={b.x + (i === 3 ? 160 : 128) + 16} y={66} fill="var(--muted)" fontSize="16" textAnchor="middle">→</text>}
+          <rect x={b.x} y={38} width={b.w} height={44} rx={8} fill="var(--panel-2)" stroke="var(--line-strong)" />
+          <text x={b.x + b.w / 2} y={65} fill="var(--text)" fontSize="13" textAnchor="middle">{b.label}</text>
+          {i < 3 && <text x={b.x + b.w + 14} y={66} fill="var(--muted)" fontSize="16" textAnchor="middle">→</text>}
         </g>
       ))}
-      <text x={254} y={104} fill="var(--muted)" fontSize="12" textAnchor="middle">貯蓄率 ＝ 貯蓄 ÷ 可処分所得</text>
+      <text x={320} y={104} fill="var(--muted)" fontSize="12" textAnchor="middle">貯蓄率 ＝ 貯蓄 ÷ 可処分所得</text>
     </svg>
   );
 }
