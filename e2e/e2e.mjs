@@ -179,14 +179,14 @@ if (pdfDl) {
   ok('18 要点まとめPDF: ファイル名が一致（環境制約時は download）', ['【資料】金融教養 要点まとめ.pdf', 'download'].includes(pdfDl.suggestedFilename()), pdfDl.suggestedFilename());
   const dlPath = await pdfDl.path();
   const dlSize = dlPath ? (await import('node:fs')).statSync(dlPath).size : 0;
-  ok('18 要点まとめPDF: ダウンロードのバイト数が一致', dlSize === 1731955, String(dlSize));
+  ok('18 要点まとめPDF: ダウンロードのバイト数が一致', dlSize === 1729947, String(dlSize));
 }
 const pdfHead = await page.evaluate(async () => {
   const t = await (await fetch('pdf64/finance-summary.b64')).text();
   const bin = atob(t.replace(/\s+/g, ''));
   return { head: bin.slice(0, 5), len: bin.length };
 });
-ok('18 要点まとめPDF: 同梱分を復元するとPDF（%PDF-）で1.7MB', pdfHead.head === '%PDF-' && pdfHead.len === 1731955, JSON.stringify(pdfHead));
+ok('18 要点まとめPDF: 同梱分を復元するとPDF（%PDF-）で1.7MB', pdfHead.head === '%PDF-' && pdfHead.len === 1729947, JSON.stringify(pdfHead));
 
 // モバイル幅（375px）の主要画面: 横はみ出しなし・ページエラーなし
 const mob = await browser.newContext({ viewport: { width: 375, height: 667 } });

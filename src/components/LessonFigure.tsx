@@ -46,8 +46,9 @@ function BondFigure() {
   const ys = Array.from({ length: 61 }, (_, i) => 0.0 + i * 0.001 * 10); // 0%〜6%
   const prices = ys.map(y => bondPrice(100, 0.01, y, 10, 1));
   const max = Math.max(...prices), min = Math.min(...prices);
+  const maxS = max * 1.05 + 2; // 上端に余白を作り、曲線の始点が軸ラベル（債券価格）に重ならないようにする
   const sx = (y: number) => PL + (y / 0.06) * (W - PL - PR);
-  const sy = (v: number) => (H - PB) - ((v - min) / (max - min)) * (H - PT - PB);
+  const sy = (v: number) => (H - PB) - ((v - min) / (maxS - min)) * (H - PT - PB);
   const pts = ys.map((y, i) => ({ x: sx(y), y: sy(prices[i]!) }));
   const atPar = { x: sx(0.01), y: sy(bondPrice(100, 0.01, 0.01, 10, 1)) };
   return (
@@ -56,7 +57,7 @@ function BondFigure() {
       <circle cx={atPar.x} cy={atPar.y} r="4" fill="var(--accent-2)" />
       <text x={atPar.x + 8} y={atPar.y - 6} fill="var(--text)" fontSize="12">利回り1%で価格は額面100</text>
       {[0, 2, 4, 6].map(y => <text key={y} x={sx(y / 100)} y={H - PB + 16} fill="var(--muted)" fontSize="11" textAnchor="middle">{y}%</text>)}
-      <text x={sx(0.045)} y={sy(bondPrice(100, 0.01, 0.045, 10, 1)) + 20} fill="var(--muted)" fontSize="12">金利が上がると価格は下がる（凸型の曲線）</text>
+      <text x={PL + 8} y={H - PB - 12} fill="var(--muted)" fontSize="12">金利が上がると価格は下がる（凸型の曲線）</text>
     </Frame>
   );
 }
@@ -74,7 +75,7 @@ function OptionFigure() {
       <line x1={PL} y1={sy(0)} x2={W - PR} y2={sy(0)} stroke="var(--line-strong)" strokeDasharray="3 3" />
       <path d={pathFrom(call)} fill="none" stroke="var(--accent)" strokeWidth="2.5" />
       <path d={pathFrom(put)} fill="none" stroke="var(--accent-2)" strokeWidth="2.5" />
-      <text x={sx(122)} y={sy(17)} fill="var(--accent)" fontSize="13">コール買い（損失は保険料分まで）</text>
+      <text x={sx(92)} y={sy(25)} fill="var(--accent)" fontSize="13" textAnchor="middle">コール買い（損失は保険料分まで）</text>
       <text x={sx(63)} y={sy(28)} fill="var(--accent-2)" fontSize="13">プット買い</text>
       <text x={sx(K)} y={H - PB + 16} fill="var(--muted)" fontSize="11" textAnchor="middle">行使価格100</text>
     </Frame>
@@ -97,8 +98,8 @@ function AmmFigure() {
       <circle cx={before.x} cy={before.y} r="4" fill="var(--accent-2)" />
       <circle cx={after.x} cy={after.y} r="4" fill="var(--text)" />
       <text x={before.x - 6} y={before.y - 10} fill="var(--text)" fontSize="12" textAnchor="end">取引前（100, 100）</text>
-      <text x={after.x + 8} y={after.y + 16} fill="var(--text)" fontSize="12">{`Xを10追加→Yは約${afterY.toFixed(1)}に（同じ曲線上を移動）`}</text>
-      <text x={sx(150)} y={sy(k / 150) - 10} fill="var(--muted)" fontSize="12">x × y = 一定（手数料なしの単純化）</text>
+      <text x={after.x + 10} y={after.y + 34} fill="var(--text)" fontSize="12">{`Xを10追加→Yは約${afterY.toFixed(1)}に`}</text>
+      <text x={W - PR - 4} y={PT + 16} fill="var(--muted)" fontSize="12" textAnchor="end">x × y = 一定（手数料なしの単純化）</text>
     </Frame>
   );
 }

@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 
 // 同梱PDF（pdf64方式）は Google Drive「会計」フォルダ保存分と同一バイト列でなければならない。
 // PDFを差し替えたら、Drive側の保存と合わせてここの期待値も更新すること。
-const EXPECTED_BYTES = 1731955;
-const EXPECTED_MD5 = 'cfa14aabaa093b2aef0189c151bf863d';
+const EXPECTED_BYTES = 1729947;
+const EXPECTED_MD5 = 'ca38769350db9b15aed147113b18b5d9';
 
 describe('要点まとめPDFの同梱', () => {
   it('Base64を復元するとDrive保存分とバイト数・MD5が一致する', () => {
